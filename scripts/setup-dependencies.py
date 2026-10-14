@@ -2,6 +2,22 @@
 """Retrieve pinned public build tools. Downloads only; does not access a device."""
 from pathlib import Path
 import argparse, subprocess, json, hashlib, urllib.request, tarfile, os, xml.etree.ElementTree as ET
+def archive_content_sha256(path):
+    digest = hashlib.sha256()
+    with tarfile.open(path, "r:gz") as archive:
+        members = sorted(
+            (m for m in archive.getmembers() if m.isfile()),
+            key=lambda m: m.name,
+        )
+        for member in members:
+            name = member.name.encode()
+            with archive.extractfile(member) as stream:
+                content_hash = hashlib.sha256(stream.read()).digest()
+            digest.update(len(name).to_bytes(8, "big"))
+            digest.update(name)
+            digest.update(member.size.to_bytes(8, "big"))
+            digest.update(content_hash)
+    return digest.hexdigest()
 root=Path(__file__).resolve().parents[1]
 a=argparse.ArgumentParser();a.add_argument('--pipeline',type=Path,default=root/'.deps/gki');args=a.parse_args();pipeline=args.pipeline.resolve();pipeline.mkdir(parents=True,exist_ok=True)
 lock=json.loads((root/'manifests/dependencies.json').read_text())
@@ -23,7 +39,7 @@ for entry in lock['toolchain_archives']:
   with urllib.request.urlopen(url,timeout=600) as src,temp.open('wb') as dst:
    while chunk:=src.read(8*1024*1024):dst.write(chunk)
   temp.rename(cache)
- with cache.open('rb') as f:actual=hashlib.file_digest(f,'sha256').hexdigest()
+ actual = archive_content_sha256(cache)
  if actual!=entry['sha256']:raise SystemExit('Dependency archive checksum mismatch')
  relative='prebuilts/clang/host/linux-x86/clang-r450784e' if entry['subdir'].startswith('clang-') else 'prebuilts/ndk-r23/toolchains/llvm/prebuilt/linux-x86_64/sysroot'
  dest=pipeline/relative

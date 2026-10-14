@@ -57,7 +57,7 @@
       "subdir": "clang-r450784e",
       "archive": "clang-r450784e.tar.gz",
       "destination": "toolchains/clang-r450784e",
-      "sha256": "af92cdc5f84defd0a754b1d3b3ded9f0da29a737efba5a796c4ebff5a71baa3d"
+      "sha256": "d91d562d1c8e6ee0aa0791274205d6160e88ce8613f2dd22e8bbb2073bb718c4"
     },
     {
       "repository": "toolchain/prebuilts/ndk/r23",
@@ -65,7 +65,7 @@
       "subdir": "toolchains/llvm/prebuilt/linux-x86_64/sysroot",
       "archive": "ndk-r23-sysroot.tar.gz",
       "destination": "sources/gki/prebuilts/ndk-r23/toolchains/llvm/prebuilt/linux-x86_64/sysroot",
-      "sha256": "705ddc9f201a9436c2edf0952f65697d45c9bd788e1375f51b69d004450b777a"
+      "sha256": "549066ad181b817d19456c8f662184b445e3efde7bc3ee74a61a9eee7b82eef7"
     }
   ]
 }
