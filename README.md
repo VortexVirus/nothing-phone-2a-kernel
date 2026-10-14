@@ -1,5 +1,13 @@
 # Nothing Phone (2a) custom kernel — Pacman
 
+this code is most probably shit as i am in no way capable of checking wtf he did.
+this is made by codex after i failed miserably multiple times i still dont know where he got this from and how he did this but as i am in no position to complain, i wont.
+this kernel can totaly be taken to make other things to nothing phone 2a i really dont care and dont think anyone else has made a working kernel like this.
+
+
+**THIS IS VIDE CODED ON SOMETHING I DO NOT KNOW AND UNDERSTAND USE AT YOUR OWN RISK AND DO CHECK BEFORE BLINDLY TRUSTING THIS IS GOOD AND FUNCTIONING**
+
+
 Recovered development snapshot for **Nothing Phone (2a), Pacman, MT6886**, targeting Nothing OS **B4.0-251230-2052**. This is not a Phone (3) project. Linux **5.15.178**, based on the exact Google GKI shipped in the target firmware, with separate Nothing vendor sources.
 
 The snapshot integrates KernelSU Next v3.4.0 with a local SUSFS 2.3.0 port, DroidSpaces prerequisite configuration including USER_NS, and NoMount 2.0.0. Vendor FPSGO06 optimizations are supplied as patches. The later FPSGO07 experiment is separate and was not the installed build.
