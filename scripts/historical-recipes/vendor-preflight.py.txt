@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""Generate vendor STOCK config using Nothing's own generator. No compilation/phone writes."""
+from pathlib import Path
+import os,sys,json,subprocess,hashlib,re
+p=Path('${PROJECT_ROOT}');run=sys.argv[1];assert re.fullmatch(r'[a-z0-9-]+',run)
+refs={'nothing-vendor-stock':'02f45fecd3aa6780740aca0a79a120b810f7c744','nothing-modules-stock':'733567edc7c458342db0ad12593821add4a0c7f0'}
+for name,sha in refs.items():
+ assert subprocess.check_output(['git','-C',str(p/'sources'/name),'rev-parse','HEAD'],text=True).strip()==sha
+ assert not subprocess.check_output(['git','-C',str(p/'sources'/name),'status','--porcelain','--untracked-files=no'],text=True).strip()
+platform=p/'sources/vendor-stock-platform';root=platform/'kernel';root.mkdir(parents=True,exist_ok=True)
+def link(path,target):
+ path.parent.mkdir(parents=True,exist_ok=True)
+ if path.is_symlink():assert path.resolve()==target.resolve()
+ else:assert not path.exists();path.symlink_to(target)
+link(root/'kernel-5.15',p/'sources/nothing-vendor-stock');link(root/'build',p/'sources/gki/build');link(root/'prebuilts',p/'sources/gki/prebuilts');link(root/'tools',p/'sources/gki/tools')
+link(platform/'vendor/mediatek/kernel_modules',p/'sources/nothing-modules-stock')
+gki=p/'builds/vendor-stock-gki-input';gki.mkdir(exist_ok=True)
+for name in ['vmlinux','vmlinux.symvers','System.map','modules.builtin','modules.builtin.modinfo']:
+ link(gki/name,p/'artifacts/stock/pipeline-01'/name)
+a=p/'artifacts/vendor-stock'/run;a.mkdir(parents=True,exist_ok=False)
+out=Path('${BUILD_CACHE}')/('vendor-stock-'+run);assert not out.exists()
+config=a/'build.config'
+cmd=['python3',str(root/'kernel-5.15/scripts/gen_build_config.py'),'--kernel-defconfig','mgk_64_k515_defconfig','--build-mode','user','--out-file',str(config)]
+subprocess.run(cmd,cwd=root,check=True)
+# The upstream generator concatenates ROOT-relative paths with absolute OUT_DIR.
+# Preserve its output, then resolve only this host-path issue in generated config.
+mtk=a/'build.config.mtk';original=mtk.read_text();(a/'build.config.mtk.upstream').write_text(original)
+fragment=a/'mgk_64_k515.config';fragment.write_bytes((p/'sources/nothing-vendor-stock/arch/arm64/configs/mgk_64_k515_defconfig').read_bytes())
+relative=os.path.relpath(fragment,p/'sources/nothing-vendor-stock/arch/arm64/configs')
+fixed=re.sub(r'^DEFCONFIG=.*$', 'DEFCONFIG="gki_defconfig '+relative+'"',original,flags=re.M)
+fixed=re.sub(r'^PRE_DEFCONFIG_CMDS=.*$', 'PRE_DEFCONFIG_CMDS=""',fixed,flags=re.M)
+mtk.write_text(fixed)
+
+env=os.environ.copy();env.update(BUILD_CONFIG=os.path.relpath(config,root),OUT_DIR=str(out),DIST_DIR=str(a/'dist'),GKI_PREBUILTS_DIR=str(gki),POST_DEFCONFIG_CMDS='exit 0')
+for key in ['BUILD_NUMBER','FAST_BUILD','LTO','KASAN','KCSAN','SKIP_DEFCONFIG','SKIP_MRPROPER']:env.pop(key,None)
+log=p/'logs/vendor-audit'/('preflight-'+run+'.log')
+with log.open('w') as fd:r=subprocess.run(['bash','build/build.sh','-j8'],cwd=root,env=env,stdout=fd,stderr=subprocess.STDOUT)
+cfg=out/'kernel-5.15/.config';info={'stage':'vendor stock configuration only; module build not yet attempted','refs':refs,'config_generator_command':cmd,'build_command':['bash','build/build.sh','-j8'],'cwd':str(root),'out_dir':str(out),'environment_overrides':{k:env[k] for k in ['BUILD_CONFIG','OUT_DIR','DIST_DIR','GKI_PREBUILTS_DIR','POST_DEFCONFIG_CMDS']},'exit_code':r.returncode,'config_sha256':hashlib.sha256(cfg.read_bytes()).hexdigest() if cfg.exists() else None,'product_overlay_status':'mgk_64_k515 candidate; exact Pacman product overlays not yet proven','phone_modified':False}
+(a/'PREFLIGHT-INFO.json').write_text(json.dumps(info,indent=2)+'\n');print(json.dumps(info,indent=2));raise SystemExit(r.returncode)

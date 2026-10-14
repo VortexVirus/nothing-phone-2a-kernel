@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""Build candidate Nothing vendor modules against verified stock GKI; never flash."""
+from pathlib import Path
+import os,sys,json,subprocess,hashlib,re,shutil,datetime
+p=Path('${PROJECT_ROOT}');run=sys.argv[1];preflight=sys.argv[2] if len(sys.argv)>2 else 'preflight-02'
+assert re.fullmatch(r'[a-z0-9-]+',run) and re.fullmatch(r'[a-z0-9-]+',preflight)
+pre=p/'artifacts/vendor-stock'/preflight;i=json.loads((pre/'PREFLIGHT-INFO.json').read_text());assert i['exit_code']==0
+out=Path(i['out_dir']);cfg=out/'kernel-5.15/.config';assert hashlib.sha256(cfg.read_bytes()).hexdigest()==i['config_sha256']
+for name,sha in i['refs'].items():
+ assert subprocess.check_output(['git','-C',str(p/'sources'/name),'rev-parse','HEAD'],text=True).strip()==sha
+ assert not subprocess.check_output(['git','-C',str(p/'sources'/name),'status','--porcelain','--untracked-files=no'],text=True).strip()
+a=p/'artifacts/vendor-stock'/run;a.mkdir(parents=True,exist_ok=False)
+for name in ['build.config','build.config.mtk','build.config.gki.aarch64','mgk_64_k515.config']:
+ s=(pre/name).read_text().replace(str(pre),str(a)).replace('artifacts/vendor-stock/'+preflight+'/', 'artifacts/vendor-stock/'+run+'/')
+ if name=='build.config.mtk':s=re.sub(r'^DIST_DIR=.*$', 'DIST_DIR="'+str(a/'dist')+'"',s,flags=re.M)
+ (a/name).write_text(s)
+# Preserve the Android TOP layout despite realpath resolution of source worktrees.
+module_link=out/'vendor/mediatek/kernel_modules'
+module_link.parent.mkdir(parents=True,exist_ok=True)
+if not module_link.is_symlink():
+ assert not module_link.exists()
+ module_link.symlink_to(out/'nothing-modules-stock',target_is_directory=True)
+assert module_link.resolve()==(out/'nothing-modules-stock').resolve()
+root=Path(i['cwd'])
+legacy_kernel=root.parent/'kernel-5.15'
+if not legacy_kernel.is_symlink():
+ assert not legacy_kernel.exists()
+ legacy_kernel.symlink_to(root/'kernel-5.15',target_is_directory=True)
+assert legacy_kernel.resolve()==(root/'kernel-5.15').resolve()
+env=os.environ.copy();env.update(i['environment_overrides']);env.update(BUILD_CONFIG=os.path.relpath(a/'build.config',root),DIST_DIR=str(a/'dist'),SKIP_DEFCONFIG='1',SKIP_MRPROPER='1')
+for key in ['POST_DEFCONFIG_CMDS','BUILD_NUMBER','FAST_BUILD','LTO','KASAN','KCSAN']:env.pop(key,None)
+log=p/'logs/vendor-audit'/('build-'+run+'.log');meta={'date_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'stage':'candidate vendor STOCK build; exact product overlay and runtime not yet validated','preflight':preflight,'refs':i['refs'],'config_sha256':i['config_sha256'],'out_dir':str(out),'gki_reference':'artifacts/stock/pipeline-01','command':['bash','build/build.sh','-j4','TARGET_BUILD_VARIANT=user','TOP='+str(root.parent)],'exit_code':None,'phone_modified':False}
+(a/'BUILD-INFO.json').write_text(json.dumps(meta,indent=2)+'\n')
+with log.open('w') as fd:r=subprocess.run(meta['command'],cwd=root,env=env,stdout=fd,stderr=subprocess.STDOUT)
+meta['exit_code']=r.returncode;meta['config_sha256_after']=hashlib.sha256(cfg.read_bytes()).hexdigest();meta['modules_produced']=len(list(out.rglob('*.ko')))
+(a/'BUILD-INFO.json').write_text(json.dumps(meta,indent=2)+'\n');print(json.dumps(meta,indent=2));raise SystemExit(r.returncode)

@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""Independent post-package audit. Read-only to images; emits a new report."""
+from pathlib import Path
+import sys,zipfile,types,hashlib,json,os,subprocess,tempfile
+P=Path('${PROJECT_ROOT}');O=P/'artifacts/ksu-next-susfs-droidspaces'/sys.argv[1]
+T=P/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin';tool=T/'avbtool';a=types.ModuleType('pinned_avbtool')
+exec(compile(zipfile.ZipFile(tool).read('avbtool.py'),str(tool)+'!avbtool.py','exec'),a.__dict__);v=a.Avb()
+os.environ['PATH']=str(T)+os.pathsep+os.environ['PATH']
+ST=P/'stock-images/Pacman_B4.0-251230-2052';report=O/'CHAIN-AUDIT.json';assert not report.exists()
+def read(f):
+ i=a.ImageHandler(str(f),read_only=True);_,h,d,_=v._parse_image(i);blob=v._load_vbmeta_blob(i)
+ assert h.flags==0 and a.verify_vbmeta_signature(h,blob)
+ off=256+h.authentication_data_block_size+h.public_key_offset
+ return h,d,blob[off:off+h.public_key_size]
+_,root,rootkey=read(O/'vbmeta.img');changes={'boot','vbmeta_vendor','vendor_boot'}
+old=read(ST/'vbmeta.img')[1]
+assert len(root)==len(old)
+for x,y in zip(root,old):
+ if getattr(x,'partition_name',None) not in changes:assert x.encode()==y.encode()
+chain={}
+for d in root:
+ if isinstance(d,a.AvbChainPartitionDescriptor):
+  path=(O if d.partition_name in ['boot','vbmeta_vendor'] else ST)/(d.partition_name+'.img')
+  h,ds,pk=read(path);assert pk==d.public_key,d.partition_name
+  chain[d.partition_name]={'signature_valid':True,'parent_public_key_matches':True,'rollback_location':d.rollback_index_location}
+vd=read(O/'vbmeta_vendor.img')[1];ovd=read(ST/'vbmeta_vendor.img')[1];assert len(vd)==len(ovd)
+for x,y in zip(vd,ovd):
+ if getattr(x,'partition_name',None)!='vendor_dlkm':assert x.encode()==y.encode()
+for d in root+vd:
+ if getattr(d,'partition_name',None) in ['vendor_boot','vendor_dlkm']:
+  assert d.verify(str(O),'.img',{},a.ImageHandler(str(O/'vbmeta.img'),read_only=True),False)
+# Recompute FEC over the data + hashtree, independent of the packaging pass.
+f=O/'vendor_dlkm.img';b=f.read_bytes();d=next(d for d in read(f)[1] if isinstance(d,a.AvbHashtreeDescriptor))
+with tempfile.TemporaryDirectory(prefix='pacman-fec-check-') as tmp:
+ data=Path(tmp)/'input';output=Path(tmp)/'fec';data.write_bytes(b[:d.fec_offset])
+ subprocess.run([str(T/'fec'),'--encode','--roots',str(d.fec_num_roots),str(data),str(output)],check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ fec=output.read_bytes();assert fec[:d.fec_size]==b[d.fec_offset:d.fec_offset+d.fec_size]
+info=json.loads((O/'PACKAGE-INFO.json').read_text())
+for n,m in info['images'].items():
+ image=(O/n).read_bytes();assert len(image)==m['bytes'] and hashlib.sha256(image).hexdigest()==m['sha256']
+result={'chain':chain,'root_signature_valid':True,'root_trust':'Local experimental key; NOT Nothing/OEM. Unlocked bootloader acceptance requires device test.','unrelated_descriptors_byte_identical':True,'flags_all_zero':True,'vendor_dlkm_hashtree_and_fec_verified':True,'full_unmodified_partition_payload_verification':False,'scope_limit':'Unmodified system/vendor/odm/product partition payloads not all available; their original AVB descriptors/signatures are preserved. This is not physical validation.'}
+report.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

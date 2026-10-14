@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""Fresh Nothing USER_NS vendor build for the pinned NoMount USER_NS GKI; no phone commands."""
+from pathlib import Path
+import sys,os,re,json,subprocess,hashlib,datetime,shutil
+p=Path('${PROJECT_ROOT}');run=sys.argv[1];assert re.fullmatch('[a-z0-9-]+',run)
+a=p/'artifacts/vendor-droidspaces'/run;out=Path('${BUILD_CACHE}')/('vendor-droidspaces-'+run)
+assert not a.exists() and not out.exists()
+refs={'nothing-vendor-stock':'02f45fecd3aa6780740aca0a79a120b810f7c744','nothing-modules-stock':'733567edc7c458342db0ad12593821add4a0c7f0'}
+for name,sha in refs.items():
+ assert subprocess.check_output(['git','-C',str(p/'sources'/name),'rev-parse','HEAD'],text=True).strip()==sha
+ assert not subprocess.check_output(['git','-C',str(p/'sources'/name),'status','--porcelain','--untracked-files=no'],text=True).strip()
+gki=p/'artifacts/ksu-next-susfs-droidspaces-nomount-userns/userns-02';gi=json.loads((gki/'BUILD-INFO.txt').read_text());assert gi['exit_code']==0
+assert gi['sources']['repos']['sources/common-nomount-userns']=='90700ba133db2fb1d2b05519d45de38ad3d148e1'
+actual_clang=subprocess.check_output([str(p/'toolchains/clang-r450784e/bin/clang'),'--version'],text=True)
+assert actual_clang.strip()==gi['clang_version'].strip(), 'Toolchain differs from combined GKI'
+def sha(f):return hashlib.sha256(f.read_bytes()).hexdigest()
+def cfg(f):
+ d={}
+ for line in f.read_text().splitlines():
+  if line.startswith('CONFIG_'):k,v=line.split('=',1);d[k]=v
+  elif (m:=re.fullmatch(r'# (CONFIG_\w+) is not set',line)):d[m[1]]='n'
+ return d
+a.mkdir(parents=True);logdir=p/'logs/vendor-droidspaces';logdir.mkdir(exist_ok=True)
+platform=p/'sources/vendor-droidspaces-platform';root=platform/'kernel'
+def link(path,target):
+ path.parent.mkdir(parents=True,exist_ok=True)
+ if path.is_symlink():assert path.resolve()==target.resolve()
+ else:assert not path.exists();path.symlink_to(target)
+for name,target in {'kernel-5.15':p/'sources/nothing-vendor-stock','build':p/'sources/gki/build','prebuilts':p/'sources/gki/prebuilts','tools':p/'sources/gki/tools'}.items():link(root/name,target)
+link(platform/'kernel-5.15',p/'sources/nothing-vendor-stock');link(platform/'vendor/mediatek/kernel_modules',p/'sources/nothing-modules-stock')
+# Freeze the input manifest; symlinks reuse large immutable GKI artifacts.
+ginput=p/'builds'/('vendor-droidspaces-gki-input-'+run);ginput.mkdir()
+hashes={}
+for name in ['vmlinux','vmlinux.symvers','System.map','modules.builtin','modules.builtin.modinfo']:
+ hashes[name]=sha(gki/name);assert hashes[name]==gi['artifact_sha256'][name]
+ link(ginput/name,gki/name)
+fragment=p/'patches/droidspaces-userns-vendor.config';shutil.copyfile(fragment,a/'droidspaces.config')
+old=p/'artifacts/vendor-stock/preflight-02'
+for name in ['build.config','build.config.mtk','build.config.gki.aarch64','mgk_64_k515.config']:
+ s=(old/name).read_text().replace(str(old),str(a)).replace('artifacts/vendor-stock/preflight-02/','artifacts/vendor-droidspaces/'+run+'/')
+ if name=='build.config.mtk':s=re.sub(r'^DIST_DIR=.*$','DIST_DIR="'+str(a/'dist')+'"',s,flags=re.M)
+ if name=='mgk_64_k515.config':s+='\n'+fragment.read_text()
+ (a/name).write_text(s)
+link(out/'vendor/mediatek/kernel_modules',out/'nothing-modules-stock')
+env=os.environ.copy();env.update(BUILD_CONFIG=os.path.relpath(a/'build.config',root),OUT_DIR=str(out),DIST_DIR=str(a/'dist'),GKI_PREBUILTS_DIR=str(ginput),POST_DEFCONFIG_CMDS='exit 0')
+for k in ['BUILD_NUMBER','FAST_BUILD','LTO','KASAN','KCSAN','SKIP_DEFCONFIG','SKIP_MRPROPER']:env.pop(k,None)
+cmd=['bash','build/build.sh','-j4','TARGET_BUILD_VARIANT=user','TOP='+str(platform)]
+info={'date_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'device':'Nothing Phone (2a) / Pacman','firmware':gi['firmware'],'stage':'DroidSpaces vendor rebuild against combined GKI; NOT device validated','refs':refs,'project_commit':subprocess.check_output(['git','-C',str(p),'rev-parse','HEAD'],text=True).strip(),'out_dir':str(out),'gki_reference':str(gki.relative_to(p)),'gki_input':str(ginput),'gki_sha256':hashes,'kernel_commit':gi['sources']['repos']['sources/common-nomount-userns'],'modules_commit':refs['nothing-modules-stock'],'ksu_next_commit':gi['sources']['repos']['sources/KernelSU-Next-susfs'],'susfs_commit':gi['sources']['repos']['sources/susfs4ksu'],'clang_version':gi['clang_version'],'defconfig':'gki_defconfig + mgk_64_k515_defconfig user + droidspaces-vendor.config','fragment_sha256':sha(fragment),'commands':[],'phase':'preflight','exit_code':None,'phone_modified':False,'device_validated':False}
+meta=a/'BUILD-INFO.json'
+def save():meta.write_text(json.dumps(info,indent=2)+'\n')
+def call(command,phase):
+ info['phase']=phase;info['commands'].append(command);save()
+ with (logdir/(run+'-'+phase+'.log')).open('w') as fd:r=subprocess.run(command,cwd=root,env=env,stdout=fd,stderr=subprocess.STDOUT)
+ if r.returncode:raise subprocess.CalledProcessError(r.returncode,command)
+try:
+ call(cmd,'preflight')
+ actual=cfg(out/'kernel-5.15/.config');expected=cfg(fragment);combined=cfg(Path(gi['out_dir'])/'common-nomount-userns/.config');stock=cfg(p/'artifacts/vendor-stock/reference-01/vendor.config')
+ for key,val in expected.items():assert actual.get(key)==val==combined.get(key),(key,actual.get(key),val,combined.get(key))
+ for key in ['CONFIG_MODVERSIONS','CONFIG_CFI_CLANG','CONFIG_SHADOW_CALL_STACK','CONFIG_LTO_CLANG_FULL','CONFIG_MODULE_SIG_PROTECT']:assert actual.get(key)==stock.get(key),(key,actual.get(key),stock.get(key))
+ diff={k:{'stock':stock.get(k),'droidspaces':actual.get(k)} for k in stock.keys()|actual.keys() if stock.get(k)!=actual.get(k)}
+ (a/'config-diff.json').write_text(json.dumps(diff,indent=2)+'\n');shutil.copyfile(out/'kernel-5.15/.config',a/'vendor.config')
+ info['config_sha256']=sha(a/'vendor.config');save()
+ env.pop('POST_DEFCONFIG_CMDS');env.update(SKIP_DEFCONFIG='1',SKIP_MRPROPER='1')
+ call(cmd,'main-build')
+ assert sha(out/'kernel-5.15/.config')==info['config_sha256']
+ info['exit_code']=0;info['phase']='main-build-complete';save()
+except Exception as e:
+ info['exit_code']=getattr(e,'returncode',1);info['error']=repr(e);save();raise
+print(json.dumps({k:v for k,v in info.items() if k!='commands'},indent=2))

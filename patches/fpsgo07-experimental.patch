@@ -1,0 +1,106 @@
+diff --git a/drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c b/drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c
+index 724bbf445..ce8bd8109 100644
+--- a/drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c
++++ b/drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c
+@@ -4429,6 +4429,17 @@ static void fpsgo_update_cpufreq_to_now(unsigned long long new_ts_100us)
+ 
+ 
+ 
++/* Per-call heap snapshots; keep power-of-two allocation sizes. */
++struct fbt_loading_timestamps {
++	unsigned long long prev[LOADING_CNT];
++	unsigned long long next[LOADING_CNT];
++};
++
++struct fbt_cluster_observations {
++	unsigned int obv[LOADING_CNT];
++	unsigned int isolated[LOADING_CNT];
++};
++
+ static int fbt_get_loading_exp(int pid, unsigned long long buffer_id,
+ 	unsigned long long thr_last_cb_ts, unsigned long long *loading, unsigned long long ts_100us,
+ 	unsigned long long *_freq_prev_cb_ts, unsigned long long *_freq_lastest_ts,
+@@ -4442,20 +4453,23 @@ static int fbt_get_loading_exp(int pid, unsigned long long buffer_id,
+ 	unsigned long long *cpu_freq_ts_prev, *cpu_freq_ts_next;
+ 	unsigned int cpy_current_obv;
+ 	unsigned int *cpu_obv;
++	struct fbt_loading_timestamps *timestamps;
+ 	new_ts_100us = ts_100us;
+ 
+ 	if (!test_mode)
+ 		fpsgo_update_cpufreq_to_now(new_ts_100us);
+ 
+-	cpu_freq_ts_prev = kcalloc(LOADING_CNT, sizeof(unsigned long long), GFP_KERNEL);
+-	cpu_freq_ts_next = kcalloc(LOADING_CNT, sizeof(unsigned long long), GFP_KERNEL);
++	timestamps = kzalloc(sizeof(*timestamps), GFP_KERNEL);
+ 	cpu_obv = kcalloc(LOADING_CNT, sizeof(unsigned int), GFP_KERNEL);
+-	if (!cpu_freq_ts_prev || !cpu_freq_ts_next || !cpu_obv) {
++	if (!timestamps || !cpu_obv) {
+ 		fpsgo_main_trace("[%s] ERROR OOM\n", __func__);
+ 		ret = 1;
+ 		goto out;
+ 	}
+ 
++	cpu_freq_ts_prev = timestamps->prev;
++	cpu_freq_ts_next = timestamps->next;
++
+ 	spin_lock_irqsave(&freq_slock, spinlock_flag_freq);
+ 	cpy_current_obv = (*_freq_last_obv);
+ 	spin_unlock_irqrestore(&freq_slock, spinlock_flag_freq);
+@@ -4536,8 +4550,7 @@ static int fbt_get_loading_exp(int pid, unsigned long long buffer_id,
+ 	}
+ 
+ out:
+-	kfree(cpu_freq_ts_prev);
+-	kfree(cpu_freq_ts_next);
++	kfree(timestamps);
+ 	kfree(cpu_obv);
+ 	return ret;
+ }
+@@ -4575,6 +4588,8 @@ static int fbt_get_cl_loading_exp(int pid, unsigned long long buffer_id,
+ 	unsigned long long render_last_cb_ts, freq_last_cb_ts;
+ 	unsigned long long *cpu_freq_ts_prev, *cpu_freq_ts_next;
+ 	unsigned int *cpu_obv, *cpu_isolated, cpy_current_cl_obv;
++	struct fbt_loading_timestamps *timestamps = NULL;
++	struct fbt_cluster_observations *observations = NULL;
+ 
+ 	new_ts_100us = ts_100us;
+ 
+@@ -4586,16 +4601,19 @@ static int fbt_get_cl_loading_exp(int pid, unsigned long long buffer_id,
+ 		goto out;
+ 	}
+ 
+-	cpu_freq_ts_prev = kcalloc(LOADING_CNT, sizeof(unsigned long long), GFP_KERNEL);
+-	cpu_freq_ts_next = kcalloc(LOADING_CNT, sizeof(unsigned long long), GFP_KERNEL);
+-	cpu_obv = kcalloc(LOADING_CNT, sizeof(unsigned int), GFP_KERNEL);
+-	cpu_isolated = kcalloc(LOADING_CNT, sizeof(unsigned int), GFP_KERNEL);
+-	if (!cpu_freq_ts_prev || !cpu_freq_ts_next || !cpu_obv || !cpu_isolated) {
++	timestamps = kzalloc(sizeof(*timestamps), GFP_KERNEL);
++	observations = kzalloc(sizeof(*observations), GFP_KERNEL);
++	if (!timestamps || !observations) {
+ 		fpsgo_main_trace("[%s] new temp array OOM\n", __func__);
+ 		ret = 1;
+ 		goto out;
+ 	}
+ 
++	cpu_freq_ts_prev = timestamps->prev;
++	cpu_freq_ts_next = timestamps->next;
++	cpu_obv = observations->obv;
++	cpu_isolated = observations->isolated;
++
+ 	spin_lock_irqsave(&freq_slock, spinlock_flag_freq);
+ 	cpy_current_cl_obv = clus_obv[cid];
+ 	spin_unlock_irqrestore(&freq_slock, spinlock_flag_freq);
+@@ -4671,10 +4689,8 @@ static int fbt_get_cl_loading_exp(int pid, unsigned long long buffer_id,
+ 			ret = 1;
+ 	}
+ out:
+-	kfree(cpu_freq_ts_prev);
+-	kfree(cpu_freq_ts_next);
+-	kfree(cpu_obv);
+-	kfree(cpu_isolated);
++	kfree(timestamps);
++	kfree(observations);
+ 	return ret;
+ }
+ 

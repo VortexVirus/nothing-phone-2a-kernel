@@ -1,0 +1,51 @@
+{
+  "scope": "Historical final package; header and content-format inspection repeated during archival. OEM/private-AVB origin means no public image distribution. Signature-chain proof remains historical unless explicitly rechecked.",
+  "images": [
+    {
+      "name": "boot.img",
+      "bytes": 67108864,
+      "sha256": "992ace71354129e17bf130a8224a474cf6db09dacca745445e0bd9f4820422fe",
+      "local_only": true,
+      "avb_footer": true,
+      "format": "Android boot",
+      "header_version": 4,
+      "kernel_bytes": 25435972,
+      "ramdisk_bytes": 0
+    },
+    {
+      "name": "vendor_boot.img",
+      "bytes": 67108864,
+      "sha256": "bbb81742f2216cee0589ee0dd8172da07a906c80ce19d309574ebe38d8bb939c",
+      "local_only": true,
+      "avb_footer": true,
+      "format": "Android vendor boot",
+      "header_version": 4,
+      "page_size": 4096,
+      "ramdisk_bytes": 27383387
+    },
+    {
+      "name": "vendor_dlkm.img",
+      "bytes": 28262400,
+      "sha256": "696266a1760c8735ebc27833bda3c2ac5d4db29f065eea28f5d94a37f680c348",
+      "local_only": true,
+      "avb_footer": true,
+      "format": "EROFS"
+    },
+    {
+      "name": "vbmeta.img",
+      "bytes": 8192,
+      "sha256": "c4e99d7a717dc5ece1cfa13b8cfd4f02fef3fc957813aa8d88cde45bd39309d5",
+      "local_only": true,
+      "avb_footer": false,
+      "format": "AVB metadata"
+    },
+    {
+      "name": "vbmeta_vendor.img",
+      "bytes": 8192,
+      "sha256": "9983ca80ab447e50e8380df062d9b487d6ff4b713108f9dbfa9c72453794ab19",
+      "local_only": true,
+      "avb_footer": false,
+      "format": "AVB metadata"
+    }
+  ]
+}

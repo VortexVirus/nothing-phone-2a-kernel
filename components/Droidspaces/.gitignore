@@ -1,0 +1,16 @@
+*.o
+*.tar.gz
+droidspaces-*
+output
+.cursor
+old_code_with_android-app/
+logs/
+*.img
+*.txt
+*.patch
+*.diff
+*.config
+
+# Keystores
+*.keystore
+local.properties

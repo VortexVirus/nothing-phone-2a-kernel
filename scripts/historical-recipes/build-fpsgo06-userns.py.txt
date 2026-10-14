@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""Isolated baseline/candidate FPSGO builds using prepared DroidSpaces headers."""
+from pathlib import Path
+import subprocess,os,json,hashlib,shutil,datetime,sys,re
+run=sys.argv[1] if len(sys.argv)>1 else '03';assert re.fullmatch('[a-z0-9-]+',run)
+P=Path('${PROJECT_ROOT}'); L=P/('logs/performance-fpsgo/build-'+run);L.mkdir(exist_ok=False)
+O=Path('${BUILD_CACHE}')/('fpsgo-performance-'+run);O.mkdir(exist_ok=False)
+K=Path('${BUILD_CACHE}/vendor-droidspaces-userns-perf-02-main/kernel-5.15')
+S=P/'sources/nothing-vendor-stock';N=P/'sources/nothing-vendor-perf'
+rel=Path('drivers/misc/mediatek/performance/fpsgo_v3')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def git(p,*args):return subprocess.check_output(['git','-C',str(p),*args],text=True).strip()
+assert git(S,'rev-parse','HEAD')=='02f45fecd3aa6780740aca0a79a120b810f7c744'
+candidate_commit='313c21a9dc2358667e9640e35738d2e9cab49a5e'
+assert git(N,'rev-parse',candidate_commit+'^{commit}')==candidate_commit
+assert git(N,'status','--porcelain','--untracked-files=no')==''
+assert sha(K/'.config')=='09235f5f8786756cbaf1b32f7d1077aa506a3e764959f1cf712bf73dc96ec5b8'
+meta={'date_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_base':git(S,'rev-parse','HEAD'),'source_candidate':candidate_commit,'out_dir':str(O),'prepared_tree':str(K),'gki_compatibility':'USER_NS userns-02 kernel90700ba; vendor userns-perf-02; not device validated','commands':[],'results':{},'phone_modified':False,'device_validated':False}
+protected={str(f):sha(f) for f in [K/'.config',K/'Module.symvers',K/rel/'mtk_fpsgo.ko']};meta['prepared_inputs']=protected
+syms=O/'providers.symvers';syms.write_text(''.join(line for line in (K/'Module.symvers').read_text().splitlines(True) if line.split()[2].split('/')[-1]!='mtk_fpsgo'))
+meta['provider_filter']='Exclude existing mtk_fpsgo own exports to avoid duplicate definitions in external modpost; no CRC changes';meta['providers_sha256']=sha(syms)
+env=os.environ.copy();env['PATH']=str(P/'toolchains/clang-r450784e/bin')+':'+str(P/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin')+':/usr/bin:/bin'
+meta['clang']=subprocess.check_output(['clang','--version'],env=env,text=True)
+for label,root in [('baseline',S),('candidate',N)]:
+ M=O/label/rel
+ if label=='candidate':
+  archive=O/'candidate-source.tar'
+  with archive.open('wb') as f:subprocess.run(['git','-C',str(N),'archive','--format=tar',candidate_commit,str(rel)],stdout=f,check=True)
+  (O/label).mkdir();subprocess.run(['tar','-xf',str(archive),'-C',str(O/label)],check=True)
+  meta['candidate_source_archive_sha256']=sha(archive)
+ else:shutil.copytree(root/rel,M)
+ (O/label/'drivers/nothing_performance').symlink_to(S/'drivers/nothing_performance')
+ meta[label+'_source_hashes']={str(f.relative_to(M)):sha(f) for f in M.rglob('*') if f.is_file()}
+ flags='-I'+str(M)+' '+' '.join('-I'+str(S/q) for q in ['drivers/misc/mediatek/performance/perf_ioctl','drivers/misc/mediatek/performance/include','kernel'])
+ cmd=['make','-C',str(S),'O='+str(K),'LLVM=1','LLVM_IAS=1','ARCH=arm64','TARGET_BUILD_VARIANT=user','TOP='+str(P/'sources/vendor-droidspaces-platform'),'KBUILD_MIXED_TREE='+str(P/'builds/vendor-droidspaces-gki-input-userns-perf-02-main'),'M='+str(M),'FPSGO_TOP='+str(M)+'/', 'KCFLAGS='+flags,'input-symdump='+str(syms),'-j4','modules']
+ meta['commands'].append(cmd);(L/'BUILD-INFO.json').write_text(json.dumps(meta,indent=2))
+ with (L/(label+'.log')).open('w') as f:r=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT)
+ meta['results'][label]={'exit_code':r.returncode}
+ (L/'BUILD-INFO.json').write_text(json.dumps(meta,indent=2))
+ assert r.returncode==0, label+' failed; log preserved'
+ meta['results'][label]['module_sha256']=sha(M/'mtk_fpsgo.ko')
+assert all(sha(Path(f))==h for f,h in protected.items()),'Prepared reference was modified'
+meta['prepared_inputs_unchanged']=True
+A=P/('artifacts/vendor-performance/fpsgo-'+run);A.mkdir(parents=True,exist_ok=False)
+for label in ['baseline','candidate']:
+ shutil.copyfile(O/label/rel/'mtk_fpsgo.ko',A/(label+'-mtk_fpsgo.ko'))
+ shutil.copyfile(O/label/rel/'Module.symvers',A/(label+'-Module.symvers'))
+(A/'BUILD-INFO.json').write_text(json.dumps(meta,indent=2));(L/'BUILD-INFO.json').write_text(json.dumps(meta,indent=2))
+(A/'NOT-FLASHABLE.txt').write_text('Experimental module only, no partition image. Offline checks and later explicit flash authorization required. Not device validated.\n')
+print(json.dumps(meta['results'],indent=2))

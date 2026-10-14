@@ -1,0 +1,71 @@
+{
+  "status": "GKI_STOCK_PIPELINE_CONFIG_VERIFIED_VENDOR_REBUILD_PENDING",
+  "firmware": "Nothing/PacmanEEA/Pacman:16/BP2A.250605.031.A3/2512302052:user/release-keys",
+  "kernel": {
+    "url": "https://github.com/NothingOSS/android_kernel_5.15_nothing_mt6886.git",
+    "commit": "02f45fecd3aa6780740aca0a79a120b810f7c744"
+  },
+  "modules": {
+    "url": "https://github.com/NothingOSS/android_kernel_modules_nothing_mt6886.git",
+    "commit": "733567edc7c458342db0ad12593821add4a0c7f0"
+  },
+  "gki_binary_commit": {
+    "url": "https://android.googlesource.com/kernel/common",
+    "commit": "18a89f1307e251f1533266476c36a9bae2a0c033",
+    "tag": "android13-5.15-2025-03_r4"
+  },
+  "clang": "r450784e / Android 8508608 / 14.0.7",
+  "ksu_next": null,
+  "susfs": null,
+  "build_tools_commit": "b05fb2e75ba86f934da7fbcb4435678a54645c5f",
+  "google_build": "13471816",
+  "google_manifest_url": "https://ci.android.com/builds/submitted/13471816/kernel_aarch64/latest/raw/manifest_13471816.xml",
+  "pipeline_projects": [
+    {
+      "path": "build/kernel",
+      "name": "kernel/build",
+      "revision": "b05fb2e75ba86f934da7fbcb4435678a54645c5f"
+    },
+    {
+      "path": "prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8",
+      "name": "platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8",
+      "clone-depth": "1",
+      "revision": "007101a451907c5369db5002ddf7b14dcefb7864"
+    },
+    {
+      "path": "prebuilts/build-tools",
+      "name": "platform/prebuilts/build-tools",
+      "clone-depth": "1",
+      "revision": "f6813860e16b2fa1461a15e7b8a3127dfdee021a"
+    },
+    {
+      "path": "prebuilts/kernel-build-tools",
+      "name": "kernel/prebuilts/build-tools",
+      "clone-depth": "1",
+      "revision": "083e34d8c2c4239be4967172427268c267585951"
+    },
+    {
+      "path": "tools/mkbootimg",
+      "name": "platform/system/tools/mkbootimg",
+      "revision": "2208a03d874255af1e4eaf6cf7c156fe1dc98943"
+    }
+  ],
+  "toolchain_archives": [
+    {
+      "repository": "platform/prebuilts/clang/host/linux-x86",
+      "commit": "9f759dee5cdc5f85d076c642a192f6a9232f7058",
+      "subdir": "clang-r450784e",
+      "archive": "clang-r450784e.tar.gz",
+      "destination": "toolchains/clang-r450784e",
+      "sha256": "af92cdc5f84defd0a754b1d3b3ded9f0da29a737efba5a796c4ebff5a71baa3d"
+    },
+    {
+      "repository": "toolchain/prebuilts/ndk/r23",
+      "commit": "93532f3052c14fbb337ff57d5732128dc7481ee6",
+      "subdir": "toolchains/llvm/prebuilt/linux-x86_64/sysroot",
+      "archive": "ndk-r23-sysroot.tar.gz",
+      "destination": "sources/gki/prebuilts/ndk-r23/toolchains/llvm/prebuilt/linux-x86_64/sysroot",
+      "sha256": "705ddc9f201a9436c2edf0952f65697d45c9bd788e1375f51b69d004450b777a"
+    }
+  ]
+}

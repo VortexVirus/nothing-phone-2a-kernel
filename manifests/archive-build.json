@@ -1,0 +1,114 @@
+{
+  "exit_code": 0,
+  "elf_aarch64": true,
+  "arm64_Image_magic": true,
+  "gzip_matches_Image": true,
+  "lz4_matches_Image": true,
+  "exports_historical": 8427,
+  "exports_new": 8427,
+  "exports_added": [],
+  "exports_removed": [],
+  "changed_crc": [],
+  "device_tested": false,
+  "compiler_warning_lines": 0,
+  "compiler_error_lines": 0,
+  "clock_skew_lines": 0,
+  "abi_dump_exit": 0,
+  "abi_diff_exit": 0,
+  "artifacts": {
+    "abi.prop": {
+      "bytes": 107,
+      "sha256": "e8443dc7aba911ce0f67a4f315fa32e6c47899b6164b88fe8f97b9f649a3e815"
+    },
+    "modules.builtin.modinfo": {
+      "bytes": 146047,
+      "sha256": "c78006add46da4a1cf59c93ea19b71becab81d9a806f3c08affdec70e9b7cf29"
+    },
+    "DO-NOT-FLASH.txt": {
+      "bytes": 154,
+      "sha256": "cc14f802c7d806d51cd4bb4a4777d84d0133723773ca91d0aa5e10de3963954e"
+    },
+    "kernel.config": {
+      "bytes": 189903,
+      "sha256": "386d7475d59880a47dea8d945631579cffdb412ed6df3c0e01b8c8b0de615311"
+    },
+    "Image": {
+      "bytes": 48253440,
+      "sha256": "af40992e6af896ddde640bfa54393a0eadfea17ab359a87864e60e699d803fc7"
+    },
+    "abi_symbollist": {
+      "bytes": 966720,
+      "sha256": "eb18cdb48a5f443c3aed2fee493972bc0190186980974b8da804b51c6f0a9e3a"
+    },
+    "test_mappings.zip": {
+      "bytes": 22,
+      "sha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85"
+    },
+    "abi_symbollist.report": {
+      "bytes": 271376,
+      "sha256": "6cbfe1dcefbcd3d5072758f6d8906af5bfebcdcda571226498b29b04e438089a"
+    },
+    "kernel-headers.tar.gz": {
+      "bytes": 15219922,
+      "sha256": "6ce75e1ee36086afb962d6c8fb9c48edb1b3baeb105c6d38a02df96803365066"
+    },
+    "kernel-uapi-headers.tar.gz": {
+      "bytes": 1557498,
+      "sha256": "1d0dbc238aaf98a32c406951600bc91a8009eb0ff68e3934d401fbac8a7277ff"
+    },
+    "Image.lz4": {
+      "bytes": 25437139,
+      "sha256": "90d5fb4dbf741e34e9afa6bc75e486d25cb83f16a623c1173636e2439cac7989"
+    },
+    "zram.ko": {
+      "bytes": 750593,
+      "sha256": "5297deea66b9e72630e09ba30fe265bd52053cdd2f98b20e0056a6a7e02ce7cc"
+    },
+    "gki_aarch64_modules": {
+      "bytes": 42,
+      "sha256": "2e9146738ad7b58fa02cb90a5e8141ae73f22ca92982590c997edee4c49c186e"
+    },
+    "vmlinux.symvers": {
+      "bytes": 510086,
+      "sha256": "ec7144df2d3116b1c5c29f577f3dcb040543c2717aa1492d4b40c04d256f7c0e"
+    },
+    "abi.xml": {
+      "bytes": 14530079,
+      "sha256": "dc1b2d4dcf83b6f2bc9a470354806206082c0f0a2b8de517f73f367adbc6d910"
+    },
+    "build.sanitized.log": {
+      "bytes": 231333,
+      "sha256": "c48d33921aae56147a4b9adffbbf0bc363a6b996d7993e9772182bdbd4c1c5b1"
+    },
+    "vmlinux": {
+      "bytes": 506203208,
+      "sha256": "f365414c95cc5317e2d97aee7ca0a10f80f62fc21957829e833e0dc2b299da82"
+    },
+    "System.map": {
+      "bytes": 7525525,
+      "sha256": "8491020bda854e8e6a509cb21421280be7c0ab72394756785794da4fb2141aef"
+    },
+    "Image.gz": {
+      "bytes": 21892848,
+      "sha256": "a0bf1d42ab586b82a46786c25b1de6d2e17b726a60e419ee9bf6f829cf66e118"
+    },
+    "modules.builtin": {
+      "bytes": 22886,
+      "sha256": "b354ba8ec22f1d6a9ab96b9ab0afb55efd7d67a7fe8400383df6106050d7dd0a"
+    },
+    "zsmalloc.ko": {
+      "bytes": 745521,
+      "sha256": "5c075990c4cceb2f0af563b6fe894cba1cfb9287662915595b85fd99870f544f"
+    }
+  },
+  "kernel_release": "5.15.178-g90700ba133db2",
+  "source_commit": "90700ba133db2fb1d2b05519d45de38ad3d148e1",
+  "ksu_version": 33296,
+  "notes": [
+    "New independent build; not bit-identical to historical artifacts",
+    "Private signing keys excluded",
+    "No vendor rebuild or boot packaging in this archival build",
+    "Source export suffix differs from original; module pairing must be rebuilt and checked",
+    "abi.xml at distribution root is upstream baseline metadata; checks/abi.xml is actual DWARF dump"
+  ]
+}

@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import os,sys,json,hashlib,subprocess,datetime
+p=Path('${PROJECT_ROOT}');j=json.loads((p/'sources.lock.json').read_text())
+a=Path(os.environ['PACMAN_ARTIFACT_OUT']);b=Path(os.environ['PACMAN_BUILD_OUT']);cfg=b/'common/.config'
+def sha(f):
+ h=hashlib.sha256()
+ with f.open('rb') as fd:
+  for chunk in iter(lambda:fd.read(8*1024*1024),b''):h.update(chunk)
+ return h.hexdigest()
+info={'date_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'device':'Nothing Phone (2a) / Pacman','firmware':j['firmware'],'kernel_commit':j['gki_binary_commit']['commit'],'nothing_kernel_commit':j['kernel']['commit'],'modules_source_commit':j['modules']['commit'],'vendor_modules_rebuilt':False,'kernelsu_next_commit':None,'susfs_commit_version':None,'clang_version':subprocess.check_output([str(p/'toolchains/clang-r450784e/bin/clang'),'--version'],text=True),'defconfig':'gki_defconfig + official GKI symbol trimming','config_sha256':sha(cfg) if cfg.exists() else None,'exit_code':int(sys.argv[1]),'device_validated':False,'build_log':os.environ['PACMAN_BUILD_LOG'],'project_commit':os.environ.get('PACMAN_PROJECT_COMMIT') or subprocess.check_output(['git','-C',str(p),'rev-parse','HEAD'],text=True).strip(),'artifact_sha256':{str(f.relative_to(a)):sha(f) for f in sorted(a.rglob('*')) if f.is_file() and f.name!='BUILD-INFO.txt'}}
+info['host_versions']={cmd[0]:subprocess.check_output(cmd,text=True).splitlines()[0] for cmd in [['git','--version'],['make','--version'],['python3','--version']]}
+(a/'BUILD-INFO.txt').write_text(json.dumps(info,indent=2)+'\n')
+print('BUILD-INFO:',a/'BUILD-INFO.txt','exit',sys.argv[1])

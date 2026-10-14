@@ -1,0 +1,27 @@
+[
+  {
+    "component": "kernel",
+    "commit": "90700ba133db2fb1d2b05519d45de38ad3d148e1",
+    "source": "sources/common-nomount-userns"
+  },
+  {
+    "component": "components/KernelSU-Next",
+    "commit": "e7f85f7c439f157ec25a3c682e92886bb5f1546a",
+    "source": "sources/KernelSU-Next-susfs"
+  },
+  {
+    "component": "components/susfs4ksu",
+    "commit": "687d2d18d94cb2e3e72d1074778d58384d58e379",
+    "source": "sources/susfs4ksu"
+  },
+  {
+    "component": "components/nomount",
+    "commit": "b8d268353b4e7ecc53c67d1816a626b7d6579201",
+    "source": "sources/nomount"
+  },
+  {
+    "component": "components/Droidspaces",
+    "commit": "14a8dba3bedfd42cfc9b6f10ce06b72e688c7523",
+    "source": "sources/Droidspaces"
+  }
+]

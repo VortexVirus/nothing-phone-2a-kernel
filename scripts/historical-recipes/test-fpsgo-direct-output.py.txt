@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""Differential test of the actual FPSGO update functions with mocked side effects."""
+from pathlib import Path
+import subprocess,re,json,os,sys
+P=Path('${PROJECT_ROOT}');run=sys.argv[1];assert re.fullmatch('[a-z0-9-]+',run)
+O=P/('logs/performance-fpsgo/direct-tests-'+run);O.mkdir(exist_ok=False)
+repo=P/'sources/nothing-vendor-perf';rel='drivers/misc/mediatek/performance/fpsgo_v3/'
+old=subprocess.check_output(['git','-C',str(repo),'show','37964b3716063357437aea2a00f61e364c8ff1b9:'+rel+'fbt/src/fbt_cpu.c'],text=True)
+new=(repo/rel/'fbt/src/fbt_cpu.c').read_text();hdr=(repo/rel/'base/include/fpsgo_base.h').read_text()
+loading=re.search(r'struct fpsgo_loading \{.*?\n\};',hdr,re.S)[0]
+code=r'''
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#define MAX_DEP_NUM 100
+#define FPSGO_JERK_INACTIVE 0
+'''+loading+r'''
+struct fbt_thread_blc {int pid;unsigned long long buffer_id;unsigned blc;int dep_num;struct fpsgo_loading dep[MAX_DEP_NUM];};
+static struct fbt_thread_blc nodes[64];
+static int node_count,blc_mlock,fbt_mlock,locks,copies,events;
+static unsigned max_blc,max_blc_cur,base_opp[3];
+static int max_blc_pid,max_blc_stage,max_blc_dep_num,boost_ta,boosted_group,ultra_rescue,cluster_num=3;
+static unsigned long long max_blc_buffer_id;
+static struct fpsgo_loading max_blc_dep[MAX_DEP_NUM];
+#define list_for_each_entry_safe(pos,next,head,entry) for(pos=nodes,next=nodes;pos<nodes+node_count;pos++,next=pos)
+static void mutex_lock(int *p){assert(!*p && fbt_mlock);*p=1;locks++;}
+static void mutex_unlock(int *p){assert(*p==1);*p=0;}
+static void *checked_copy(void *d,const void *s,size_t n){assert(fbt_mlock);assert(n<=sizeof(max_blc_dep));copies++;return memcpy(d,s,n);}
+#define memcpy checked_copy
+#define fpsgo_systrace_c_fbt_debug(...) ((void)0)
+#define print_dep(...) ((void)0)
+static void fbt_clear_boost_value(void){events|=1;}
+static void fbt_free_bhr(void){events|=2;}
+static void fbt_boost_dram(int x){assert(x==0);events|=4;}
+static void fbt_notify_CM_limit(int x){assert(x==0);events|=8;}
+static void fbt_set_idleprefer_locked(int x){assert(x==0);events|=16;}
+static void fbt_set_down_throttle_locked(int x){assert(x==-1);events|=32;}
+static void fbt_set_limit(int pid,unsigned blc,int owner,unsigned long long id,int n,struct fpsgo_loading *dep,void *thread,long long runtime){
+ assert(pid==23 && blc==max_blc && owner==max_blc_pid && id==max_blc_buffer_id && n==max_blc_dep_num && dep==max_blc_dep && !thread && !runtime);events|=64;
+}
+'''
+for tag,s in [('old',old),('new',new)]:
+ helper=s[s.index('static void fbt_find_max_blc('):s.index('static void fbt_find_ex_max_blc(')]
+ check=s[s.index('static void fbt_check_max_blc_locked('):s.index('static int fbt_overest_loading(')]
+ code+=(helper+check).replace('fbt_find_max_blc',tag+'_max').replace('fbt_check_max_blc_locked',tag+'_check')
+code+=r'''
+#undef memcpy
+static uint32_t seed=0x5041434d;
+static uint32_t rnd(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
+struct result {unsigned blc,cur,opp[3];int pid,stage,n,boosted,events;unsigned long long id;struct fpsgo_loading deps[MAX_DEP_NUM];};
+static void init(int flags){fbt_mlock=1;blc_mlock=locks=copies=events=0;boost_ta=flags&1;boosted_group=(flags>>1)&1;ultra_rescue=(flags>>2)&1;max_blc=max_blc_cur=77;max_blc_pid=55;max_blc_buffer_id=123;max_blc_stage=2;max_blc_dep_num=100;memset(max_blc_dep,0xa5,sizeof(max_blc_dep));memset(base_opp,0x5a,sizeof(base_opp));}
+static struct result capture(void){struct result r;memset(&r,0,sizeof(r));r.blc=max_blc;r.cur=max_blc_cur;r.pid=max_blc_pid;r.id=max_blc_buffer_id;r.stage=max_blc_stage;r.n=max_blc_dep_num;r.boosted=boosted_group;r.events=events;memcpy(r.opp,base_opp,sizeof(base_opp));memcpy(r.deps,max_blc_dep,sizeof(max_blc_dep));return r;}
+int main(void){long oldcopies=0,newcopies=0;
+ for(int trial=0;trial<20000;trial++){
+  node_count=rnd()%65;
+  for(int i=0;i<node_count;i++){memset(&nodes[i],0,sizeof(nodes[i]));nodes[i].blc=trial%5==0?0:trial%7==0?50:rnd()%101;nodes[i].pid=rnd()%8;nodes[i].buffer_id=rnd()%8;nodes[i].dep_num=trial%3==0?100:trial%3==1?0:rnd()%101;for(int j=0;j<nodes[i].dep_num;j++)nodes[i].dep[j].pid=rnd();}
+  for(int flags=0;flags<8;flags++){
+   init(flags);old_check(23);assert(!blc_mlock && locks==1);oldcopies+=copies;struct result a=capture();
+   init(flags);new_check(23);assert(!blc_mlock && locks==1);newcopies+=copies;struct result b=capture();assert(!memcmp(&a,&b,sizeof(a)));
+  }
+ }
+ printf("{\"datasets\":20000,\"state_comparisons\":160000,\"equivalent\":true,\"old_copy_calls\":%ld,\"new_copy_calls\":%ld,\"runtime_validated\":false}\n",oldcopies,newcopies);
+}
+'''
+(O/'test.c').write_text(code);cmd=['gcc','-O2','-g','-fsanitize=address,undefined','-fno-omit-frame-pointer',str(O/'test.c'),'-o',str(O/'test')]
+(O/'command.json').write_text(json.dumps(cmd));subprocess.run(cmd,check=True)
+env=os.environ.copy();env['ASAN_OPTIONS']='detect_leaks=0';r=subprocess.run([str(O/'test')],capture_output=True,text=True,env=env)
+(O/'stdout.txt').write_text(r.stdout);(O/'stderr.txt').write_text(r.stderr);print(r.stdout,r.stderr);sys.exit(r.returncode)

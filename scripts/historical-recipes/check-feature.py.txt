@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Offline config, GKI CRC, vendor import and DWARF ABI checks. Never flashes."""
+from pathlib import Path
+import sys,json,re,struct,subprocess,os
+p=Path('${PROJECT_ROOT}');variant,run=sys.argv[1:3]
+assert re.fullmatch(r'[a-z0-9-]+',variant) and re.fullmatch(r'[a-z0-9-]+',run)
+a=p/'artifacts'/variant/run;info=json.loads((a/'BUILD-INFO.txt').read_text());b=Path(info['out_dir'])/info['sources']['kernel_dir']
+assert info['exit_code'] is not None, 'Build still running; wait for final metadata'
+check_suffix=sys.argv[3] if len(sys.argv)>3 else ''
+assert not check_suffix or re.fullmatch(r'-[a-z0-9-]+',check_suffix)
+c=p/'artifacts'/variant/(run+'-checks'+check_suffix);c.mkdir(exist_ok=False)
+def cfg(f):
+ d={}
+ for line in f.read_text().splitlines():
+  if line.startswith('CONFIG_'):k,v=line.split('=',1);d[k]=v
+  elif (m:=re.fullmatch(r'# (CONFIG_\w+) is not set',line)):d[m[1]]='n'
+ return d
+def syms(f):return {x[1]:int(x[0],16) for l in f.read_text().splitlines() if (x:=l.split())}
+def sections(data):
+ assert data[:6]==b'\x7fELF\x02\x01'
+ off=struct.unpack_from('<Q',data,40)[0];ents,n,idx=struct.unpack_from('<HHH',data,58)
+ hs=[struct.unpack_from('<IIQQQQIIQQ',data,off+i*ents) for i in range(n)]
+ sh=hs[idx];names=data[sh[4]:sh[4]+sh[5]]
+ return {names[h[0]:].split(b'\0')[0].decode():data[h[4]:h[4]+h[5]] for h in hs}
+x=cfg(p/'logs/pass0/archive-kernel.config');y=cfg(b/'.config')
+r={'variant':variant,'run':run,'device_validated':False,'build_exit':info['exit_code'],'config_diff':{k:{'stock':x.get(k),'candidate':y.get(k)} for k in sorted(x.keys()|y.keys()) if x.get(k)!=y.get(k)}}
+required={'CONFIG_KSU':'y'}
+if info['sources'].get('susfs'):required['CONFIG_KSU_SUSFS']='y'
+fragment=info['sources'].get('config_fragment')
+if fragment:required.update(cfg(p/fragment))
+# DroidSpaces documentation uses a nonexistent name on Linux 5.15.
+# Keep old build inputs intact; verify the actual conntrack-netlink option explicitly.
+r['documented_config_aliases']={}
+if 'CONFIG_NF_CONNTRACK_NETLINK' in required:
+ r['documented_config_aliases']['CONFIG_NF_CONNTRACK_NETLINK']='CONFIG_NF_CT_NETLINK'
+ required['CONFIG_NF_CT_NETLINK']=required.pop('CONFIG_NF_CONNTRACK_NETLINK')
+for name in ['CONFIG_MODVERSIONS','CONFIG_CFI_CLANG','CONFIG_LTO_CLANG_FULL','CONFIG_TRIM_UNUSED_KSYMS','CONFIG_MODULE_SIG_PROTECT']:
+ required[name]=x.get(name)
+r['required_config_mismatches']={k:{'expected':v,'actual':y.get(k)} for k,v in required.items() if y.get(k)!=v}
+ref=syms(p/'stock-images/google-13471816/vmlinux.symvers');sf=a/'vmlinux.symvers'
+if not sf.exists():sf=b/'vmlinux.symvers'
+if sf.exists():
+ new=syms(sf);r.update(symbols_missing=sorted(ref.keys()-new.keys()),symbols_added=sorted(new.keys()-ref.keys()),crc_differences={k:{'stock':hex(ref[k]),'candidate':hex(new[k])} for k in sorted(ref.keys()&new.keys()) if ref[k]!=new[k]})
+ rows=[]
+ for f in sorted((p/'stock-images/vendor-modules').glob('*.ko'))+sorted((p/'stock-images/vendor-dlkm').rglob('*.ko')):
+  data=sections(f.read_bytes()).get('__versions',b'');assert len(data)%64==0
+  mismatches=[];matched=0
+  for off in range(0,len(data),64):
+   crc=struct.unpack_from('<Q',data,off)[0];name=data[off+8:off+64].split(b'\0')[0].decode()
+   if name not in ref:continue
+   if new.get(name)==crc:matched+=1
+   else:mismatches.append({'symbol':name,'module_crc':hex(crc),'candidate_crc':hex(new[name]) if name in new else None})
+  rows.append({'module':str(f.relative_to(p)),'matched_gki_imports':matched,'mismatches':mismatches})
+ r['vendor_modules']=len(rows);r['vendor_gki_imports_matched']=sum(v['matched_gki_imports'] for v in rows);r['vendor_crc_mismatches']=sum(len(v['mismatches']) for v in rows)
+ (c/'vendor-imports.json').write_text(json.dumps(rows,indent=2)+'\n')
+(c/'summary.json').write_text(json.dumps(r,indent=2)+'\n')
+if (b/'vmlinux').exists():
+ env=os.environ.copy();env['PATH']=str(p/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin')+':'+str(p/'toolchains/clang-r450784e/bin')+':/usr/bin:/bin'
+ symbols=a/'abi_symbollist'
+ if not symbols.exists():symbols=b/'abi_symbollist'
+ if not symbols.exists():symbols=p/'artifacts/stock/pipeline-01/abi_symbollist'
+ commands=[['python3',str(p/'sources/gki/build/kernel/abi/dump_abi'),'--linux-tree',str(b),'--out-file',str(c/'abi.xml'),'--kmi-symbol-list',str(symbols)],['python3',str(p/'sources/gki/build/kernel/abi/diff_abi'),'--abi-tool','delegated','--baseline',str(p/'sources/common/android/abi_gki_aarch64.xml'),'--new',str(c/'abi.xml'),'--report',str(c/'abi.report')]]
+ (c/'commands.json').write_text(json.dumps(commands,indent=2)+'\n')
+ with (c/'abi.log').open('w') as fd:
+  r['abi_dump_exit']=subprocess.run(commands[0],env=env,stdout=fd,stderr=subprocess.STDOUT).returncode
+  if r['abi_dump_exit']==0:r['abi_diff_exit']=subprocess.run(commands[1],env=env,stdout=fd,stderr=subprocess.STDOUT).returncode
+r['offline_compatibility_pass']=bool(r.get('build_exit')==0 and r.get('abi_diff_exit')==0 and r.get('vendor_crc_mismatches')==0 and not r.get('symbols_missing') and not r.get('crc_differences') and not r['required_config_mismatches'])
+(c/'summary.json').write_text(json.dumps(r,indent=2)+'\n')
+print(json.dumps({k:v for k,v in r.items() if k not in ['config_diff','crc_differences']},indent=2))
+raise SystemExit(0 if r['offline_compatibility_pass'] else 1)

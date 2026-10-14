@@ -1,0 +1,390 @@
+[
+  {
+    "path": "components/KernelSU-Next/assets/kernelsu_next.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_modules.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_settings_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_modules_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_modules_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_superuser_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_launcher_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_superuser_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_superuser.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_settings.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxxhdpi/ic_settings_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_modules.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_settings_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_modules_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_modules_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_superuser_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_launcher_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_superuser_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_superuser.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_settings.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-mdpi/ic_settings_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_modules.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_settings_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_modules_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_modules_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_superuser_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_launcher_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_superuser_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_superuser.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_settings.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-hdpi/ic_settings_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_modules.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_settings_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_modules_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_modules_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_superuser_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_launcher_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_superuser_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_superuser.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_settings.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xhdpi/ic_settings_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_modules.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_settings_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_modules_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_modules_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_superuser_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_launcher_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_superuser_monochrome.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_superuser.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_settings.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/res/mipmap-xxhdpi/ic_settings_foreground.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/gradle/wrapper/gradle-wrapper.jar",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/userspace/ksud/bin/aarch64/busybox",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/userspace/ksud/bin/aarch64/bootctl",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/KernelSU-Next/userspace/ksud/bin/x86_64/busybox",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/app/src/main/assets/binaries/busybox-aarch64",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/app/src/main/assets/binaries/busybox-x86_64",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/app/src/main/assets/binaries/magiskpolicy-x86",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/app/src/main/assets/binaries/magiskpolicy-x86_64",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/app/src/main/assets/binaries/magiskpolicy-armhf",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/app/src/main/assets/binaries/busybox-x86",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/app/src/main/assets/binaries/busybox-armhf",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/app/src/main/assets/binaries/magiskpolicy-aarch64",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Android/gradle/wrapper/gradle-wrapper.jar",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/linux/linux-showcase.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/2-containers_tab.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/5_container_configuration.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/3_container_configuration.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/6_startup_logs.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/4_container_configuration.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/9_systemd_menu.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/12_mnt_net_isolation.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/8_container_information.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/1-home_page.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/13_settings_screen.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/11_terminal_fastfetch.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/7_panel.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/10_terminal_user_picker.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/Droidspaces/Documentation/resources/gallery/14_built_in_requirements_checker.png",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "components/susfs4ksu/ksu_module_susfs/tools/ksu_susfs_arm64",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "kernel/Documentation/logo.gif",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "kernel/tools/perf/tests/pe-file.exe",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "kernel/tools/perf/tests/pe-file.exe.debug",
+    "reason": "opaque upstream asset excluded; kernel build does not need it"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/sgx/sign_key.pem",
+    "reason": "upstream test private key; not included in either deliverable"
+  },
+  {
+    "path": "components/nomount/.github",
+    "reason": "upstream CI omitted from archive export"
+  },
+  {
+    "path": "components/Droidspaces/.github",
+    "reason": "upstream CI omitted from archive export"
+  },
+  {
+    "path": "components/KernelSU-Next/.github",
+    "reason": "upstream CI omitted from archive export"
+  }
+]

@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+"""Read-only CPIO and EROFS metadata helpers. EROFS definitions: kernel fs/erofs/erofs_fs.h."""
+import struct, stat, subprocess, re
+
+def cpio_read(b):
+ rows=[];i=0
+ while i+110<=len(b):
+  assert b[i:i+6]==b'070701', (i,b[i:i+6])
+  f=[int(b[i+6+j*8:i+14+j*8],16) for j in range(13)]
+  n=b[i+110:i+110+f[11]-1].decode();i=(i+110+f[11]+3)&~3
+  data=b[i:i+f[6]];assert len(data)==f[6];i=(i+f[6]+3)&~3
+  rows.append((n,f,data))
+  if n=='TRAILER!!!':
+   assert not any(b[i:]);return rows
+ raise ValueError('Missing CPIO trailer')
+
+def cpio_write(rows):
+ out=bytearray()
+ for n,f,data in rows:
+  f=f.copy();f[6]=len(data);name=n.encode()+b'\0';assert len(name)==f[11]
+  out+=b'070701'+''.join(f'{x:08x}' for x in f).encode()+name
+  out+=bytes((-len(out))%4);out+=data;out+=bytes((-len(out))%4)
+ out+=bytes((-len(out))%512)
+ return bytes(out)
+
+def erofs_metadata(image):
+ b=image.read_bytes();assert struct.unpack_from('<I',b,1024)[0]==0xe0f5e1e2
+ bs=1<<b[1036];assert bs==4096
+ meta,xbase=struct.unpack_from('<II',b,1064);rows={}
+ def xentry(off):
+  nl,idx,vl=struct.unpack_from('<BBH',b,off)
+  name=b[off+4:off+4+nl].decode();v=b[off+4+nl:off+4+nl+vl]
+  prefixes={1:'user.',4:'trusted.',6:'security.'};assert idx in prefixes,idx
+  return prefixes[idx]+name,v.hex(),(4+nl+vl+3)&~3
+ def visit(path,nid):
+  off=meta*bs+nid*32;fmt,xc,mode=struct.unpack_from('<HHH',b,off)
+  insize=64 if fmt&1 else 32
+  if fmt&1:uid,gid=struct.unpack_from('<II',b,off+24)
+  else:uid,gid=struct.unpack_from('<HH',b,off+24)
+  attrs={}
+  if xc:
+   xo=off+insize;end=xo+12+4*(xc-1);shared=b[xo+4];assert shared<=128
+   for j in range(shared):
+    idx=struct.unpack_from('<I',b,xo+12+j*4)[0];k,v,_=xentry(xbase*bs+idx*4);attrs[k]=v
+   pos=xo+12+shared*4
+   while pos<end:
+    k,v,sz=xentry(pos);attrs[k]=v;pos+=sz
+   assert pos==end
+  rows[path]={'mode':mode,'uid':uid,'gid':gid,'xattrs':attrs}
+  if stat.S_ISDIR(mode):
+   s=subprocess.check_output(['dump.erofs','--ls','--path='+path,str(image)],text=True)
+   for line in s.splitlines():
+    m=re.fullmatch(r'\s*(\d+)\s+\d+\s+(\S+)',line)
+    if m and m[2] not in ('.','..'):visit(path.rstrip('/')+'/'+m[2],int(m[1]))
+ visit('/',struct.unpack_from('<H',b,1038)[0])
+ return rows

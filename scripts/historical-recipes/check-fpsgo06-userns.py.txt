@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""Compare candidate driver contracts and DWARF to the rebuilt USER_NS FPSGO baseline."""
+from pathlib import Path
+import ast,struct,json,collections,hashlib,subprocess,os,sys,re
+run=sys.argv[1] if len(sys.argv)>1 else '03';assert re.fullmatch('[a-z0-9-]+',run)
+P=Path('${PROJECT_ROOT}');A=P/('artifacts/vendor-performance/fpsgo-'+run);L=P/('logs/performance-fpsgo/checks-'+run);L.mkdir(exist_ok=False)
+# Reuse only the pure ELF reader, without executing the existing checker CLI.
+tree=ast.parse((P/'scripts/check-vendor-droidspaces.py').read_text());fn=next(x for x in tree.body if isinstance(x,ast.FunctionDef) and x.name=='module')
+exec(compile(ast.Module(body=[fn],type_ignores=[]),'<ELF reader>','exec'))
+old=P/'artifacts/vendor-droidspaces/userns-perf-02-modules/modules/mtk_fpsgo.ko'
+paths={'userns_reference':old,'baseline_rebuilt':A/'baseline-mtk_fpsgo.ko','candidate':A/'candidate-mtk_fpsgo.ko'}
+rows={label:module(path) for label,path in paths.items()}
+checks={}
+for label in ['baseline_rebuilt','candidate']:
+ checks[label]={k:rows[label][k]==rows['userns_reference'][k] for k in ['name','vermagic','depends','license','imports','strong_undefined','weak_undefined','exports','exports_missing_crc','has_cfi_check']}
+checks['candidate_has_cfi_check']=rows['candidate']['has_cfi_check']
+checks['import_count']=len(rows['candidate']['imports']);checks['export_count']=len(rows['candidate']['exports'])
+T=P/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin'
+env=os.environ.copy();env['PATH']=str(T)+':'+str(P/'toolchains/clang-r450784e/bin')+':/usr/bin:/bin'
+commands=[]
+for label,path in paths.items():
+ cmd=[str(T/'abidw'),'--load-all-types','--no-show-locs','--out-file',str(L/(label+'.xml')),str(path)];commands.append(cmd)
+ with (L/(label+'-abi.log')).open('w') as f:r=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,env=env)
+ assert r.returncode==0, 'DWARF extraction failed'
+for label in ['baseline_rebuilt','candidate']:
+ cmd=[str(T/'abidiff'),str(L/'userns_reference.xml'),str(L/(label+'.xml'))];commands.append(cmd)
+ with (L/(label+'-abi-diff.txt')).open('w') as f:r=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,env=env)
+ checks[label]['abi_diff_exit_zero']=r.returncode==0
+(L/'commands.json').write_text(json.dumps(commands,indent=2))
+report={'checks':checks,'modules':rows,'device_validated':False,'speedup_measured_on_phone':False,'pass':all(all(v.values()) for k,v in checks.items() if isinstance(v,dict)) and checks['candidate_has_cfi_check']}
+(L/'report.json').write_text(json.dumps(report,indent=2));(A/'CHECKS.json').write_text(json.dumps(report,indent=2));print(json.dumps(checks,indent=2));assert report['pass']

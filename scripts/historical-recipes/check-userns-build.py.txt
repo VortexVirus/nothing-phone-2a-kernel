@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""Record USER_NS config, CRC and DWARF changes; never authorize vendor reuse/flash."""
+from pathlib import Path
+import subprocess,json,os,sys,re,hashlib
+P=Path('${PROJECT_ROOT}');run=sys.argv[1];assert re.fullmatch('[a-z0-9-]+',run)
+A=P/'artifacts/ksu-next-susfs-droidspaces-nomount-userns'/run
+info=json.loads((A/'BUILD-INFO.txt').read_text());assert info['exit_code']==0
+B=Path(info['out_dir'])/info['sources']['kernel_dir'];C=A.parent/(run+'-checks');C.mkdir(exist_ok=False)
+base=P/'artifacts/ksu-next-susfs-droidspaces-nomount/nomount-01'
+def cfg(f):
+ d={}
+ for line in f.read_text().splitlines():
+  if line.startswith('CONFIG_'):k,v=line.split('=',1);d[k]=v
+  elif m:=re.fullmatch(r'# (CONFIG_\w+) is not set',line):d[m[1]]='n'
+ return d
+def syms(f):return {x[1]:x[0] for line in f.read_text().splitlines() if (x:=line.split())}
+x=cfg(base/'kernel.config');y=cfg(B/'.config');a=syms(base/'vmlinux.symvers');b=syms(A/'vmlinux.symvers')
+r={'kernel_commit':info['sources']['repos']['sources/common-nomount-userns'],'baseline':'nomount-01','device_validated':False,'vendor_reuse_approved':False,'config_diff':{k:[x.get(k),y.get(k)] for k in sorted(x.keys()|y.keys()) if x.get(k)!=y.get(k)},'symbols_missing':sorted(a.keys()-b.keys()),'symbols_added':sorted(b.keys()-a.keys()),'crc_changes':{k:[a[k],b[k]] for k in sorted(a.keys()&b.keys()) if a[k]!=b[k]},'symbols_compared':len(a.keys()&b.keys()),'config_sha256':hashlib.sha256((B/'.config').read_bytes()).hexdigest()}
+for k in ['CONFIG_USER_NS','CONFIG_MEMCG','CONFIG_KSU','CONFIG_NOMOUNT','CONFIG_MODVERSIONS','CONFIG_CFI_CLANG','CONFIG_LTO_CLANG_FULL','CONFIG_MODULE_SIG_PROTECT']:
+ assert y.get(k)=='y',(k,y.get(k))
+(A/'kernel.config').write_bytes((B/'.config').read_bytes())
+env=os.environ.copy();env['PATH']=str(P/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin')+':'+str(P/'toolchains/clang-r450784e/bin')+':/usr/bin:/bin'
+commands=[['python3',str(P/'sources/gki/build/kernel/abi/dump_abi'),'--linux-tree',str(B),'--out-file',str(C/'abi.xml'),'--kmi-symbol-list',str(A/'abi_symbollist')],['python3',str(P/'sources/gki/build/kernel/abi/diff_abi'),'--abi-tool','delegated','--baseline',str(base.parent/'nomount-01-checks/abi.xml'),'--new',str(C/'abi.xml'),'--report',str(C/'abi.report')]]
+(C/'commands.json').write_text(json.dumps(commands,indent=2)+'\n')
+(C/'summary.json').write_text(json.dumps(r,indent=2)+'\n')
+with (C/'abi.log').open('w') as f:
+ r['abi_dump_exit']=subprocess.run(commands[0],env=env,stdout=f,stderr=subprocess.STDOUT).returncode
+ if r['abi_dump_exit']==0:r['abi_diff_exit']=subprocess.run(commands[1],env=env,stdout=f,stderr=subprocess.STDOUT).returncode
+r['exported_abi_unchanged']=not r['crc_changes'] and not r['symbols_missing'] and r.get('abi_diff_exit')==0
+r['remaining_requirement']='Audit/rebuild vendor inline UID/GID semantics and precompiled objects, then coherent packaging and physical validation. CRC alone insufficient.'
+(C/'summary.json').write_text(json.dumps(r,indent=2)+'\n')
+if not (A/'DO-NOT-FLASH.txt').exists():
+ (A/'DO-NOT-FLASH.txt').write_text(r['remaining_requirement']+'\n')
+(A/'SHA256SUMS').write_text(''.join(hashlib.sha256(f.read_bytes()).hexdigest()+'  '+f.name+'\n' for f in sorted(A.iterdir()) if f.is_file() and f.name!='SHA256SUMS'))
+print(json.dumps({k:v for k,v in r.items() if k!='crc_changes'},indent=2));print('CRC changes:',len(r['crc_changes']))
+assert r['abi_dump_exit']==0 and r.get('abi_diff_exit') in (0,4,8,12), 'ABI tool execution error; inspect logs'

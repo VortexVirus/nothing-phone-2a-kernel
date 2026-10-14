@@ -1,0 +1,16 @@
+{
+  "configuration_differences": {
+    "CONFIG_UNUSED_KSYMS_WHITELIST": {
+      "historical": "historical output path",
+      "new": "isolated archive output path"
+    }
+  },
+  "ksu_compilation": {
+    "commands_examined": 33,
+    "version_33296_present": true,
+    "tag_v3_4_0_present": true
+  },
+  "new_kernel_release": "5.15.178-g90700ba133db2",
+  "historical_kernel_release": "5.15.178-android13-8-g90700ba133db",
+  "scope": "configuration and compiler command inspection; final link not implied"
+}

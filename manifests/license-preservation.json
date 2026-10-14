@@ -1,0 +1,207 @@
+[
+  {
+    "component": "kernel",
+    "license_files": [
+      {
+        "path": "kernel/COPYING",
+        "sha256": "fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/Documentation/COPYING-logo",
+        "sha256": "10486db7007735c86ca687e57973c61d10b86804553551f1eed1e8e83210eaba",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/include/linux/license.h",
+        "sha256": "fcd903604a4382c8913ef9c5e1779a2475248b09781a3b52e743bc066f5a6ff7",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/tools/usb/usbip/COPYING",
+        "sha256": "cd5c66af63b509ccd75ec85fee41b6e5cbb77cd6bf9392a54900acc0f02be4a6",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/exceptions/Linux-syscall-note",
+        "sha256": "8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/exceptions/GCC-exception-2.0",
+        "sha256": "0dca50b78073055447d02e8f6ae4fa94c1d0e6d7fbb4c874c9db5eb960c8b3d4",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/dual/MPL-1.1",
+        "sha256": "ccbda1d2f0cfef821f39e1880aae9213c7933e07713ee638ad1fb02547c0b97b",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/dual/CDDL-1.0",
+        "sha256": "490abf7869e4638fbb43df99a20e5683224617a6bf9ffd06971cb02b153e53c1",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/dual/Apache-2.0",
+        "sha256": "7e4d3fba250d15e9e0afa380d4b611828fa2560cc8fdebe95bcf2f01a487de12",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/dual/CC-BY-4.0",
+        "sha256": "84d5ad08940d29065d8a6f062effa4204c2235c9f2487aa53748ed0a0a6cce86",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/preferred/BSD-2-Clause",
+        "sha256": "6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/preferred/BSD-3-Clause",
+        "sha256": "7a83b1aeb460458db9a4bd521d7f237c45b1650f6e60ea5ffc71e49472454de3",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/preferred/MIT",
+        "sha256": "323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/preferred/GPL-2.0",
+        "sha256": "f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/preferred/BSD-3-Clause-Clear",
+        "sha256": "3f8a01d020e77c045e364c4681ee78c591041b7a38aa61972f689f4bc4cb5088",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/preferred/LGPL-2.1",
+        "sha256": "0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/preferred/LGPL-2.0",
+        "sha256": "b62fa9feac8de9899cd1738f5845cedbad9ca2acd8056513b77666c9ba1ef600",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/deprecated/X11",
+        "sha256": "21115f2385035c1ceeda8820b7f050c89a30418457a5e2a5c6091f2545d40e44",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/deprecated/GPL-1.0",
+        "sha256": "79270bf7a89e1c6bee5d578f920f330b61db2ff3b800cf095a1cc5cb34367ccd",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/deprecated/GFDL-1.1",
+        "sha256": "d803c235315b9f8bc0df530f5fc89d8d9680bf82975c5c9cc971668cd722370a",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/deprecated/Linux-OpenIB",
+        "sha256": "8ae20d34c2a74c85ae2760dd0034baf18e44bee3289b9b3a4fe46768b4ea2cd6",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/deprecated/ISC",
+        "sha256": "cbdf535b99a9f4cb208c5495c6dd9a1f84104d83c03f8f0d98ee7a0c43805388",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/deprecated/GFDL-1.2",
+        "sha256": "8924806fea842f1166f891a2f07cdaac771cd3a99e6c5d4b9ac76b0dfcd0b28b",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/LICENSES/deprecated/Zlib",
+        "sha256": "3b42160485d3d596ff8a4956958c4360dc55f1e2414c964aef0ad2d3c2a92abb",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/drivers/net/LICENSE.SRC",
+        "sha256": "926bbcf0ff4b061b3ee987a486877fc09fb1ecb506e3375652bd97d925c9cd12",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/drivers/net/wireless/marvell/libertas/LICENSE",
+        "sha256": "d252a214b30d9a81ad9eb2e3b6b7e1c8ed75f40a43db173903f1d38559234a99",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/Documentation/process/license-rules.rst",
+        "sha256": "eabaa82f704625a0be40f248f0888b236d320121a951ce6880099d5491b5e0ec",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/Documentation/scsi/LICENSE.FlashPoint",
+        "sha256": "effc722d2f0ee223eaa9e1e352fb4ac421119dd9b5328f9e566489c17c6384c3",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/Documentation/translations/zh_TW/process/license-rules.rst",
+        "sha256": "351189cfffe3d978b1333cb9ead0967107dfa23a326a639c590c9b0da4287f1c",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/Documentation/translations/zh_CN/process/license-rules.rst",
+        "sha256": "ccbf1dfdd8682497720c61c663bd6288dd870d036004d5a5f22642c07abf5e07",
+        "identical_to_original": true
+      },
+      {
+        "path": "kernel/Documentation/translations/it_IT/process/license-rules.rst",
+        "sha256": "bf90d52465d79494f004acde2cf3abd51e32669b870ca6bf3fa69d49fb9a6e36",
+        "identical_to_original": true
+      }
+    ]
+  },
+  {
+    "component": "components/KernelSU-Next",
+    "license_files": [
+      {
+        "path": "components/KernelSU-Next/LICENSE",
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "identical_to_original": true
+      },
+      {
+        "path": "components/KernelSU-Next/kernel/LICENSE",
+        "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+        "identical_to_original": true
+      }
+    ]
+  },
+  {
+    "component": "components/susfs4ksu",
+    "license_files": [
+      {
+        "path": "components/susfs4ksu/LICENSE",
+        "sha256": "3da27bc7c6a063f498b4278372d48e113453f93aecc709f44276e278fc0cac12",
+        "identical_to_original": true
+      }
+    ]
+  },
+  {
+    "component": "components/nomount",
+    "license_files": [
+      {
+        "path": "components/nomount/LICENSE",
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "identical_to_original": true
+      }
+    ]
+  },
+  {
+    "component": "components/Droidspaces",
+    "license_files": [
+      {
+        "path": "components/Droidspaces/LICENSE",
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "identical_to_original": true
+      }
+    ]
+  }
+]

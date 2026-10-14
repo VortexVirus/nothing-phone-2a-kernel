@@ -1,0 +1,24 @@
+# Local dependencies, builds, keys and phone data
+.deps/
+.work/
+out/
+dist/
+*.o
+*.ko
+*.img
+*.apk
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+.env
+.env.*
+__pycache__/
+*.pyc
+logs/
+private/
+*.tar
+*.tar.gz
+*.tar.zst

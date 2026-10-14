@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+"""Preserve the selected experimental module set and metadata, never a flash image."""
+from pathlib import Path
+import json,hashlib,shutil,sys,re,datetime
+p=Path('${PROJECT_ROOT}');run,release=sys.argv[1:3];assert all(re.fullmatch('[a-z0-9-]+',x) for x in [run,release])
+a=p/'artifacts/vendor-droidspaces'/run;i=json.loads((a/'BUILD-INFO.json').read_text());c=json.loads((a/'module-checks.json').read_text());l=json.loads((a/'layout-checks.json').read_text());assert i['exit_code']==0
+assert c['no_new_symbol_errors_vs_stock'] and not c['observed_loaded_not_selected'] and not c['observed_loaded_with_symbol_errors']
+assert hashlib.sha256((Path(i['out_dir'])/'kernel-5.15/.config').read_bytes()).hexdigest()==i['config_sha256']
+assert l['all_observed_layouts_match'] and l['all_six_types_covered']
+assert c['selected_vendor_modules']==410 and not c['missing'] and not c['ambiguous']
+target=p/'artifacts/vendor-droidspaces'/release;target.mkdir(exist_ok=False);(target/'modules').mkdir()
+hashes={};rows=[];lookup={m['name']:m for m in c['modules']}
+for name,m in sorted(lookup.items()):
+ src=Path(m['path']);dst=target/'modules'/(name+'.ko');assert hashlib.sha256(src.read_bytes()).hexdigest()==m['sha256']
+ shutil.copyfile(src,dst);assert hashlib.sha256(dst.read_bytes()).hexdigest()==m['sha256'];hashes['modules/'+dst.name]=m['sha256']
+stock=json.loads((p/'artifacts/vendor-stock/reference-01/module-map.json').read_text())
+for m in stock:
+ name=m['module_name'];rows.append({'stock_path':m['stock_path'],'module_name':name,'candidate':str((target/'modules'/(name+'.ko')).relative_to(p)),'sha256':lookup[name]['sha256']})
+info=dict(i,date_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),stage='Experimental DroidSpaces module set matched to combined GKI; NOT FLASHABLE standalone',source_run=run,stock_files=len(rows),unique_modules=len(lookup),artifact_sha256=hashes,device_validated=False,offline_no_new_symbol_errors=True,offline_absolute_closure_pass=c['offline_symbol_pass'],preexisting_stock_unresolved_strong=c['preexisting_stock_unresolved_strong'],representative_layouts_match=True,abi_coverage=l['coverage'])
+info.pop('local_source_snapshots',None)
+(target/'BUILD-INFO.json').write_text(json.dumps(info,indent=2)+'\n');(target/'module-map.json').write_text(json.dumps(rows,indent=2)+'\n');(target/'SHA256SUMS').write_text(''.join(v+'  '+k+'\n' for k,v in sorted(hashes.items())))
+shutil.copyfile(Path(i['out_dir'])/'kernel-5.15/.config',target/'vendor.config')
+(target/'DO-NOT-FLASH.txt').write_text('Experimental modules only, paired only with the GKI recorded in BUILD-INFO.json. Not compatible with the currently installed module set. Partition packaging, AVB/rollback and device tests not done. Pre-existing optional TUI dependency remains documented. No automatic flash permitted.\n')
+print(json.dumps({'release':str(target),'unique_modules':len(lookup),'stock_paths_mapped':len(rows),'device_validated':False}))

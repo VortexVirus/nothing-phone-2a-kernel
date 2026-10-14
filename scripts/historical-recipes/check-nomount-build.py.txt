@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""Compare NoMount to the physically tested combined kernel; no phone operations."""
+from pathlib import Path
+import json,os,subprocess,sys,hashlib,re
+P=Path('${PROJECT_ROOT}');variant='ksu-next-susfs-droidspaces-nomount'
+run=sys.argv[1];assert re.fullmatch(r'[a-z0-9-]+',run)
+A=P/'artifacts'/variant/run;info=json.loads((A/'BUILD-INFO.txt').read_text());assert info['exit_code']==0
+B=Path(info['out_dir'])/info['sources']['kernel_dir'];C=A.parent/(run+'-checks');C.mkdir(exist_ok=False)
+base=P/'artifacts/ksu-next-susfs-droidspaces/combined-01'
+def cfg(f):
+ d={}
+ for line in f.read_text().splitlines():
+  if line.startswith('CONFIG_'):k,v=line.split('=',1);d[k]=v
+  elif m:=re.fullmatch(r'# (CONFIG_\w+) is not set',line):d[m[1]]='n'
+ return d
+def syms(f):return {a[1]:a[0] for line in f.read_text().splitlines() if (a:=line.split())}
+x=cfg(P/'builds/archive-ksu-next-susfs-droidspaces-combined-01/common-susfs-droidspaces/.config');y=cfg(B/'.config')
+a=syms(base/'vmlinux.symvers');b=syms(A/'vmlinux.symvers')
+r={'baseline_kernel':'9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd','candidate_sources':info['sources'],'device_validated':False,'config_diff':{k:[x.get(k),y.get(k)] for k in sorted(x.keys()|y.keys()) if x.get(k)!=y.get(k)},'symbols_missing':sorted(a.keys()-b.keys()),'symbols_added':sorted(b.keys()-a.keys()),'crc_changes':{k:[a[k],b[k]] for k in a.keys()&b.keys() if a[k]!=b[k]},'symbols_compared':len(a.keys()&b.keys()),'nomount_builtin':y.get('CONFIG_NOMOUNT')=='y' and (B/'fs/nomount/nomount.o').exists(),'config_sha256':hashlib.sha256((B/'.config').read_bytes()).hexdigest()}
+env=os.environ.copy();env['PATH']=str(P/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin')+':'+str(P/'toolchains/clang-r450784e/bin')+':/usr/bin:/bin'
+cmd=['python3',str(P/'sources/gki/build/kernel/abi/diff_abi'),'--abi-tool','delegated','--baseline',str(base.parent/'combined-01-checks/abi.xml'),'--new',str(C/'abi.xml'),'--report',str(C/'abi.report')]
+(C/'command.json').write_text(json.dumps(cmd,indent=2)+'\n')
+dump=['python3',str(P/'sources/gki/build/kernel/abi/dump_abi'),'--linux-tree',str(B),'--out-file',str(C/'abi.xml'),'--kmi-symbol-list',str(A/'abi_symbollist')]
+(C/'dump-command.json').write_text(json.dumps(dump,indent=2)+'\n')
+with (C/'abi.log').open('w') as f:
+ r['abi_dump_exit']=subprocess.run(dump,env=env,stdout=f,stderr=subprocess.STDOUT).returncode
+ assert r['abi_dump_exit']==0,'Cannot validate ABI without DWARF extraction'
+ r['abi_diff_exit']=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT).returncode
+# The whitelist path changes with OUT_DIR; accept only byte-identical content.
+whitelist='CONFIG_UNUSED_KSYMS_WHITELIST'
+r['config_path_only_differences']={}
+if whitelist in r['config_diff']:
+ old_path,new_path=[Path(v.strip('"')) for v in r['config_diff'][whitelist]]
+ old_whitelist=P/'builds/archive-ksu-next-susfs-droidspaces-combined-01/common-susfs-droidspaces/abi_symbollist.raw'
+ assert old_whitelist.read_bytes()==new_path.read_bytes(), 'KMI whitelist content changed'
+ r['config_path_only_differences'][whitelist]={'paths':r['config_diff'].pop(whitelist),'content_sha256':hashlib.sha256(new_path.read_bytes()).hexdigest()}
+r['offline_compatibility_pass']=r['nomount_builtin'] and not r['symbols_missing'] and not r['crc_changes'] and r['abi_diff_exit']==0 and r['config_diff']=={'CONFIG_NOMOUNT':[None,'y']}
+r['vendor_reuse_scope']='Existing combined-modules-01 only, not stock drivers; unchanged exported CRC/config and DWARF ABI required. Pre-existing t_base_tui and blob exceptions remain.'
+(C/'summary.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r,indent=2));sys.exit(0 if r['offline_compatibility_pass'] else 1)

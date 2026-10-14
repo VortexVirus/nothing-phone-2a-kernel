@@ -1,0 +1,20 @@
+[
+  {
+    "script": "setup-dependencies.py",
+    "syntax": "pass",
+    "help_exit": 0
+  },
+  {
+    "script": "build.py",
+    "syntax": "pass",
+    "help_exit": 0
+  },
+  {
+    "script": "audit-release.py",
+    "syntax": "pass",
+    "help_exit": 0
+  },
+  {
+    "required_documents_present": true
+  }
+]

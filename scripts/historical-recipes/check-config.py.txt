@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+"""Compare all Kconfig values; only the verified symbol-list pathname may differ."""
+from pathlib import Path
+import hashlib,json,re,subprocess,sys
+p=Path('${PROJECT_ROOT}')
+def config(f):
+ d={}
+ for s in f.read_text().splitlines():
+  if s.startswith('CONFIG_'):k,v=s.split('=',1);d[k]=v
+  elif (m:=re.fullmatch(r'# (CONFIG_\w+) is not set',s)):d[m[1]]='n'
+ return d
+ref=p/'logs/pass0/archive-kernel.config';gen=p/'builds/preflight/dist/generated.config'
+a,b=config(ref),config(gen)
+diff={k:{'stock':a.get(k),'generated':b.get(k)} for k in sorted(a.keys()|b.keys()) if a.get(k)!=b.get(k)}
+raw=p/'builds/preflight/common/abi_symbollist.raw'
+# Google dist's abi_symbollist is a sectioned list; flatten with the exact official tool.
+r=subprocess.run([str(p/'sources/gki/build/abi/flatten_symbol_list')],input=(p/'stock-images/google-13471816/abi_symbollist').read_bytes(),capture_output=True,check=True)
+symbols_match=raw.read_bytes()==r.stdout
+unexpected={k:v for k,v in diff.items() if k!='CONFIG_UNUSED_KSYMS_WHITELIST'}
+report={'passed':not unexpected and symbols_match,'differences':diff,'unexpected_differences':unexpected,'flattened_symbol_list_matches_google':symbols_match,'generated_config_sha256':hashlib.sha256(gen.read_bytes()).hexdigest(),'reference_config_sha256':hashlib.sha256(ref.read_bytes()).hexdigest(),'gki_commit':subprocess.check_output(['git','-C',str(p/'sources/common'),'rev-parse','HEAD'],text=True).strip()}
+(p/'logs/pipeline/config-comparison.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report,indent=2))
+sys.exit(0 if report['passed'] else 2)

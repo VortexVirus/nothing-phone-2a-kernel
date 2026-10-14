@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import subprocess,json,hashlib
+p=Path('${PROJECT_ROOT}');j=json.loads((p/'sources.lock.json').read_text())
+repos=[('sources/common',j['gki_binary_commit']['commit']),('sources/nothing-kernel',j['kernel']['commit']),('sources/nothing-modules',j['modules']['commit'])]+[('sources/gki/'+x['path'],x['revision']) for x in j['pipeline_projects']]
+for path,commit in repos:
+ d=p/path
+ got=subprocess.check_output(['git','-C',str(d),'rev-parse','HEAD'],text=True).strip()
+ assert got==commit,(path,got,commit)
+ assert not subprocess.check_output(['git','-C',str(d),'status','--porcelain','--untracked-files=no'],text=True).strip(),f'Dirty source: {path}'
+ print(path,got)
+clang=subprocess.check_output([str(p/'toolchains/clang-r450784e/bin/clang'),'--version'],text=True)
+assert '8508608' in clang and 'r450784e' in clang and '14.0.7' in clang
+print(clang)
+print(subprocess.check_output([str(p/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin/pahole'),'--version'],text=True))
+print('Pipeline pinned; source trees clean.')

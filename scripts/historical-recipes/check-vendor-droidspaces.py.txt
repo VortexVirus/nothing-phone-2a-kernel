@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+"""Check actual selected module ELF imports/exports against the combined GKI."""
+from pathlib import Path
+import json,struct,hashlib,sys,collections,re
+p=Path('${PROJECT_ROOT}');run=sys.argv[1];assert re.fullmatch('[a-z0-9-]+',run)
+family='vendor-stock' if sys.argv[2:]==['--stock-reference'] else 'vendor-droidspaces'
+assert not sys.argv[2:] or sys.argv[2:]==['--stock-reference']
+a=p/'artifacts'/family/run;i=json.loads((a/'BUILD-INFO.json').read_text());assert i['exit_code']==0
+out=Path(i['out_dir']);dest=a/'module-checks.json';assert not dest.exists()
+for f in (p/'artifacts'/family).glob('*/BUILD-INFO.json'):
+ v=json.loads(f.read_text());assert not(v.get('out_dir')==str(out) and v.get('exit_code') is None)
+def module(f):
+ b=f.read_bytes();assert b[:6]==b'\x7fELF\x02\x01'
+ off=struct.unpack_from('<Q',b,40)[0];ents,n,idx=struct.unpack_from('<HHH',b,58)
+ hs=[struct.unpack_from('<IIQQQQIIQQ',b,off+j*ents) for j in range(n)];h=hs[idx];names=b[h[4]:h[4]+h[5]]
+ sections={names[h[0]:].split(b'\0')[0].decode():b[h[4]:h[4]+h[5]] for h in hs}
+ mi=collections.defaultdict(list)
+ for v in sections.get('.modinfo',b'').split(b'\0'):
+  if b'=' in v:k,val=v.split(b'=',1);mi[k.decode()].append(val.decode(errors='replace'))
+ v=sections.get('__versions',b'');assert len(v)%64==0
+ imports={v[j+8:j+64].split(b'\0')[0].decode():struct.unpack_from('<Q',v,j)[0] for j in range(0,len(v),64)}
+ syms=sections.get('.symtab',b'');strings=sections.get('.strtab',b'');undefined=[];weak=[];exported=set();crcs={};symbol_names=set()
+ assert syms,'ELF symtab missing'
+ for j in range(0,len(syms),24):
+  name,info,other,shndx,value,size=struct.unpack_from('<IBBHQQ',syms,j);name=strings[name:strings.find(b'\0',name)].decode();symbol_names.add(name)
+  if name and shndx==0 and info>>4==1:undefined.append(name)
+  if name and shndx==0 and info>>4==2:weak.append(name)
+  if name.startswith('__ksymtab_'):exported.add(name[len('__ksymtab_'):])
+  if name.startswith('__crc_') and shndx==0xfff1:crcs[name[len('__crc_'):]]=value&0xffffffff
+ return {'path':str(f),'sha256':hashlib.sha256(b).hexdigest(),'name':mi.get('name',[f.stem])[0],'vermagic':mi.get('vermagic',[]),'depends':mi.get('depends',[]),'license':mi.get('license',[]),'imports':imports,'strong_undefined':sorted(undefined),'weak_undefined':sorted(weak),'exports':{k:crcs[k] for k in exported if k in crcs},'exports_missing_crc':sorted(exported-crcs.keys()),'has_cfi_check':'__cfi_check' in symbol_names}
+stock=[module(f) for f in sorted((p/'stock-images/vendor-modules').glob('*.ko'))+sorted((p/'stock-images/vendor-dlkm').rglob('*.ko'))]
+index=collections.defaultdict(list)
+for base in ['kernel-5.15','nothing-modules-stock']:
+ for f in sorted((out/base).rglob('*.ko')):
+  m=module(f);index[m['name']].append(m)
+required={m['name'] for m in stock};missing=sorted(required-index.keys());ambiguous={n:[x['path'] for x in index[n]] for n in required if len(index[n])>1}
+selected={n:index[n][0] for n in required if len(index[n])==1}
+gki=p/i['gki_reference'];gki_modules=[module(gki/n) for n in ['zram.ko','zsmalloc.ko']]
+# Keep stock vendor variants (notably ZRAM_WRITEBACK); generic GKI alternatives differ.
+providers=collections.defaultdict(list)
+for line in (gki/'vmlinux.symvers').read_text().splitlines():
+ v=line.split();providers[v[1]].append({'module':'vmlinux','crc':int(v[0],16)})
+for m in selected.values():
+ for k,v in m['exports'].items():providers[k].append({'module':m['name'],'crc':v})
+reference_vermagic=gki_modules[0]['vermagic'][0].split(' ',1)[1]
+stock_unique={m['name']:m for m in stock}
+stock_exports=set()
+for line in (p/'stock-images/google-13471816/vmlinux.symvers').read_text().splitlines():stock_exports.add(line.split()[1])
+for m in stock_unique.values():stock_exports.update(m['exports'])
+preexisting={m['name']:sorted(set(m['strong_undefined'])-stock_exports) for m in stock_unique.values() if set(m['strong_undefined'])-stock_exports}
+gki_build=json.loads((gki/'BUILD-INFO.txt').read_text())
+gki_out=(p/'builds/archive-stock-pipeline-01/common') if family=='vendor-stock' else Path(gki_build['out_dir'])/gki_build['sources']['kernel_dir']
+protected_imports=set(re.findall(r'"([^"]+)"',(gki_out/'kernel/gki_module_protected.h').read_text()))
+protected_exports=set(re.findall(r'"([^"]+)"',(gki_out/'kernel/gki_module_exported.h').read_text()))
+rows=[]
+for m in selected.values():
+ unresolved=[n for n in m['strong_undefined'] if n not in providers]
+ crc_errors={n:{'import':hex(v),'providers':providers.get(n,[])} for n,v in m['imports'].items() if not(n in m['weak_undefined'] and n not in providers) and (len(providers.get(n,[]))!=1 or providers[n][0]['crc']!=v)}
+ no_crc=sorted(set(m['strong_undefined'])-m['imports'].keys())
+ vermagic_ok=len(m['vermagic'])==1 and ' ' in m['vermagic'][0] and m['vermagic'][0].split(' ',1)[1]==reference_vermagic
+ rows.append(dict(m,unresolved_weak_allowed=sorted(n for n in m['weak_undefined'] if n not in providers),protected_imports=sorted(set(m['strong_undefined'])&protected_imports),protected_exports=sorted(m['exports'].keys()&protected_exports),unresolved_strong=unresolved,crc_errors=crc_errors,strong_without_crc=no_crc,vermagic_suffix_matches=vermagic_ok))
+observed=json.loads((p/'logs/flash-next-susfs-a/android-after.json').read_text())['stdout']
+loaded={line.split()[0] for line in observed.splitlines() if re.match(r'^\S+ \d+ \d+ .* Live ',line)}
+stock_deltas=[]
+for m in stock:
+ n=selected.get(m['name'])
+ if n:stock_deltas.append({'stock_path':m['path'],'name':m['name'],'crc_changed_count':sum(n['imports'].get(k)!=v for k,v in m['imports'].items()),'imports_added':sorted(n['imports'].keys()-m['imports'].keys()),'imports_removed':sorted(m['imports'].keys()-n['imports'].keys())})
+errors=[m['name'] for m in rows if m['unresolved_strong'] or m['crc_errors'] or m['strong_without_crc'] or m['exports_missing_crc'] or not m['vermagic_suffix_matches'] or not m['has_cfi_check'] or m['protected_imports'] or m['protected_exports']]
+new_errors=[]
+for m in rows:
+ known=set(preexisting.get(m['name'],[]))
+ if set(m['unresolved_strong'])-known or set(m['crc_errors'])-known or m['strong_without_crc'] or m['exports_missing_crc'] or not m['vermagic_suffix_matches'] or not m['has_cfi_check'] or m['protected_imports'] or m['protected_exports']:new_errors.append(m['name'])
+r={'scope':'Actual ELF symbol closure of selected vendor variants, including vendor zram/zsmalloc, against the combined GKI. Does not prove layout/runtime compatibility.','gki_reference':i['gki_reference'],'stock_files':len(stock),'stock_unique_modules':len(required),'selected_vendor_modules':len(selected),'selected_gki_modules':0,'generic_gki_modules_used':False,'missing':missing,'ambiguous':ambiguous,'modules_with_errors':errors,'observed_loaded_module_count':len(loaded),'observed_loaded_not_selected':sorted(loaded-selected.keys()),'observed_loaded_with_symbol_errors':sorted(loaded&set(errors)),'preexisting_stock_unresolved_strong':preexisting,'new_symbol_errors':new_errors,'no_new_symbol_errors_vs_stock':not(missing or ambiguous or new_errors),'offline_symbol_pass':not(missing or ambiguous or errors),'changed_import_crc_entries_vs_stock':sum(x['crc_changed_count'] for x in stock_deltas),'stock_deltas':stock_deltas,'modules':rows,'device_validated':False}
+dest.write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({k:v for k,v in r.items() if k not in ['modules','stock_deltas']},indent=2));sys.exit(0 if r['offline_symbol_pass'] else 1)

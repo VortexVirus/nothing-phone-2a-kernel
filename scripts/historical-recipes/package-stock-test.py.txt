@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Offline only. Build a test candidate; never call adb or fastboot."""
+from pathlib import Path
+import hashlib, json, struct, subprocess, sys, tempfile, re
+p=Path('${PROJECT_ROOT}')
+run=sys.argv[1] if len(sys.argv)>1 else 'pipeline-01'
+if run not in ('pipeline-01','repro-02'): raise SystemExit('Unsupported stock build')
+kernel=p/'artifacts/stock'/run/'Image.lz4'
+stock=p/'stock-images/Pacman_B4.0-251230-2052/boot.img'
+out=p/'artifacts/stock'/('test-'+run)
+if out.exists(): raise SystemExit('Output exists; preserve it')
+def sha(b): return hashlib.sha256(b).hexdigest()
+s=stock.read_bytes()
+assert sha(s)=='b4fca219157eac8e12b298ae419dc7bd99e6aeabdd72f7cd397ae0361ea67ef0'
+assert s[:8]==b'ANDROID!' and len(s)==67108864
+size,ramdisk,osversion,header=struct.unpack_from('<4I',s,8)
+assert (ramdisk,osversion,header)==(0,0,1584)
+assert struct.unpack_from('<I',s,40)[0]==4
+assert struct.unpack_from('<I',s,1580)[0]==0
+assert s[44:1580]==bytes(1536)
+avb=p/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin/avbtool'
+mk=p/'sources/gki/tools/mkbootimg/mkbootimg.py'
+commands=[]
+def call(args):
+ commands.append([str(x) for x in args])
+ return subprocess.check_output(commands[-1],stderr=subprocess.STDOUT,text=True)
+def mkboot(k,b): call([sys.executable,mk,'--header_version','4','--kernel',k,'--output',b])
+with tempfile.TemporaryDirectory(prefix='pacman-pack-') as tmp:
+ t=Path(tmp); refk=t/'stock.lz4'; refk.write_bytes(s[4096:4096+size]); refb=t/'stock.img'
+ mkboot(refk,refb)
+ # Prove mkbootimg reconstructs the OEM payload, up to the AVB original size.
+ origsize=struct.unpack_from('>Q',s,len(s)-64+12)[0]
+ base=refb.read_bytes()
+ assert base==s[:len(base)], 'Stock unsigned payload round trip differs'
+ certificate=s[len(base):origsize]
+ assert len(certificate)==16384 and certificate[:4]==b'AVB0', 'Unknown OEM extension'
+ assert base+certificate==s[:origsize]
+ # The old Google certificate is archived, never attached to a different kernel.
+ out.mkdir(parents=True)
+ hashes=[]
+ for n in (1,2):
+  b=t/('candidate-'+str(n)+'.img'); mkboot(kernel,b)
+  raw=b.read_bytes(); h=bytearray(raw[:4096]); h[8:12]=s[8:12]
+  assert h==s[:4096], 'Unexpected header change'
+  assert raw[4096:4096+kernel.stat().st_size]==kernel.read_bytes()
+  call([avb,'add_hash_footer','--image',b,'--partition_name','boot',
+        '--partition_size','67108864','--algorithm','NONE','--salt',sha(kernel.read_bytes()),
+        '--prop','com.android.build.boot.os_version:13',
+        '--prop','com.android.build.boot.fingerprint:alps/hal_mgvi_64_armv82/mgvi_64_armv82:13/TP1A.220624.014/2512302052:user/release-keys',
+        '--prop','com.android.build.boot.security_patch:2025-04-05'])
+  data=b.read_bytes(); assert len(data)==67108864; hashes.append(sha(data))
+  if n==1:
+   (out/'boot-test.img').write_bytes(data)
+   (out/'avb-info.txt').write_text(call([avb,'info_image','--image',b]))
+   info=(out/'avb-info.txt').read_text()
+   image_size=int(re.search(r'Image Size:\s+(\d+) bytes',info).group(1))
+   salt=bytes.fromhex(re.search(r'Salt:\s+([a-f0-9]+)',info).group(1))
+   digest=re.search(r'Digest:\s+([a-f0-9]+)',info).group(1)
+   assert sha(salt+data[:image_size])==digest
+   (out/'integrity-verify.txt').write_text('Hash descriptor verified independently; algorithm NONE has no signature to verify.\n')
+ assert hashes[0]==hashes[1], 'Packaging not reproducible'
+ report={'build':run,'device_validated':False,'flash_authorized':False,
+ 'stock_unsigned_payload_round_trip_exact':True,'stock_gki_certificate_bytes':16384,'candidate_gki_certificate':'omitted: old Google certificate would be invalid','packaged_twice_identical':True,
+ 'boot_test_sha256':hashes[0],'kernel_sha256':sha(kernel.read_bytes()),
+ 'rollback_stock_sha256':sha(s),'image_bytes':67108864,
+ 'avb':'NONE: integrity hash only; no OEM signature, OEM chain NOT satisfied. Unlocked device required; bootloader acceptance untested.',
+ 'partition_size_device_confirmed':False,'fastboot_boot_supported':None,'commands':commands}
+ (out/'PACKAGE-INFO.json').write_text(json.dumps(report,indent=2)+'\n')
+ (out/'SHA256SUMS').write_text(hashes[0]+'  boot-test.img\n')
+ print(json.dumps(report,indent=2))

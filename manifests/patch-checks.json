@@ -1,0 +1,17 @@
+[
+  {
+    "patch": "gki-custom.patch",
+    "check_against_original_base": 0,
+    "diagnostic_bytes": 0
+  },
+  {
+    "patch": "ksu-susfs-port.patch",
+    "check_against_original_base": 0,
+    "diagnostic_bytes": 0
+  },
+  {
+    "patch": "fpsgo06.patch",
+    "check_against_original_base": 0,
+    "diagnostic_bytes": 0
+  }
+]

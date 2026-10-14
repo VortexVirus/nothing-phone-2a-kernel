@@ -1,0 +1,26 @@
+{
+  "publication_status": "SOURCE REVIEW ONLY: integrated licensing clarification required before public release",
+  "privacy_status": "automated pre-archive passes passed; final extracted archive scan recorded separately",
+  "license_files_verified": 36,
+  "private_git_history_included": false,
+  "private_keys_included": false,
+  "oem_images_publicly_included": false,
+  "original_sources_modified": false,
+  "device_actions_performed": false,
+  "new_build": {
+    "exit_code": 0,
+    "abi_dump_exit": 0,
+    "abi_diff_exit": 0,
+    "export_count": 8427,
+    "crc_changes": 0,
+    "device_tested": false
+  },
+  "limitations": [
+    "heuristic secrets checks are not an absolute guarantee",
+    "component kernel-license grants require clarification",
+    "new kernel signature and release suffix differ",
+    "no full new vendor rebuild or phone validation",
+    "historical optional TUI closure failure remains",
+    "proprietary blob interfaces not exhaustively validated"
+  ]
+}

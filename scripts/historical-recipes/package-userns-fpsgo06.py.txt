@@ -1,0 +1,185 @@
+#!/usr/bin/env python3
+"""Offline paired package only. Never invokes adb/fastboot. Refuses overwrite.
+Preserves CPIO entries, EROFS metadata and AVB descriptors outside explicit changes.
+"""
+from pathlib import Path
+import subprocess,sys,json,hashlib,struct,runpy,shutil,os,re,zipfile,types,stat,uuid
+P=Path('${PROJECT_ROOT}');run=sys.argv[1];assert re.fullmatch('[a-z0-9-]+',run)
+O=P/'artifacts/ksu-next-susfs-droidspaces-nomount-userns'/('paired-'+run)
+W=Path('${BUILD_CACHE}')/('package-userns-fpsgo06-'+run)
+assert not O.exists() and not W.exists(),'Preserve previous attempts'
+O.mkdir();W.mkdir();(O/'NOT-READY-TO-FLASH.txt').write_text('Offline preparation only. Live prechecks and explicit authorization required.\n')
+T=P/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin';AVB=T/'avbtool'
+os.environ['PATH']=str(T)+os.pathsep+os.environ['PATH']
+ST=P/'stock-images/Pacman_B4.0-251230-2052';G=P/'artifacts/ksu-next-susfs-droidspaces-nomount-userns/userns-02'
+M=P/'artifacts/vendor-droidspaces/userns-fpsgo06-01-modules';CK=P/'artifacts/vendor-droidspaces/userns-fpsgo06-01-modules'
+h=runpy.run_path(str(P/'scripts/image-metadata.py'));commands=[]
+def sha(b):return hashlib.sha256(b).hexdigest()
+def js(path,data):path.write_text(json.dumps(data,indent=2)+'\n')
+def cmd(args):
+ a=list(map(str,args));commands.append(a);js(O/'commands.json',commands)
+ r=subprocess.run(a,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+ with (O/'commands.log').open('ab') as log:log.write(('\n$ '+' '.join(a)+'\n').encode()+(('Binary stdout: '+str(len(r.stdout))+' bytes, SHA256 '+sha(r.stdout)+'\n').encode() if b'\0' in r.stdout else r.stdout))
+ if r.returncode:raise RuntimeError(f'Command exit {r.returncode}: {a[0]} (see commands.log)')
+ return r.stdout
+checks=json.loads((CK/'module-checks.json').read_text());layouts=json.loads((CK/'layout-checks.json').read_text())
+assert checks['no_new_symbol_errors_vs_stock'] and not checks['new_symbol_errors']
+assert not checks['observed_loaded_not_selected'] and not checks['observed_loaded_with_symbol_errors']
+assert checks['modules_with_errors']==['t_base_tui']
+assert layouts['all_observed_layouts_match'] and layouts['all_six_types_covered']
+expected=json.loads((P/'logs/pipeline/stock-images-extended-hashes.json').read_text())
+for n,d in expected.items():assert sha((ST/n).read_bytes())==d,n
+assert sha((G/'vmlinux.symvers').read_bytes())=='ec7144df2d3116b1c5c29f577f3dcb040543c2717aa1492d4b40c04d256f7c0e'
+mp=json.loads((M/'module-map.json').read_text());assert len(mp)==435
+# Strip only debugging sections; prove all allocated runtime sections identical.
+def sections(b):
+ off=struct.unpack_from('<Q',b,40)[0];es,n,idx=struct.unpack_from('<HHH',b,58)
+ hs=[struct.unpack_from('<IIQQQQIIQQ',b,off+j*es) for j in range(n)];sn=hs[idx];names=b[sn[4]:sn[4]+sn[5]]
+ return {names[x[0]:].split(b'\0')[0].decode():(x[2],x[1],x[5],b[x[4]:x[4]+x[5]] if x[1]!=8 else b'') for x in hs}
+def runtime(b):return {n:v for n,v in sections(b).items() if v[0]&2}
+def modinfo(b):
+ s=sections(b)['.modinfo'][3];d={}
+ for x in s.split(b'\0'):
+  if b'=' in x:
+   k,v=x.split(b'=',1);d.setdefault(k,[]).append(v)
+ return d
+stripdir=W/'stripped';stripdir.mkdir();stripped={};stripreport=[]
+for row in mp:
+ src=P/row['candidate'];name=row['module_name'];b=src.read_bytes();assert sha(b)==row['sha256']
+ if name not in stripped:
+  dst=stripdir/(name+'.ko');shutil.copyfile(src,dst);cmd([P/'toolchains/clang-r450784e/bin/llvm-strip','--strip-debug',dst])
+  nb=dst.read_bytes();assert runtime(b)==runtime(nb),name
+  stripped[name]=nb;stripreport.append({'name':name,'input_sha256':sha(b),'stripped_sha256':sha(nb),'bytes':len(nb),'runtime_sections_unchanged':True})
+ old=modinfo(Path(row['stock_path']).read_bytes());new=modinfo(b)
+ for k in [b'alias',b'softdep'] :assert sorted(old.get(k,[]))==sorted(new.get(k,[])),(name,k)
+ assert set(b','.join(old.get(b'depends',[])).split(b','))==set(b','.join(new.get(b'depends',[])).split(b',')),name
+assert len(stripped)==410;js(O/'stripping.json',stripreport)
+# Read AVB implementation embedded in pinned build tool, never from an unpinned pip module.
+a=types.ModuleType('pinned_avbtool');a.__file__=str(AVB)
+exec(compile(zipfile.ZipFile(AVB).read('avbtool.py'),str(AVB)+'!avbtool.py','exec'),a.__dict__);av=a.Avb()
+def parse(path):return av._parse_image(a.ImageHandler(str(path),read_only=True))
+def footer(image,name,size,template,tree=False):
+ desc=parse(template)[2];d=next(x for x in desc if getattr(x,'partition_name',None)==name)
+ args=[AVB,'add_hashtree_footer' if tree else 'add_hash_footer','--image',image,'--partition_name',name,'--partition_size',size,'--algorithm','NONE','--salt',d.salt.hex()]
+ if tree:args+=['--hash_algorithm',d.hash_algorithm,'--block_size',d.data_block_size,'--fec_num_roots',d.fec_num_roots]
+ if name=='boot':
+  args[args.index('--algorithm')+1]='SHA256_RSA2048';args+=['--key',key]
+ for x in desc:
+  if isinstance(x,a.AvbPropertyDescriptor):args+=['--prop',x.key+':'+x.value.decode()]
+ cmd(args)
+ (O/(name+'-avb.txt')).write_bytes(cmd([AVB,'info_image','--image',image]))
+keydir=P/'toolchains/private-droidspaces-avb';keydir.mkdir(mode=0o700,exist_ok=True);key=keydir/'test-rsa2048.pem'
+if not key.exists():
+ fd=os.open(key,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600);os.close(fd)
+ cmd(['openssl','genpkey','-algorithm','RSA','-pkeyopt','rsa_keygen_bits:2048','-out',key])
+assert stat.S_IMODE(key.stat().st_mode)==0o600
+# Boot: original header and OEM unsigned payload round trip.
+mk=P/'sources/gki/tools/mkbootimg/mkbootimg.py';s=(ST/'boot.img').read_bytes();ks=struct.unpack_from('<I',s,8)[0]
+ref=W/'original-kernel';ref.write_bytes(s[4096:4096+ks]);rb=W/'roundtrip-boot.img'
+cmd([sys.executable,mk,'--header_version','4','--kernel',ref,'--output',rb]);assert rb.read_bytes()==s[:rb.stat().st_size]
+assert parse(ST/'boot.img')[0].original_image_size-rb.stat().st_size==16384
+cmd([sys.executable,mk,'--header_version','4','--kernel',G/'Image.lz4','--output',O/'boot.img'])
+new=(O/'boot.img').read_bytes();bh=bytearray(new[:4096]);bh[8:12]=s[8:12];assert bh==s[:4096]
+footer(O/'boot.img','boot',len(s),ST/'boot.img')
+# Vendor boot: unpack/repack round trip before any edits; retain DTB, table and bootconfig.
+u=W/'vendor-boot';u.mkdir()
+args=cmd([sys.executable,P/'sources/gki/tools/mkbootimg/unpack_bootimg.py','--boot_img',ST/'vendor_boot.img','--out',u,'--format','mkbootimg','-0']).decode().rstrip('\0').split('\0')
+vref=W/'roundtrip-vendor-boot.img';cmd([sys.executable,mk,*args,'--vendor_boot',vref])
+vs=(ST/'vendor_boot.img').read_bytes();assert vref.read_bytes()==vs[:parse(ST/'vendor_boot.img')[0].original_image_size]
+ram=u/'vendor_ramdisk00';orig=cmd(['lz4','-dc',ram]);rows=h['cpio_read'](orig)
+assert h['cpio_read'](h['cpio_write'](rows))==rows
+lookup={Path(x['stock_path']).name:x for x in mp if '/vendor-modules/' in x['stock_path']}
+changed=[];newrows=[];fstabs={}
+for n,f,data in rows:
+ if n.endswith('.ko'):
+  assert n.startswith('lib/modules/') and f[4]==1,n
+  row=lookup[Path(n).name];assert data==Path(row['stock_path']).read_bytes()
+  data=stripped[row['module_name']];changed.append(n)
+ elif 'fstab' in n:fstabs[n]=data.decode()
+ f=f.copy();f[6]=len(data);newrows.append((n,f,data))
+assert len(changed)==len(lookup)
+cp=W/'vendor.cpio';cp.write_bytes(h['cpio_write'](newrows));cmd(['lz4','-l','-12','-f',cp,ram])
+assert h['cpio_read'](cmd(['lz4','-dc',ram]))==newrows
+cmd([sys.executable,mk,*args,'--vendor_boot',O/'vendor_boot.img'])
+footer(O/'vendor_boot.img','vendor_boot',67108864,ST/'vendor_boot.img')
+vu=W/'verify-vendor-boot';vu.mkdir()
+cmd([sys.executable,P/'sources/gki/tools/mkbootimg/unpack_bootimg.py','--boot_img',O/'vendor_boot.img','--out',vu])
+assert h['cpio_read'](cmd(['lz4','-dc',vu/'vendor_ramdisk00']))==newrows
+assert (vu/'dtb').read_bytes()==(u/'dtb').read_bytes()
+assert (vu/'bootconfig').read_bytes()==(u/'bootconfig').read_bytes()
+js(O/'fstabs-unchanged.json',fstabs)
+# EROFS: extract pristine image, preserve exact metadata via fs_config + SELinux labels.
+metadata=h['erofs_metadata'](ST/'vendor_dlkm.img');js(O/'stock-erofs-metadata.json',metadata)
+root=W/'vendor_dlkm';cmd([T/'fsck.erofs','--extract='+str(root),ST/'vendor_dlkm.img'])
+fsconfig=['/ 0 0 755 capabilities=0'];contexts=[]
+for path,m in metadata.items():
+ assert set(m['xattrs'])=={'security.selinux'},(path,m)
+ context=bytes.fromhex(m['xattrs']['security.selinux']).decode();assert '\0' not in context
+ target='vendor_dlkm'+('' if path=='/' else path)
+ fsconfig.append(f'{target} {m["uid"]} {m["gid"]} {m["mode"]&0o7777:o} capabilities=0')
+ contexts.append(re.escape('/'+target)+' '+context)
+ disk=root/path.lstrip('/')
+ assert stat.S_IFMT(disk.lstat().st_mode)==stat.S_IFMT(m['mode'])
+ os.chmod(disk,m['mode']&0o7777,follow_symlinks=False)
+fc=W/'fs_config';fc.write_text('\n'.join(fsconfig)+'\n');ct=W/'file_contexts';ct.write_text('\n'.join(contexts)+'\n')
+changed_dlkm=[]
+for row in mp:
+ if '/vendor-dlkm/' not in row['stock_path']:continue
+ rel=Path(row['stock_path']).relative_to(P/'stock-images/vendor-dlkm');dst=root/rel
+ assert dst.read_bytes()==Path(row['stock_path']).read_bytes(),str(rel)
+ dst.write_bytes(stripped[row['module_name']]);changed_dlkm.append(str(rel))
+assert len(changed)+len(changed_dlkm)==435
+# No load/dependency/alias manifest changes: imports, depends, aliases checked above.
+oldb=(ST/'vendor_dlkm.img').read_bytes();stamp=struct.unpack_from('<Q',oldb,1048)[0];uid=str(uuid.UUID(bytes=oldb[1072:1088]))
+cmd([T/'mkfs.erofs','-zlz4hc,9','-T'+str(stamp),'-U'+uid,'--mount-point=/vendor_dlkm','--fs-config-file='+str(fc),'--file-contexts='+str(ct),O/'vendor_dlkm.img',root])
+actual=h['erofs_metadata'](O/'vendor_dlkm.img');assert actual==metadata,'EROFS metadata changed'
+back=W/'verify-vendor-dlkm';cmd([T/'fsck.erofs','--extract='+str(back),O/'vendor_dlkm.img'])
+for path in metadata:
+ x=root/path.lstrip('/');y=back/path.lstrip('/')
+ if x.is_file():assert x.read_bytes()==y.read_bytes(),path
+ elif x.is_symlink():assert os.readlink(x)==os.readlink(y),path
+footer(O/'vendor_dlkm.img','vendor_dlkm',len(oldb),ST/'vendor_dlkm.img',True)
+# Locally signed metadata, preserving dm-verity (flags=0), and every unrelated descriptor.
+pub=O/'test-avb-public.bin';cmd([AVB,'extract_public_key','--key',key,'--output',pub]);pk=pub.read_bytes()
+def vbmeta(part,changes):
+ _,hdr,descs,_=parse(ST/(part+'.img'));assert hdr.flags==0
+ before=[x.encode() for x in descs];touched=[]
+ for i,d in enumerate(descs):
+  n=getattr(d,'partition_name',None)
+  if n in changes:
+   if isinstance(d,a.AvbChainPartitionDescriptor):d.public_key=pk
+   else:descs[i]=next(x for x in parse(O/(n+'.img'))[2] if type(x)==type(d) and getattr(x,'partition_name',None)==n)
+   touched.append(n)
+ assert set(touched)==set(changes)
+ for i,d in enumerate(descs):
+  if getattr(d,'partition_name',None) not in changes:assert d.encode()==before[i]
+ blob=av._generate_vbmeta_blob(algorithm_name='SHA256_RSA2048',key_path=str(key),public_key_metadata_path=None,descriptors=descs,chain_partitions=None,rollback_index=hdr.rollback_index,flags=0,rollback_index_location=hdr.rollback_index_location,props=None,props_from_file=None,kernel_cmdlines=None,setup_rootfs_from_kernel=None,ht_desc_to_setup=None,include_descriptors_from_image=None,signing_helper=None,signing_helper_with_files=None,release_string=None,append_to_release_string=None,required_libavb_version_minor=hdr.required_libavb_version_minor)
+ assert len(blob)<=8192;(O/(part+'.img')).write_bytes(blob+bytes(8192-len(blob)))
+ assert a.verify_vbmeta_signature(a.AvbVBMetaHeader(blob[:256]),blob)
+ (O/(part+'-avb.txt')).write_bytes(cmd([AVB,'info_image','--image',O/(part+'.img')]))
+ return {'changed_descriptors':touched,'other_descriptors_byte_identical':True,'flags':0,'signature':'local test RSA2048; NOT OEM trusted'}
+vr=vbmeta('vbmeta_vendor',['vendor_dlkm']);rr=vbmeta('vbmeta',['boot','vendor_boot','vbmeta_vendor'])
+# Descriptor verification recomputes hashes/hashtree via the pinned AVB library.
+verification={}
+for part in ['boot','vendor_boot','vendor_dlkm']:
+ ds=parse(O/(part+'.img'))[2];d=next(x for x in ds if getattr(x,'partition_name',None)==part)
+ assert d.verify(str(O),'.img',{},a.ImageHandler(str(O/(part+'.img')),read_only=True),False),part
+ verification[part]=True
+# Parents reference exactly the new child descriptors; unrelated descriptors kept byte-for-byte.
+assert next(x for x in parse(O/'vbmeta_vendor.img')[2] if getattr(x,'partition_name',None)=='vendor_dlkm').encode()==next(x for x in parse(O/'vendor_dlkm.img')[2] if getattr(x,'partition_name',None)=='vendor_dlkm').encode()
+rollback={n:{'path':str(ST/(n+'.img')),'sha256':expected[n+'.img']} for n in ['boot','vendor_boot','vendor_dlkm','vbmeta','vbmeta_vendor']}
+stock_rollback=rollback
+paired=P/'artifacts/ksu-next-susfs-droidspaces/paired-06'
+pairinfo=json.loads((paired/'PACKAGE-INFO.json').read_text())
+known=P/'artifacts/ksu-next-susfs-droidspaces-nomount/test-nomount-01/boot.img'
+assert sha(known.read_bytes())=='396e8aa103aba44d6081d967dc2bc41be3873d670bfd4c4ff57123a93dd9a727'
+current={'boot':{'path':str(known),'sha256':sha(known.read_bytes())}}
+for name in ['vendor_boot','vendor_dlkm','vbmeta','vbmeta_vendor']:
+ path=paired/(name+'.img');digest=pairinfo['images'][path.name]['sha256'];assert sha(path.read_bytes())==digest
+ current[name]={'path':str(path),'sha256':digest}
+rollback={'return_to_last_tested_nomount_paired06':current,'original_stock_full_set_reference':stock_rollback,'note':'Coherent sets only. Never restore stock boot alone over rebuilt vendor modules. Rollback needs separate explicit authorization; slot B is not a fallback.'}
+js(O/'ROLLBACK.json',rollback)
+images={f.name:{'bytes':f.stat().st_size,'sha256':sha(f.read_bytes())} for f in sorted(O.glob('*.img'))}
+(O/'SHA256SUMS').write_text(''.join(v['sha256']+'  '+n+'\n' for n,v in images.items()))
+report={'kernel_commit':'90700ba133db2fb1d2b05519d45de38ad3d148e1','kernel_image_sha256':sha((G/'Image.lz4').read_bytes()),'modules':410,'module_files':435,'ramdisk_modules':len(changed),'dlkm_modules':len(changed_dlkm),'images':images,'stock_boot_and_vendor_boot_payload_roundtrips':True,'cpio_nonmodule_entries_unchanged':True,'erofs_metadata_preserved':True,'manifest_files_unchanged':True,'allocated_module_sections_preserved_after_strip':True,'avb_descriptor_verification':verification,'vbmeta_vendor':vr,'vbmeta':rr,'preexisting_exception':checks['preexisting_stock_unresolved_strong'],'device_validated':False,'flash_authorized':False,'ready_to_flash':False,'remaining':['live firmware/slot/partition size checks','fastbootd availability and Virtual A/B snapshot status','confirm physical bootloader recovery path','explicit authorization for every flash and rollback'],'work_dir':str(W),'project_commit':cmd(['git','-C',P,'rev-parse','HEAD']).decode().strip()}
+report['fpsgo_source_commit']='313c21a9dc2358667e9640e35738d2e9cab49a5e';report['module_set']=str(M);js(O/'PACKAGE-INFO.json',report);print(json.dumps(report,indent=2))

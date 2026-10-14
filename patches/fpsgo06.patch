@@ -1,0 +1,184 @@
+diff --git a/drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c b/drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c
+index af2f67d58..724bbf445 100644
+--- a/drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c
++++ b/drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c
+@@ -610,7 +610,7 @@ static void fbt_find_max_blc(unsigned int *temp_blc, int *temp_blc_pid,
+ 	unsigned long long *temp_blc_buffer_id,
+ 	int *temp_blc_dep_num, struct fpsgo_loading temp_blc_dep[])
+ {
+-	struct fbt_thread_blc *pos, *next;
++	struct fbt_thread_blc *pos, *next, *best = NULL;
+ 
+ 	*temp_blc = 0;
+ 	*temp_blc_pid = 0;
+@@ -624,10 +624,14 @@ static void fbt_find_max_blc(unsigned int *temp_blc, int *temp_blc_pid,
+ 			*temp_blc_pid = pos->pid;
+ 			*temp_blc_buffer_id = pos->buffer_id;
+ 			*temp_blc_dep_num = pos->dep_num;
+-			memcpy(temp_blc_dep, pos->dep,
+-				pos->dep_num * sizeof(struct fpsgo_loading));
++			best = pos;
+ 		}
+ 	}
++	/* A NULL dependency buffer requests only the maximum and its identity. */
++	/* The list and dependency storage stay protected until the copy. */
++	if (best && temp_blc_dep)
++		memcpy(temp_blc_dep, best->dep,
++			best->dep_num * sizeof(struct fpsgo_loading));
+ 	mutex_unlock(&blc_mlock);
+ }
+ 
+@@ -636,7 +640,7 @@ static void fbt_find_ex_max_blc(int pid, unsigned long long buffer_id,
+ 	unsigned long long *temp_blc_buffer_id,
+ 	int *temp_blc_dep_num, struct fpsgo_loading temp_blc_dep[])
+ {
+-	struct fbt_thread_blc *pos, *next;
++	struct fbt_thread_blc *pos, *next, *best = NULL;
+ 
+ 	*temp_blc = 0;
+ 	*temp_blc_pid = 0;
+@@ -651,10 +655,13 @@ static void fbt_find_ex_max_blc(int pid, unsigned long long buffer_id,
+ 			*temp_blc_pid = pos->pid;
+ 			*temp_blc_buffer_id = pos->buffer_id;
+ 			*temp_blc_dep_num = pos->dep_num;
+-			memcpy(temp_blc_dep, pos->dep,
+-				pos->dep_num * sizeof(struct fpsgo_loading));
++			best = pos;
+ 		}
+ 	}
++	/* The list and dependency storage stay protected until the copy. */
++	if (best)
++		memcpy(temp_blc_dep, best->dep,
++			best->dep_num * sizeof(struct fpsgo_loading));
+ 	mutex_unlock(&blc_mlock);
+ }
+ 
+@@ -3147,8 +3154,7 @@ static void fbt_do_boost(unsigned int blc_wt, int pid,
+ 	unsigned long long buffer_id)
+ {
+ 	struct cpu_ctrl_data *pld;
+-	int *clus_opp;
+-	unsigned int *clus_floor_freq;
++	unsigned int clus_floor_freq;
+ 	int tgt_opp = 0;
+ 	unsigned int mbhr;
+ 	int mbhr_opp;
+@@ -3164,23 +3170,6 @@ static void fbt_do_boost(unsigned int blc_wt, int pid,
+ 		return;
+ 	}
+ 
+-	clus_opp =
+-		kzalloc(cluster_num * sizeof(int), GFP_KERNEL);
+-	if (!clus_opp) {
+-		kfree(pld);
+-		FPSGO_LOGE("ERROR OOM %d\n", __LINE__);
+-		return;
+-	}
+-
+-	clus_floor_freq =
+-		kzalloc(cluster_num * sizeof(unsigned int), GFP_KERNEL);
+-	if (!clus_floor_freq) {
+-		kfree(pld);
+-		kfree(clus_opp);
+-		FPSGO_LOGE("ERROR OOM %d\n", __LINE__);
+-		return;
+-	}
+-
+ 	if (cpu_max_freq <= 1)
+ 		fpsgo_systrace_c_fbt(pid, buffer_id, cpu_max_freq,
+ 			"cpu_max_freq");
+@@ -3188,16 +3177,15 @@ static void fbt_do_boost(unsigned int blc_wt, int pid,
+ 	for (cluster = 0 ; cluster < cluster_num; cluster++) {
+ 		tgt_opp = fbt_get_opp_by_normalized_cap(blc_wt, cluster);
+ 
+-		clus_floor_freq[cluster] = cpu_dvfs[cluster].power[tgt_opp];
+-		clus_opp[cluster] = tgt_opp;
++		clus_floor_freq = cpu_dvfs[cluster].power[tgt_opp];
+ 
+ 		if (cluster == min_cap_cluster
+ 			&& blc_wt <= cpu_dvfs[min_cap_cluster].power[0]) {
+-			mbhr_opp = max((clus_opp[cluster] - MAX(bhr_opp, bhr_opp_l)), 0);
++			mbhr_opp = max((tgt_opp - MAX(bhr_opp, bhr_opp_l)), 0);
+ 		} else
+-			mbhr_opp = max((clus_opp[cluster] - bhr_opp), 0);
++			mbhr_opp = max((tgt_opp - bhr_opp), 0);
+ 
+-		mbhr = clus_floor_freq[cluster] * 100U;
++		mbhr = clus_floor_freq * 100U;
+ 		mbhr = mbhr / cpu_max_freq;
+ 		mbhr = mbhr + (unsigned int)bhr;
+ 		mbhr = (min(mbhr, 100U) * cpu_max_freq);
+@@ -3224,7 +3212,7 @@ static void fbt_do_boost(unsigned int blc_wt, int pid,
+ 		} else
+ 			pld[cluster].max = -1;
+ 
+-		base_opp[cluster] = clus_opp[cluster];
++		base_opp[cluster] = tgt_opp;
+ 	}
+ 
+ 	if (cluster_num == 1
+@@ -3244,8 +3232,6 @@ static void fbt_do_boost(unsigned int blc_wt, int pid,
+ 	fbt_set_ceiling(pld, pid, buffer_id);
+ 
+ 	kfree(pld);
+-	kfree(clus_opp);
+-	kfree(clus_floor_freq);
+ }
+ 
+ static void fbt_clear_state(struct render_info *thr)
+@@ -3254,7 +3240,6 @@ static void fbt_clear_state(struct render_info *thr)
+ 	int temp_blc_pid = 0;
+ 	unsigned long long temp_blc_buffer_id = 0;
+ 	int temp_blc_dep_num = 0;
+-	struct fpsgo_loading temp_blc_dep[MAX_DEP_NUM];
+ 
+ 	if (!thr || thr->boost_info.cur_stage == FPSGO_JERK_INACTIVE)
+ 		return;
+@@ -3267,7 +3252,7 @@ static void fbt_clear_state(struct render_info *thr)
+ 		fbt_boost_dram(0);
+ 
+ 	fbt_find_max_blc(&temp_blc, &temp_blc_pid,
+-		&temp_blc_buffer_id, &temp_blc_dep_num, temp_blc_dep);
++		&temp_blc_buffer_id, &temp_blc_dep_num, NULL);
+ 	if (temp_blc)
+ 		fbt_do_boost(temp_blc, temp_blc_pid, temp_blc_buffer_id);
+ 
+@@ -4320,10 +4305,10 @@ static void fbt_check_max_blc_locked(int pid)
+ 	int temp_blc_pid = 0;
+ 	unsigned long long temp_blc_buffer_id = 0;
+ 	int temp_blc_dep_num = 0;
+-	struct fpsgo_loading temp_blc_dep[MAX_DEP_NUM];
+ 
++	/* Both callers hold fbt_mlock, which protects max_blc_dep. */
+ 	fbt_find_max_blc(&temp_blc, &temp_blc_pid,
+-		&temp_blc_buffer_id, &temp_blc_dep_num, temp_blc_dep);
++		&temp_blc_buffer_id, &temp_blc_dep_num, max_blc_dep);
+ 
+ 	max_blc = temp_blc;
+ 	max_blc_cur = temp_blc;
+@@ -4331,8 +4316,6 @@ static void fbt_check_max_blc_locked(int pid)
+ 	max_blc_buffer_id = temp_blc_buffer_id;
+ 	max_blc_stage = FPSGO_JERK_INACTIVE;
+ 	max_blc_dep_num = temp_blc_dep_num;
+-	memcpy(max_blc_dep, temp_blc_dep,
+-		max_blc_dep_num * sizeof(struct fpsgo_loading));
+ 
+ 	fpsgo_systrace_c_fbt_debug(-100, 0, max_blc, "max_blc");
+ 	fpsgo_systrace_c_fbt_debug(-100, 0, max_blc_pid, "max_blc_pid");
+@@ -5359,7 +5342,6 @@ void fpsgo_sbe2fbt_rescue(struct render_info *thr, int start, int enhance,
+ 	int temp_blc_pid = 0;
+ 	unsigned long long temp_blc_buffer_id = 0;
+ 	int temp_blc_dep_num = 0;
+-	struct fpsgo_loading temp_blc_dep[MAX_DEP_NUM];
+ 	int separate_aa_final = separate_aa;
+ 
+ 	if (!thr || !sbe_rescue_enable)
+@@ -5466,7 +5448,7 @@ void fpsgo_sbe2fbt_rescue(struct render_info *thr, int start, int enhance,
+ 
+ 		/* find max perf index */
+ 		fbt_find_max_blc(&temp_blc, &temp_blc_pid, &temp_blc_buffer_id,
+-				&temp_blc_dep_num, temp_blc_dep);
++				&temp_blc_dep_num, NULL);
+ 		rescue_opp_f = clamp(rescue_opp_f, 0, nr_freq_cpu - 1);
+ 		fbt_get_new_base_blc(pld, temp_blc, 0, rescue_opp_f, bhr_opp);
+ 		fbt_set_ceiling(pld, thr->pid, thr->buffer_id);

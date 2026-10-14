@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""Offline recovery/early ramdisk module closure, stock and packaged DroidSpaces."""
+from pathlib import Path
+import ast,struct,hashlib,collections,runpy,subprocess,json
+P=Path('${PROJECT_ROOT}');O=P/'artifacts/ksu-next-susfs-droidspaces/paired-06'
+# Reuse only the audited pure ELF parser, not the checker's command-line workflow.
+tree=ast.parse((P/'scripts/check-vendor-droidspaces.py').read_text());fn=next(x for x in tree.body if isinstance(x,ast.FunctionDef) and x.name=='module');exec(compile(ast.Module(body=[fn],type_ignores=[]),'ELF parser','exec'))
+h=runpy.run_path(str(P/'scripts/image-metadata.py'))
+ram=P/'stock-images/vendor-ramdisk/vendor_ramdisk';entries=h['cpio_read'](subprocess.check_output(['lz4','-dc',str(ram)]));content={n:d for n,f,d in entries}
+deps={}
+for line in content['lib/modules/modules.dep'].decode().splitlines():
+ name,rest=line.split(':',1);deps[Path(name).name]=[Path(x).name for x in rest.split()]
+reports={}
+for variant,base,symvers in [('stock',P/'stock-images/vendor-modules',P/'stock-images/google-13471816/vmlinux.symvers'),('droidspaces',Path('${BUILD_CACHE}/package-droidspaces-06/stripped'),P/'artifacts/ksu-next-susfs-droidspaces/combined-01/vmlinux.symvers')]:
+ mapping=json.loads((P/'artifacts/vendor-droidspaces/combined-modules-01/module-map.json').read_text())
+ byfile={Path(x['stock_path']).name:x['module_name'] for x in mapping if '/vendor-modules/' in x['stock_path']}
+ mods={n:module(base/(n if variant=='stock' else byfile[n]+'.ko')) for n in byfile}
+ gki={line.split()[1]:int(line.split()[0],16) for line in symvers.read_text().splitlines()}
+ result={}
+ for manifest in ['lib/modules/modules.load','lib/modules/modules.load.recovery']:
+  files=[x.strip() for x in content[manifest].decode().splitlines() if x.strip() and not x.startswith('#')]
+  listed=len(files);expanded=set(files);pending=list(files)
+  while pending:
+   name=pending.pop();assert name in deps,name
+   for dep in deps[name]:
+    if dep not in expanded:expanded.add(dep);pending.append(dep)
+  files=sorted(expanded)
+  missing=[x for x in files if x not in mods];assert not missing,missing
+  selected={x:mods[x] for x in files};providers=collections.defaultdict(list)
+  for k,c in gki.items():providers[k].append(('vmlinux',c))
+  for name,m in selected.items():
+   for k,c in m['exports'].items():providers[k].append((name,c))
+  errors={}
+  for name,m in selected.items():
+   bad=[n for n in m['strong_undefined'] if not providers[n]]
+   crc=[n for n,c in m['imports'].items() if not(n in m['weak_undefined'] and not providers[n]) and (len(providers[n])!=1 or providers[n][0][1]!=c)]
+   if bad or crc:errors[name]={'unresolved':bad,'crc_errors':crc}
+  result[manifest]={'listed_modules':listed,'modules_with_recursive_dependencies':len(files),'missing_files':missing,'symbol_errors':errors}
+ reports[variant]=result
+reports['scope']='Kernel + modules.load/recovery with recursive modules.dep dependencies, all in vendor ramdisk; no vendor_dlkm providers. Not proof of recovery boot or USB fastbootd.'
+assert all(not v['symbol_errors'] for k in ['stock','droidspaces'] for v in reports[k].values()),reports
+(O/'RECOVERY-MODULE-CLOSURE.json').write_text(json.dumps(reports,indent=2)+'\n');print(json.dumps(reports,indent=2))

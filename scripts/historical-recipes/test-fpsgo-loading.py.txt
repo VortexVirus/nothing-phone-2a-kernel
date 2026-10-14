@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""Test extracted FPSGO loading functions and allocation failures; no phone operations."""
+from pathlib import Path
+import subprocess,os,json,sys,re,hashlib
+P=Path('${PROJECT_ROOT}');N=P/'sources/nothing-vendor-perf';run=sys.argv[1];assert re.fullmatch('[a-z0-9-]+',run)
+L=P/'logs/performance-fpsgo'/('loading-tests-'+run);L.mkdir(exist_ok=False)
+rel='drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c';ref='313c21a9dc2358667e9640e35738d2e9cab49a5e'
+old=subprocess.check_output(['git','-C',str(N),'show',ref+':'+rel],text=True);new=(N/rel).read_text()
+def cut(s,a,b):return s[s.index(a):s.index(b,s.index(a))]
+functions=[]
+for s,tag in [(old,'old'),(new,'new')]:
+ f=cut(s,'static int fbt_get_loading_exp(','void set_fpsgo_testing_mode(')+cut(s,'static int fbt_get_cl_loading_exp(','static unsigned long long fbt_adjust_loading_exp(')
+ functions.append(f.replace('fbt_get_loading_exp',tag+'_global').replace('fbt_get_cl_loading_exp',tag+'_cluster'))
+types=cut(new,'/* Per-call heap snapshots;','static int fbt_get_loading_exp(')
+est=cut(old,'static unsigned long long fbt_est_loading(','static void fbt_check_max_blc_locked(')
+prefix=r'''
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define LOADING_CNT 256
+#define GFP_KERNEL 0
+static int freq_slock,loading_slock,locks,unlocks,updates,traces;
+static int test_mode,cluster_num;
+static unsigned long long prev_cb_ts[LOADING_CNT],lastest_ts[LOADING_CNT],last_cb_ts;
+static unsigned int obvs[LOADING_CNT],clus_obv[4];
+static unsigned int obs_store[LOADING_CNT][4],is_store[LOADING_CNT][4];
+static unsigned int *lastest_obv_cl[LOADING_CNT],*lastest_is_cl_isolated[LOADING_CNT];
+static int allocs,fail_at,live,free_count;static size_t bytes,peak;
+static void *ptrs[8];static size_t sizes[8];
+static void *alloc(size_t n,size_t z){assert(!freq_slock&&!loading_slock);int i=allocs++;assert(i<8);if(allocs==fail_at)return NULL;void*p=calloc(n,z);assert(p);ptrs[i]=p;sizes[i]=n*z;bytes+=n*z;if(bytes>peak)peak=bytes;live++;return p;}
+#define kcalloc(n,z,g) alloc(n,z)
+#define kzalloc(n,g) alloc(1,n)
+static void kfree(void*p){assert(!freq_slock&&!loading_slock);if(!p)return;int found=0;for(int i=0;i<8;i++)if(ptrs[i]==p){bytes-=sizes[i];ptrs[i]=NULL;found++;}assert(found==1);free(p);live--;free_count++;}
+#define spin_lock_irqsave(p,f) do {assert(!freq_slock&&!loading_slock);*(p)=1;(f)=0;locks++;}while(0)
+#define spin_unlock_irqrestore(p,f) do {assert(*(p)==1);*(p)=0;(void)(f);unlocks++;}while(0)
+#define xgf_trace(...) do {traces++;}while(0)
+#define fpsgo_main_trace(...) do {traces++;}while(0)
+static void fpsgo_update_cpufreq_to_now(unsigned long long t){assert(!freq_slock&&!loading_slock);updates++;(void)t;}
+static void* copy_snapshot(void*d,const void*s,size_t n){assert(loading_slock);return memcpy(d,s,n);}
+#define memcpy copy_snapshot
+'''
+tail=r'''
+#undef memcpy
+struct result{unsigned long long value;int ret,locks,unlocks,updates,traces;};
+static struct result run(int newer,int cluster,int cid,unsigned long long start,unsigned long long end,int current,int fail){
+ assert(!live&&!bytes&&!freq_slock&&!loading_slock);locks=unlocks=updates=traces=allocs=free_count=0;peak=0;fail_at=fail;memset(ptrs,0,sizeof(ptrs));
+ unsigned long long value=0x12345678ULL;int ret;
+ if(cluster){if(newer)ret=new_cluster(1,123,start,&value,end,cid);else ret=old_cluster(1,123,start,&value,end,cid);}
+ else {if(newer)ret=new_global(1,123,start,&value,end,prev_cb_ts,lastest_ts,obvs,&last_cb_ts,&current);else ret=old_global(1,123,start,&value,end,prev_cb_ts,lastest_ts,obvs,&last_cb_ts,&current);}
+ assert(!live&&!bytes&&!freq_slock&&!loading_slock&&locks==unlocks);
+ struct result r;memset(&r,0,sizeof(r));r.value=value;r.ret=ret;r.locks=locks;r.unlocks=unlocks;r.updates=updates;r.traces=traces;return r;
+}
+static uint32_t seed=0x5041434d;static uint32_t rnd(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
+int main(void){
+ unsigned long comparisons=0,oom=0;
+ for(int t=0;t<20000;t++){
+  cluster_num=1+rnd()%4;test_mode=t%2;int current=rnd()%103;
+  unsigned long long start=t%9==0?0:1+rnd()%3000,end=t%11==0?0:1+rnd()%4000;last_cb_ts=t%13==0?0:1+rnd()%3000;
+  int rotate=rnd()%LOADING_CNT;
+  for(int c=0;c<4;c++)clus_obv[c]=rnd()%103;
+  for(int i=0;i<LOADING_CNT;i++){
+   int idx=(i+rotate)%LOADING_CNT;prev_cb_ts[idx]=t%3==0?i*10:1+rnd()%4000;lastest_ts[idx]=t%3==0?(i+1)*10:1+rnd()%4000;obvs[idx]=rnd()%103;
+   lastest_obv_cl[i]=obs_store[i];lastest_is_cl_isolated[i]=is_store[i];for(int c=0;c<4;c++){obs_store[i][c]=rnd()%103;is_store[i][c]=rnd()%2;}
+  }
+  if(t%7==0)lastest_obv_cl[rnd()%LOADING_CNT]=NULL;
+  if(t%17==0)lastest_is_cl_isolated[rnd()%LOADING_CNT]=NULL;
+  for(int cluster=0;cluster<2;cluster++){
+   int cid=t%19==0?-1:t%23==0?cluster_num:(int)(rnd()%cluster_num);int valid=!cluster||(cid>=0&&cid<cluster_num);
+   struct result a=run(0,cluster,cid,start,end,current,0);int n=allocs;
+   struct result b=run(1,cluster,cid,start,end,current,0);assert(!memcmp(&a,&b,sizeof(a)));comparisons++;
+   assert(n==(valid?(cluster?4:3):0));assert(allocs==(valid?2:0));if(valid)assert(peak==(cluster?6144:5120));
+   if(valid){
+    struct result failure=run(0,cluster,cid,start,end,current,1);assert(failure.ret==1&&failure.value==0x12345678ULL);
+    for(int f=1;f<=n;f++){struct result r=run(0,cluster,cid,start,end,current,f);assert(!memcmp(&failure,&r,sizeof(r)));oom++;}
+    for(int f=1;f<=2;f++){struct result r=run(1,cluster,cid,start,end,current,f);assert(!memcmp(&failure,&r,sizeof(r)));oom++;}
+   }
+  }
+ }
+ printf("{\"cases\":20000,\"success_comparisons\":%lu,\"oom_comparisons\":%lu,\"equivalent\":true,\"heap_bytes_global\":5120,\"heap_bytes_cluster\":6144,\"global_allocations\":[3,2],\"cluster_allocations\":[4,2],\"phone_measured\":false}\n",comparisons,oom);
+}
+'''
+source=prefix+types+est+'\n'.join(functions)+tail;(L/'loading.c').write_text(source)
+cmd=['gcc','-std=c11','-O2','-g','-ftrivial-auto-var-init=zero','-fsanitize=address,undefined','-fno-omit-frame-pointer',str(L/'loading.c'),'-o',str(L/'loading')]
+(L/'inputs.json').write_text(json.dumps({'parent':ref,'candidate_source_sha256':hashlib.sha256(new.encode()).hexdigest(),'command':cmd,'note':'Zero auto-init matches installed CONFIG_INIT_STACK_ALL_ZERO; old invalid-cid cleanup relies on this. New owned pointers explicitly NULL.'},indent=2)+'\n')
+with (L/'compile.log').open('w') as f:subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,check=True)
+env=os.environ.copy();env['ASAN_OPTIONS']='detect_leaks=0';env['UBSAN_OPTIONS']='halt_on_error=1'
+with (L/'result.json').open('w') as f,(L/'run.stderr').open('w') as e:r=subprocess.run([str(L/'loading')],env=env,stdout=f,stderr=e)
+assert r.returncode==0,f'Test failed {r.returncode}; logs preserved'
+print((L/'result.json').read_text())

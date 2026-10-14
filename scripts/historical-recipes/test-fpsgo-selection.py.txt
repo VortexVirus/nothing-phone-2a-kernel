@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""Host differential tests on extracted original/patched C; not a concurrency test."""
+import pathlib, subprocess, json, sys, re, os
+run=sys.argv[1] if len(sys.argv)>1 else 'v2';assert re.fullmatch('[a-z0-9-]+',run)
+P=pathlib.Path('${PROJECT_ROOT}'); out=P/('logs/performance-fpsgo/selection-tests-'+run)
+out.mkdir(exist_ok=False)
+rel='drivers/misc/mediatek/performance/fpsgo_v3/'
+base=P/'sources/nothing-vendor-stock'/rel; new=P/'sources/nothing-vendor-perf'/rel
+header=(base/'base/include/fpsgo_base.h').read_text()
+loading=re.search(r'struct fpsgo_loading \{.*?\n\};',header,re.S).group()
+baseline_ref=sys.argv[2] if len(sys.argv)>2 else None
+if baseline_ref: assert re.fullmatch('[0-9a-f]{40}',baseline_ref)
+funcs=[]
+for root,tag in [(base,'old'),(new,'new')]:
+ s=(subprocess.check_output(['git','-C',str(P/'sources/nothing-vendor-perf'),'show',baseline_ref+':'+rel+'fbt/src/fbt_cpu.c'],text=True) if tag=='old' and baseline_ref else (root/'fbt/src/fbt_cpu.c').read_text());s=s[s.index('static void fbt_find_max_blc('):s.index('static int fbt_is_cl_isolated(')]
+ s=s.replace('fbt_find_max_blc',tag+'_max').replace('fbt_find_ex_max_blc',tag+'_ex')
+ funcs.append(s)
+prefix=r'''
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#define MAX_DEP_NUM 100
+'''+loading+r'''
+struct fbt_thread_blc {int pid; unsigned long long buffer_id; unsigned blc; int dep_num; struct fpsgo_loading dep[MAX_DEP_NUM];};
+static struct fbt_thread_blc nodes[64];
+static int node_count, blc_mlock, locks, copies;
+#define list_for_each_entry_safe(pos,next,head,entry) for(pos=nodes,next=nodes;pos<nodes+node_count;pos++,next=pos)
+static void mutex_lock(int *p) {assert(!*p);*p=1;locks++;}
+static void mutex_unlock(int *p) {assert(*p==1);*p=0;}
+static void *tracked_copy(void *d,const void *s,size_t n) {assert(blc_mlock==1);assert(n<=sizeof(nodes[0].dep));copies++;return memcpy(d,s,n);}
+#define memcpy tracked_copy
+'''
+tail=r'''
+#undef memcpy
+static uint32_t seed=0x5041434d;
+static uint32_t rnd(void) {seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
+struct result {unsigned blc;int pid;unsigned long long id;int n;struct fpsgo_loading dep[MAX_DEP_NUM];};
+static long long before,after;
+static void check(int ex,int pid,unsigned long long id) {
+ struct result a,b;memset(&a,0xa5,sizeof(a));memset(&b,0xa5,sizeof(b));
+ locks=copies=0;
+ if(ex) old_ex(pid,id,&a.blc,&a.pid,&a.id,&a.n,a.dep);else old_max(&a.blc,&a.pid,&a.id,&a.n,a.dep);
+ assert(!blc_mlock && locks==1);int oldcopies=copies;before+=copies;locks=copies=0;
+ if(ex) new_ex(pid,id,&b.blc,&b.pid,&b.id,&b.n,b.dep);else new_max(&b.blc,&b.pid,&b.id,&b.n,b.dep);
+ assert(!blc_mlock && locks==1 && copies<=1 && copies<=oldcopies);after+=copies;
+ assert(a.blc==b.blc && a.pid==b.pid && a.id==b.id && a.n==b.n);
+ assert(a.n>=0 && a.n<=MAX_DEP_NUM);assert(!memcmp(a.dep,b.dep,a.n*sizeof(a.dep[0])));
+ /* Independent oracle: first strictly positive maximum, exact pair exclusion. */
+ struct fbt_thread_blc *best=NULL;
+ for(int i=0;i<node_count;i++) if((!ex || nodes[i].pid!=pid || nodes[i].buffer_id!=id) && nodes[i].blc>(best?best->blc:0))best=&nodes[i];
+ assert(b.blc==(best?best->blc:0));assert(b.pid==(best?best->pid:0));assert(b.id==(best?best->buffer_id:0));assert(b.n==(best?best->dep_num:0));
+ if(best)assert(!memcmp(b.dep,best->dep,b.n*sizeof(b.dep[0])));
+ if(!ex) {
+  struct result scalar;memset(&scalar,0xa5,sizeof(scalar));locks=copies=0;
+  new_max(&scalar.blc,&scalar.pid,&scalar.id,&scalar.n,NULL);
+  assert(!blc_mlock && locks==1 && copies==0);
+  assert(scalar.blc==a.blc && scalar.pid==a.pid && scalar.id==a.id && scalar.n==a.n);
+ }
+
+}
+int main(void) {
+ for(int trial=0;trial<20000;trial++) {
+  node_count=trial<65?trial:(int)(rnd()%65);
+  for(int i=0;i<node_count;i++) {
+   memset(&nodes[i],0,sizeof(nodes[i]));nodes[i].pid=rnd()%8;nodes[i].buffer_id=rnd()%8;
+   nodes[i].blc=trial<65?(unsigned)(i+1):rnd()%101;
+   if(trial%7==0)nodes[i].blc=0;if(trial%11==0)nodes[i].blc=50;
+   if(trial%13==0)nodes[i].blc=UINT32_MAX;
+   nodes[i].dep_num=trial%3==0?100:trial%3==1?0:rnd()%101;
+   for(int j=0;j<nodes[i].dep_num;j++)nodes[i].dep[j].pid=(int)rnd();
+  }
+  check(0,0,0);check(1,(int)(rnd()%8),rnd()%8);
+  if(node_count)check(1,nodes[node_count/2].pid,nodes[node_count/2].buffer_id);
+ }
+ /* Count work in an explicitly synthetic ascending 64-candidate case. */
+ node_count=64;for(int i=0;i<64;i++){nodes[i].blc=i+1;nodes[i].dep_num=100;}
+ long long b0=before,a0=after;check(0,0,0);
+ printf("{\"trials\":20000,\"equivalent\":true,\"copy_calls_before_total\":%lld,\"copy_calls_after_total\":%lld,\"synthetic_ascending_before\":%lld,\"synthetic_ascending_after\":%lld,\"phone_speedup_measured\":false}\n",before,after,before-b0,after-a0);
+}
+'''
+source=out/'selection.c';source.write_text(prefix+'\n'.join(funcs)+tail)
+cmd=['gcc','-std=c11','-O2','-g','-fsanitize=address,undefined','-fno-omit-frame-pointer',str(source),'-o',str(out/'selection')]
+(out/'compile-command.json').write_text(json.dumps(cmd));subprocess.run(cmd,check=True)
+env=os.environ.copy();env['ASAN_OPTIONS']='detect_leaks=0' # No heap in harness; LSan cannot operate under sandbox ptrace.
+r=subprocess.run([str(out/'selection')],capture_output=True,text=True,env=env)
+(out/'stdout.txt').write_text(r.stdout);(out/'stderr.txt').write_text(r.stderr)
+print(r.stdout,r.stderr);sys.exit(r.returncode)

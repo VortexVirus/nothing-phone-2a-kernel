@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Host-only microbenchmark of extracted FPSGO boost arrays/scalars, not Android/SLUB."""
+from pathlib import Path
+import subprocess,os,json,sys,re,hashlib,platform,statistics,datetime
+P=Path('${PROJECT_ROOT}');run=sys.argv[1];assert re.fullmatch('[a-z0-9-]+',run)
+L=P/'logs/performance-fpsgo'/('benchmark-'+run);L.mkdir(exist_ok=False)
+sourcefile=P/'logs/performance-fpsgo/boost-tests-scalar-06-expanded/boost.c'
+s=sourcefile.read_text().split('struct state {')[0]
+a=s.index('static int allocs,');b=s.index('struct event {',a)
+s=s[:a]+s[b:]
+a=s.index('static void *alloc(');b=s.index('static void event(',a)
+s=s[:a]+"static void *alloc(size_t n,size_t z){return calloc(n,z);}\n#define kcalloc(n,z,g) alloc(n,z)\n#define kzalloc(n,g) alloc(1,n)\nstatic void kfree(void*p){free(p);}\n"+s[b:]
+s=s.replace('#define FPSGO_LOGE(...) do { errors++; } while(0)','#define FPSGO_LOGE(...) ((void)0)')
+for name in ['old_boost','new_boost']:s=s.replace('static void '+name+'(', 'static __attribute__((noinline)) void '+name+'(')
+s='#define _GNU_SOURCE\n#include <time.h>\n'+s
+s+=r"""
+static volatile unsigned long long sink;
+static unsigned long long ns(void){struct timespec t;assert(!clock_gettime(CLOCK_MONOTONIC_RAW,&t));return (unsigned long long)t.tv_sec*1000000000ULL+t.tv_nsec;}
+static void setup(int scenario){
+ cluster_num=scenario==0?1:scenario==3?4:2;nr_freq_cpu=16;
+ bhr_opp=2;bhr_opp_l=3;bhr=10;min_cap_cluster=0;max_cap_cluster=cluster_num-1;
+ suppress_ceiling=scenario!=2;limit_policy=1;boost_ta=1;min_ceiling_setting=0;cpu_max_freq=100;
+ for(int c=0;c<4;c++){selected_opp[c]=4;for(int i=0;i<16;i++)cpu_dvfs[c].power[i]=100-i*5;}
+}
+static unsigned long long bench(int newer,int scenario,int n,unsigned long long*sum){
+ unsigned long long start=ns(),acc=0;
+ for(int i=0;i<n;i++){
+  count=0;if(newer)new_boost(75,123,456);else old_boost(75,123,456);
+  for(int j=0;j<count;j++)acc+=events[j].kind+events[j].a+events[j].p[0].max;
+  acc+=base_opp[0];
+ }
+ unsigned long long elapsed=ns()-start;sink=acc;*sum=acc;(void)scenario;return elapsed;
+}
+int main(void){
+ puts("scenario,round,order,variant,iterations,elapsed_ns,checksum");
+ for(int scenario=0;scenario<4;scenario++){
+  setup(scenario);unsigned long long a,b;
+  bench(0,scenario,5000,&a);bench(1,scenario,5000,&b);assert(a==b);
+  int n=2000;while(n<200000){if(bench(0,scenario,n,&a)>=20000000ULL)break;n*=2;}
+  for(int round=0;round<31;round++){
+   unsigned long long sums[2];for(int order=0;order<2;order++){
+    int newer=(round+order)%2;unsigned long long t=bench(newer,scenario,n,&sums[newer]);
+    printf("%d,%d,%d,%s,%d,%llu,%llu\n",scenario,round,order,newer?"candidate":"parent",n,t,sums[newer]);
+   }assert(sums[0]==sums[1]);
+  }
+ }
+}
+"""
+(L/'benchmark.c').write_text(s)
+cmd=['gcc','-std=gnu11','-O2','-g','-ftrivial-auto-var-init=zero','-fno-builtin-calloc','-fno-builtin-free',str(L/'benchmark.c'),'-o',str(L/'benchmark')]
+metadata={'date_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'x86_64 homelab VM, userspace calloc/free; no kernel allocator; helper calls record simulated events rather than controlling hardware; not phone performance','baseline_source_commit':'a76624c067205bb593641f90dd65fa2824e1966c','candidate_source_commit':'313c21a9dc2358667e9640e35738d2e9cab49a5e','function_source_fixture_sha256':hashlib.sha256(sourcefile.read_bytes()).hexdigest(),'benchmark_source_sha256':hashlib.sha256(s.encode()).hexdigest(),'platform':platform.uname()._asdict(),'compiler':subprocess.check_output(['gcc','--version'],text=True).splitlines()[0],'command':cmd,'loadavg_before':list(os.getloadavg()),'cpu_model':next((x.split(':',1)[1].strip() for x in Path('/proc/cpuinfo').read_text().splitlines() if x.startswith('model name')),None),'sanitizers':False,'cpu_affinity':None,'warmup_calls_each_variant':5000,'paired_rounds':31,'phone_measured':False}
+with (L/'compile.log').open('w') as f:subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,check=True)
+# Pin only this benchmark process, without changing governors/services.
+allowed=sorted(os.sched_getaffinity(0));cpu=allowed[-1];metadata['cpu_affinity']=[cpu]
+(L/'metadata.json').write_text(json.dumps(metadata,indent=2)+'\n')
+with (L/'samples.csv').open('w') as f,(L/'run.stderr').open('w') as e:r=subprocess.run(['taskset','-c',str(cpu),str(L/'benchmark')],stdout=f,stderr=e)
+metadata['exit_code']=r.returncode;metadata['loadavg_after']=list(os.getloadavg());(L/'metadata.json').write_text(json.dumps(metadata,indent=2)+'\n');assert r.returncode==0
+import csv
+rows=list(csv.DictReader((L/'samples.csv').open()));report=[]
+labels=['boost_one_cluster','boost_two_clusters','boost_two_no_ceiling','boost_four_clusters']
+for scenario,label in enumerate(labels):
+ groups={tag:{int(x['round']):int(x['elapsed_ns'])/int(x['iterations']) for x in rows if int(x['scenario'])==scenario and x['variant']==tag} for tag in ['parent','candidate']}
+ assert all(len(g)==31 for g in groups.values());changes=[100*(groups['parent'][i]-groups['candidate'][i])/groups['parent'][i] for i in range(31)]
+ item={'scenario':label,'ns_per_call':{},'paired_time_reduction_percent_median':statistics.median(changes),'paired_time_reduction_percent_range':[min(changes),max(changes)]}
+ for tag,v in groups.items():
+  vals=sorted(v.values());q=statistics.quantiles(vals,n=4,method='inclusive');item['ns_per_call'][tag]={'median':statistics.median(vals),'q1':q[0],'q3':q[2],'min':vals[0],'max':vals[-1]}
+ report.append(item)
+(L/'summary.json').write_text(json.dumps({'scope':metadata['scope'],'results':report,'phone_measured':False},indent=2)+'\n')
+(L/'SHA256SUMS').write_text(''.join(hashlib.sha256(f.read_bytes()).hexdigest()+'  '+f.name+'\n' for f in sorted(L.iterdir()) if f.is_file() and f.name!='SHA256SUMS'))
+print(json.dumps(report,indent=2))

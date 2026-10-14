@@ -1,0 +1,51 @@
+{
+  "local_scan": {
+    "files": 110558,
+    "nested_members": 152876,
+    "decompressed": 70,
+    "redacted": 594,
+    "excluded": 82,
+    "symlinks": 57
+  },
+  "decode_limits": [],
+  "extra_test_keys_excluded": 4,
+  "erofs_images": 8,
+  "erofs_unique_images": 5,
+  "erofs_findings": 0,
+  "history_audit": [
+    {
+      "history": "project",
+      "lines": 526155,
+      "known-private-metadata-occurrences": 7777,
+      "action": "neutral technical log, identifiers redacted; no author/email/private Git objects retained"
+    },
+    {
+      "history": "gki",
+      "lines": 6653,
+      "known-private-metadata-occurrences": 0,
+      "action": "neutral technical log, identifiers redacted; no author/email/private Git objects retained"
+    },
+    {
+      "history": "next-port",
+      "lines": 3246,
+      "known-private-metadata-occurrences": 0,
+      "action": "neutral technical log, identifiers redacted; no author/email/private Git objects retained"
+    },
+    {
+      "history": "fpsgo",
+      "lines": 337,
+      "known-private-metadata-occurrences": 0,
+      "action": "neutral technical log, identifiers redacted; no author/email/private Git objects retained"
+    }
+  ],
+  "public_first_scan": {
+    "files": 74639,
+    "nested_members": 0,
+    "decompressed": 0,
+    "redacted": 0,
+    "excluded": 0,
+    "symlinks": 42
+  },
+  "credential_entropy_candidates": 0,
+  "private_values_not_disclosed": true
+}

@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+"""Differential host harness for extracted fbt_do_boost. Not a kernel concurrency test."""
+from pathlib import Path
+import subprocess,sys,os,json,hashlib,re
+P=Path('${PROJECT_ROOT}'); run=sys.argv[1]; assert re.fullmatch('[a-z0-9-]+',run)
+L=P/'logs/performance-fpsgo'/('boost-tests-'+run);L.mkdir(exist_ok=False)
+N=P/'sources/nothing-vendor-perf'; rel='drivers/misc/mediatek/performance/fpsgo_v3/fbt/src/fbt_cpu.c'
+ref='a76624c067205bb593641f90dd65fa2824e1966c'
+old=subprocess.check_output(['git','-C',str(N),'show',ref+':'+rel],text=True); new=(N/rel).read_text()
+def extract(s,tag):
+ a=s.index('static void fbt_do_boost('); b=s.index('static void fbt_clear_state(',a)
+ return s[a:b].replace('fbt_do_boost',tag+'_boost')
+prefix=r'''
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define GFP_KERNEL 0
+#define max(a,b) ((a)>(b)?(a):(b))
+#define min(a,b) ((a)<(b)?(a):(b))
+#define MAX max
+#define clamp(x,a,b) min(max(x,a),b)
+#define FPSGO_HARD_NONE 0
+#define FPSGO_HARD_LIMIT 1
+#define FPSGO_LIMIT_NONE 0
+#define FPSGO_LOGE(...) do { errors++; } while(0)
+struct cpu_ctrl_data {int min,max;};
+struct dvfs {unsigned int power[16];};
+static struct dvfs cpu_dvfs[4];
+static int cluster_num,nr_freq_cpu,bhr_opp,bhr_opp_l,bhr,min_cap_cluster,max_cap_cluster;
+static int suppress_ceiling,limit_policy,boost_ta,min_ceiling_setting;
+static unsigned int cpu_max_freq;
+static int base_opp[4], selected_opp[4];
+static int allocs, frees, live, fail_at, errors;
+struct event {int kind,a,b;unsigned long long id;struct cpu_ctrl_data p[4];};
+static struct event events[8];static int count;
+static void *alloc(size_t n,size_t z) { allocs++; if(allocs==fail_at)return NULL;void*p=calloc(n,z);assert(p);live++;return p; }
+#define kcalloc(n,z,g) alloc(n,z)
+#define kzalloc(n,g) alloc(1,n)
+static void kfree(void *p) {if(p){free(p);frees++;live--;}}
+static void event(int k,int a,int b,unsigned long long id,struct cpu_ctrl_data*p) {assert(count<8);struct event*e=&events[count++];e->kind=k;e->a=a;e->b=b;e->id=id;if(p)memcpy(e->p,p,cluster_num*sizeof(*p));}
+static int fbt_get_opp_by_normalized_cap(unsigned int b,int c) {(void)b;return selected_opp[c];}
+static int fbt_get_L_min_ceiling(void) {return min_ceiling_setting;}
+static void fbt_set_hard_limit_locked(int m,struct cpu_ctrl_data*p) {event(1,m,0,0,p);}
+static void fbt_set_boost_value(unsigned int b) {event(2,(int)b,0,0,NULL);}
+static void fpsgo_systrace_c_fbt(int pid,unsigned long long id,unsigned int x,const char*s) {event(3,pid,(int)x,id,NULL);(void)s;}
+static void fbt_set_ceiling(struct cpu_ctrl_data*p,int pid,unsigned long long id) {event(4,pid,0,id,p);}
+'''
+tail=r'''
+struct state {int opp[4], bhr, count;struct event events[8];};
+static struct state run(int candidate,int failure,int initial,unsigned int boost) {
+ allocs=frees=live=errors=count=0;fail_at=failure;bhr_opp=initial;
+ memset(events,0,sizeof(events));for(int i=0;i<4;i++)base_opp[i]=-7;
+ if(candidate)new_boost(boost,123,0x123456789ULL);else old_boost(boost,123,0x123456789ULL);
+ assert(live==0);struct state s;memset(&s,0,sizeof(s));memcpy(s.opp,base_opp,sizeof(base_opp));s.bhr=bhr_opp;s.count=count;memcpy(s.events,events,sizeof(events));return s;
+}
+static uint32_t seed=0x5041434d;
+static uint32_t rnd(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
+int main(void){
+ for(int t=0;t<100000;t++) {
+  cluster_num=1+rnd()%4;nr_freq_cpu=1+rnd()%16;
+  min_cap_cluster=rnd()%cluster_num;max_cap_cluster=rnd()%cluster_num;
+  bhr_opp_l=rnd()%nr_freq_cpu;bhr=rnd()%101;
+  int initial=(int)(rnd()%(nr_freq_cpu+6))-3;
+  suppress_ceiling=rnd()%2;limit_policy=rnd()%2;boost_ta=rnd()%2;
+  cpu_max_freq=t%11==0?1:100+rnd()%100000;
+  min_ceiling_setting=t%3==0?0:1+rnd()%1000;
+  unsigned int boost=t%13==0?0:rnd()%200001;
+  for(int c=0;c<cluster_num;c++) {
+   unsigned v=100000;
+   for(int i=0;i<nr_freq_cpu;i++){v-=1+rnd()%1000;cpu_dvfs[c].power[i]=v;}
+   selected_opp[c]=rnd()%nr_freq_cpu;
+  }
+  struct state a=run(0,0,initial,boost);assert(allocs==3&&frees==3&&errors==0);
+  struct state b=run(1,0,initial,boost);assert(allocs==1&&frees==1&&errors==0);
+  assert(!memcmp(&a,&b,sizeof(a)));
+  struct state x=run(0,1,initial,boost);assert(allocs==1&&frees==0&&errors==1&&count==0);
+  struct state y=run(1,1,initial,boost);assert(allocs==1&&frees==0&&errors==1&&count==0);assert(!memcmp(&x,&y,sizeof(x)));
+  for(int f=2;f<=3;f++){
+   struct state z=run(0,f,initial,boost);assert(allocs==f&&frees==f-1&&errors==1&&count==0);(void)z;
+   struct state ok=run(1,f,initial,boost);assert(allocs==1&&frees==1&&errors==0);assert(!memcmp(&a,&ok,sizeof(a)));
+  }
+ }
+ puts("{\"cases\":100000,\"success_equivalent\":true,\"remaining_allocation_failure_equivalent\":true,\"removed_allocation_failures_now_complete_boost\":true,\"allocation_calls_before\":3,\"allocation_calls_after\":1,\"phone_measured\":false}");
+}
+'''
+s=prefix+extract(old,'old')+extract(new,'new')+tail;(L/'boost.c').write_text(s)
+cmd=['gcc','-std=c11','-O2','-g','-fsanitize=address,undefined','-fno-omit-frame-pointer',str(L/'boost.c'),'-o',str(L/'boost')]
+(L/'inputs.json').write_text(json.dumps({'parent':ref,'candidate_source_sha256':hashlib.sha256(new.encode()).hexdigest(),'command':cmd},indent=2)+'\n')
+with (L/'compile.log').open('w') as f:subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,check=True)
+env=os.environ.copy();env['ASAN_OPTIONS']='detect_leaks=0';env['UBSAN_OPTIONS']='halt_on_error=1'
+with (L/'result.json').open('w') as f, (L/'run.stderr').open('w') as e:r=subprocess.run([str(L/'boost')],stdout=f,stderr=e,env=env)
+assert r.returncode==0, f'Failed {r.returncode}; logs preserved in {L}'
+print((L/'result.json').read_text())

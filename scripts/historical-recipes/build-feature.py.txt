@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""Pinned feature build; never uses adb/fastboot. Source scripts are read before execution."""
+from pathlib import Path
+import os,sys,json,subprocess,hashlib,datetime,re
+p=Path('${PROJECT_ROOT}');variant,run_id=sys.argv[1:3]
+assert re.fullmatch(r'[a-z0-9-]+',variant) and re.fullmatch(r'[a-z0-9-]+',run_id)
+lock=json.loads((p/'integration.lock.json').read_text());job=lock['variants'][variant]
+def git(path,*args):return subprocess.check_output(['git','-C',str(path),*args],text=True).strip()
+subprocess.run(['git','-C',str(p),'diff','--exit-code','HEAD','--','scripts','integration.lock.json'],check=True)
+for path,commit in job['repos'].items():
+ assert git(p/path,'rev-parse','HEAD')==commit
+ assert not git(p/path,'status','--porcelain','--untracked-files=no')
+subprocess.run(['python3',str(p/'scripts/verify-pipeline.py')],check=True)
+out=Path('${BUILD_CACHE}')/(variant+'-'+run_id);a=p/'artifacts'/variant/run_id
+assert not out.exists() and not a.exists()
+out.mkdir(parents=True);a.mkdir(parents=True)
+log=p/'logs/integration'/(variant+'-'+run_id+'.log')
+info={'date_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'device':'Nothing Phone (2a) / Pacman','firmware':json.loads((p/'sources.lock.json').read_text())['firmware'],'variant':variant,'project_commit':git(p,'rev-parse','HEAD'),'sources':job,'device_validated':False,'defconfig':'gki_defconfig + KSU + optional fragment; strict KMI retained','clang_version':subprocess.check_output([str(p/'toolchains/clang-r450784e/bin/clang'),'--version'],text=True),'out_dir':str(out),'log':str(log),'exit_code':None}
+(a/'BUILD-INFO.txt').write_text(json.dumps(info,indent=2)+'\n')
+# Freeze the build fragment as well as the recorded inputs.
+fragment=a/'build.config.snapshot';fragment.write_bytes((p/'scripts/build.config.features').read_bytes())
+env=os.environ.copy()
+for key in ['BUILD_NUMBER','FAST_BUILD','LTO','KASAN','KCSAN','SKIP_DEFCONFIG','SKIP_MRPROPER','SOURCE_DATE_EPOCH']:env.pop(key,None)
+env.update(KERNEL_DIR=job['kernel_dir'],BUILD_CONFIG=os.path.relpath(fragment,p/'sources/gki'),OUT_DIR=str(out),DIST_DIR=str(a),SOURCE_DATE_EPOCH='1746772579')
+if job.get('config_fragment'):env['PACMAN_CONFIG_FRAGMENT']=str(p/job['config_fragment'])
+with log.open('w') as fd:
+ result=subprocess.run(['bash','build/build.sh','-j8'],cwd=p/'sources/gki',env=env,stdout=fd,stderr=subprocess.STDOUT)
+info['exit_code']=result.returncode
+cfg=out/job['kernel_dir']/'.config'
+def sha(f):
+ with f.open('rb') as fd:return hashlib.file_digest(fd,'sha256').hexdigest()
+info['config_hash']=sha(cfg) if cfg.exists() else None
+info['artifact_sha256']={str(f.relative_to(a)):sha(f) for f in sorted(a.rglob('*')) if f.is_file() and f.name!='BUILD-INFO.txt'}
+(a/'BUILD-INFO.txt').write_text(json.dumps(info,indent=2)+'\n')
+print('Build',variant,run_id,'exit',result.returncode,flush=True)
+raise SystemExit(result.returncode)

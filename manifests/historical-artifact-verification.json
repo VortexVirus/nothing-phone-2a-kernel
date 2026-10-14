@@ -1,0 +1,2931 @@
+[
+  {
+    "kind": "historical-build",
+    "exit_code_recorded": 0,
+    "files": [
+      {
+        "path": "Image",
+        "match": true,
+        "sha256": "5acf0485be05e034e40a27d4fbd7974ce6378dc6c61902a7f9d43c578c4844d3",
+        "bytes": 48253440
+      },
+      {
+        "path": "Image.gz",
+        "match": true,
+        "sha256": "bf50fe89d5f07efe5a93124f39403be1a5b8471561c6d67e158d0773997477de",
+        "bytes": 21888059
+      },
+      {
+        "path": "Image.lz4",
+        "match": true,
+        "sha256": "0ab973e323b5720f73403cf58492f6e93fcf2cf4e7ea2d1edb80b2881d81e962",
+        "bytes": 25435972
+      },
+      {
+        "path": "System.map",
+        "match": true,
+        "sha256": "96c1737dd9a38807cda16135e4e554f8c5b52e8ee5c5c766cbb229de89b55b0d",
+        "bytes": 7525525
+      },
+      {
+        "path": "abi.prop",
+        "match": true,
+        "sha256": "e8443dc7aba911ce0f67a4f315fa32e6c47899b6164b88fe8f97b9f649a3e815",
+        "bytes": 107
+      },
+      {
+        "path": "abi.xml",
+        "match": true,
+        "sha256": "dc1b2d4dcf83b6f2bc9a470354806206082c0f0a2b8de517f73f367adbc6d910",
+        "bytes": 14530079
+      },
+      {
+        "path": "abi_symbollist",
+        "match": true,
+        "sha256": "eb18cdb48a5f443c3aed2fee493972bc0190186980974b8da804b51c6f0a9e3a",
+        "bytes": 966720
+      },
+      {
+        "path": "abi_symbollist.report",
+        "match": true,
+        "sha256": "6cbfe1dcefbcd3d5072758f6d8906af5bfebcdcda571226498b29b04e438089a",
+        "bytes": 271376
+      },
+      {
+        "path": "boot-gz.img",
+        "match": true,
+        "sha256": "322616be8eced8b96f0ae93d6cfc11b40e7ebd8add5869ab33bce914ca51e3f0",
+        "bytes": 47185920
+      },
+      {
+        "path": "boot-img.tar.gz",
+        "match": true,
+        "sha256": "b5c2b8681fbbd2e267eb990b66fbe87b5439456ebc36edb4bbd6fbd67cb01423",
+        "bytes": 66088613
+      },
+      {
+        "path": "boot-lz4.img",
+        "match": true,
+        "sha256": "88b801a1c57fd2fb4305a806fd7fcb793a8fe6c1acda45224a9d4b7192687aed",
+        "bytes": 53477376
+      },
+      {
+        "path": "boot.img",
+        "match": true,
+        "sha256": "0562273d35c372ef4eef15f23da2814c3d13ba2c79890811024f8d62bd8601f8",
+        "bytes": 67108864
+      },
+      {
+        "path": "build.config.snapshot",
+        "match": true,
+        "sha256": "97d17b8dfadc3586908437f7b17744d751f6a72757de10cf785eedf971b26419",
+        "bytes": 667
+      },
+      {
+        "path": "gki-info.txt",
+        "match": true,
+        "sha256": "14ddf784ed15d3a28a3b7500d28104d7a7840901c24c4fbde691624806e745cd",
+        "bytes": 131
+      },
+      {
+        "path": "gki_aarch64_modules",
+        "match": true,
+        "sha256": "2e9146738ad7b58fa02cb90a5e8141ae73f22ca92982590c997edee4c49c186e",
+        "bytes": 42
+      },
+      {
+        "path": "gki_certification_tools.tar.gz",
+        "match": true,
+        "sha256": "1fffdd4a200f8033317415f4c543d68e71681c2826f2f9bba5e19dbb4f562aed",
+        "bytes": 14647798
+      },
+      {
+        "path": "kernel-headers.tar.gz",
+        "match": true,
+        "sha256": "f2b50ae67c9e85dda1651391c8443ae03532dc29e12f1ed04bad62818100a65a",
+        "bytes": 15225078
+      },
+      {
+        "path": "kernel-uapi-headers.tar.gz",
+        "match": true,
+        "sha256": "eeb1e98933f9289e396c024ac60ca42ea9c455cc333dda85683ad9da44a93cee",
+        "bytes": 1557405
+      },
+      {
+        "path": "modules.builtin",
+        "match": true,
+        "sha256": "b354ba8ec22f1d6a9ab96b9ab0afb55efd7d67a7fe8400383df6106050d7dd0a",
+        "bytes": 22886
+      },
+      {
+        "path": "modules.builtin.modinfo",
+        "match": true,
+        "sha256": "c78006add46da4a1cf59c93ea19b71becab81d9a806f3c08affdec70e9b7cf29",
+        "bytes": 146047
+      },
+      {
+        "path": "system_dlkm.img",
+        "match": true,
+        "sha256": "c85cedc78e3549a720ce510a0f410ca8db21a3c1e5b60605db1a22b9ec6aed65",
+        "bytes": 356352
+      },
+      {
+        "path": "system_dlkm.modules.load",
+        "match": true,
+        "sha256": "4f071073712137081a8c8f7afda672bd5c387aa91b8c83562c2598e9c360426e",
+        "bytes": 56
+      },
+      {
+        "path": "system_dlkm_staging_archive.tar.gz",
+        "match": true,
+        "sha256": "73ad7140f65d80c71c5f10b6df9f1c48f04295bdbb9ba6f14d73f7b8aae027c8",
+        "bytes": 60999
+      },
+      {
+        "path": "test_mappings.zip",
+        "match": true,
+        "sha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85",
+        "bytes": 22
+      },
+      {
+        "path": "vmlinux",
+        "match": true,
+        "sha256": "ce0edfd2b9193d9b4b8ef1944e80067a36cee2862a4e91641aeda7ef129b5a56",
+        "bytes": 508827256
+      },
+      {
+        "path": "vmlinux.symvers",
+        "match": true,
+        "sha256": "ec7144df2d3116b1c5c29f577f3dcb040543c2717aa1492d4b40c04d256f7c0e",
+        "bytes": 510086
+      },
+      {
+        "path": "zram.ko",
+        "match": true,
+        "sha256": "4d115d101abefd936a0be23cb2f07b06faf3c4ec07eb88550448425e68567c3c",
+        "bytes": 752777
+      },
+      {
+        "path": "zsmalloc.ko",
+        "match": true,
+        "sha256": "384cd5e5a5caaf7b9f6c45e835f900f7b363184a379d08e3a5cf070f577ee21a",
+        "bytes": 747201
+      }
+    ]
+  },
+  {
+    "kind": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01",
+    "files": [
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/boot.img",
+        "match": true,
+        "sha256": "992ace71354129e17bf130a8224a474cf6db09dacca745445e0bd9f4820422fe",
+        "bytes": 67108864
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/vbmeta.img",
+        "match": true,
+        "sha256": "c4e99d7a717dc5ece1cfa13b8cfd4f02fef3fc957813aa8d88cde45bd39309d5",
+        "bytes": 8192
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/vbmeta_vendor.img",
+        "match": true,
+        "sha256": "9983ca80ab447e50e8380df062d9b487d6ff4b713108f9dbfa9c72453794ab19",
+        "bytes": 8192
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/vendor_boot.img",
+        "match": true,
+        "sha256": "bbb81742f2216cee0589ee0dd8172da07a906c80ce19d309574ebe38d8bb939c",
+        "bytes": 67108864
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/vendor_dlkm.img",
+        "match": true,
+        "sha256": "696266a1760c8735ebc27833bda3c2ac5d4db29f065eea28f5d94a37f680c348",
+        "bytes": 28262400
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/CHAIN-AUDIT.json",
+        "match": true,
+        "sha256": "ea6d9206fae60a848fa44cf7258cb4bbf6abab7dea779099612c1674fd8d6ad2",
+        "bytes": 916
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/FINAL-OFFLINE-VERIFICATION.json",
+        "match": true,
+        "sha256": "4a69fce3cb9683d928d073dca55ba1de847d326146baf94cb14d51e37cd40684",
+        "bytes": 417
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/NOT-READY-TO-FLASH.txt",
+        "match": true,
+        "sha256": "bf62472835427afbc70d7942169ff2ea4ac9c1e53d0ce6741519dba7be409eec",
+        "bytes": 78
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/PACKAGE-INFO.json",
+        "match": true,
+        "sha256": "41c23119ebf08a08790a44e65e758f09098142fd53777d4214485d62eaa51446",
+        "bytes": 2470
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/ROLLBACK.json",
+        "match": true,
+        "sha256": "61232c34941cf0ac679165411caf833d1a53629a52655146e6364459165038ae",
+        "bytes": 2339
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/SHA256SUMS",
+        "match": true,
+        "sha256": "cf0a4b6cdd7ed8d08e53e70b59cd404e07608ed098c3e36b60af8a15c38eada8",
+        "bytes": 400
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/TEST-PROCEDURE.md",
+        "match": true,
+        "sha256": "bc78c9c2c6de14b8f57e965b32c0481843952325437b96506065a9130958281d",
+        "bytes": 5542
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/boot-avb.txt",
+        "match": true,
+        "sha256": "5b2fdf4f142cc429fcad3f56beb9401a256aa79c64e2d0ad24af3a2b1bbf8fea",
+        "bytes": 1180
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/commands.json",
+        "match": true,
+        "sha256": "4e9a90d386d14d58c8608432b3eb9e3d540860d2f44c3ad56a26663c7237fdb5",
+        "bytes": 90063
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/commands.log",
+        "match": true,
+        "sha256": "53ea3c3c3e8d07fae521be1d79f7bddd3ba5ae2167f76721d260f537f552e069",
+        "bytes": 100472
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/fstabs-unchanged.json",
+        "match": true,
+        "sha256": "a486a84594864d3ba9e4f35e2c613a6bf6fd5f11a2f75eb0f9235cdb0e2fdbb2",
+        "bytes": 20194
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/stock-erofs-metadata.json",
+        "match": true,
+        "sha256": "a8636e6a7774b5f7d4fdc316e678504c1e902ad90544f48efe984e1d4a135d70",
+        "bytes": 45583
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/stripping.json",
+        "match": true,
+        "sha256": "c17ce1dbdb251c1e2c2c13fe4170d68c5a0e3beff7549334c98e5913d5148c6a",
+        "bytes": 113002
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/test-avb-public.bin",
+        "match": true,
+        "sha256": "d348b95050cea343137b0bd2b54020c0b121cb7c98148cb451fa5af22bbeb75b",
+        "bytes": 520
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/vbmeta-avb.txt",
+        "match": true,
+        "sha256": "6d25bb8aa81651cb513fd4f32e4c37aa4e6fbed8b43789568c2f8ca0abf70937",
+        "bytes": 2526
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/vbmeta_vendor-avb.txt",
+        "match": true,
+        "sha256": "c21d87cc951185d02761bd0eb9d59319d5c7d04903e93164046aeb9b9531ecdf",
+        "bytes": 3875
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/vendor_boot-avb.txt",
+        "match": true,
+        "sha256": "056a3d86ab79104d9d70d5b73f43678a5e7de79845b1c21cd94a15ede71d2722",
+        "bytes": 997
+      },
+      {
+        "path": "artifacts/ksu-next-susfs-droidspaces-nomount-userns/paired-fpsgo06-01/vendor_dlkm-avb.txt",
+        "match": true,
+        "sha256": "5e56b20a7dc6efbe36ff0a06617ea21347566e0cf620bddfc23b42807839143f",
+        "bytes": 1362
+      }
+    ]
+  },
+  {
+    "kind": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules",
+    "files": [
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/BUILD-INFO.json",
+        "match": true,
+        "sha256": "1b3a37d8b9aa06a0aae627dcf7edb494a172547768a95ce79e0375831df51b7a",
+        "bytes": 47305
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/DO-NOT-FLASH.txt",
+        "match": true,
+        "sha256": "1cfcc4e722571e08d407957d0dcac1875d7ed60169f529290ef1147c3352126d",
+        "bytes": 78
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/layout-checks.json",
+        "match": true,
+        "sha256": "49a8231fcf92b7d897a9495712c7ded1dcf2f0f67d5dd85bf1f15937b8817917",
+        "bytes": 363134
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/module-checks.json",
+        "match": true,
+        "sha256": "dc8c77bdc45d74070d9c4ac84b22e58da613da332ef835da8421edd3eccc2519",
+        "bytes": 2217927
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/module-map.json",
+        "match": true,
+        "sha256": "a732b1f19e3470559796af2f5c08c1d02ecdfd2257334523e928acfacae892d9",
+        "bytes": 138710
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/8250_mtk.ko",
+        "match": true,
+        "sha256": "6d8e64721e641d20691807651002a50cf58c4f93a518447dcf3bfcd0087a6a1a",
+        "bytes": 529376
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/aacrt6010_haptic.ko",
+        "match": true,
+        "sha256": "c13b29a65edb72c2e31a12a8e550a675e264c6aa84a243d8a667d1340a47af84",
+        "bytes": 1409536
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/adapter_class.ko",
+        "match": true,
+        "sha256": "a5cf3344631be5a90599b8c5f91ac08e4b0fca90c46c3792e953edca3369fa44",
+        "bytes": 311400
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/adsp.ko",
+        "match": true,
+        "sha256": "2c9b20ee75ebe00e5c958f60c8f7290540d3081d2965b727d9e48e8a81be5df7",
+        "bytes": 1746896
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/adsp_v2.ko",
+        "match": true,
+        "sha256": "1bffc2def77749f5d175b633e3dfd960e285bbde87f5d57ad855c57753862e71",
+        "bytes": 408808
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/aee_aed.ko",
+        "match": true,
+        "sha256": "e71e813f1087370a173ba11edb0f1d3cd0106a593f2d0007b2f486f181314b95",
+        "bytes": 1097720
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/aee_hangdet.ko",
+        "match": true,
+        "sha256": "ca8bd377e39310600dca7356dab3079d63fcb867dc754f6f0034a567cd41eac1",
+        "bytes": 1002304
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/aee_rs.ko",
+        "match": true,
+        "sha256": "bed93eb9773beb0acce904e8e9c1b47fea319fbb8e63e02cb289c2367fbb9c10",
+        "bytes": 300208
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ak7375c.ko",
+        "match": true,
+        "sha256": "6dadb75921b257ee592a5d11b501cad2a5df6133510335030e77ce28b06b89e9",
+        "bytes": 443840
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ak7377a.ko",
+        "match": true,
+        "sha256": "64785c21c13af66a7212b0ffae4c6efbf2166f1d15e90ce4dfd74691f1ec60f0",
+        "bytes": 446416
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/apu_top.ko",
+        "match": true,
+        "sha256": "e58af05fc56e2c21f547d4be74edf0d09b11a3251892f84d3d9ddd5e912a252c",
+        "bytes": 7305080
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/apusys.ko",
+        "match": true,
+        "sha256": "4b9af60a75503ffe0f38e3cd173018d9aa812e5ad9b807b9b9eea67bac9ab666",
+        "bytes": 28036096
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/arm_dsu_pmu.ko",
+        "match": true,
+        "sha256": "12abe5b2dbd8fd25f6e9f3e3860d3a2e73c1ea66778a97982745340c405a2da4",
+        "bytes": 461680
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/atf_logger.ko",
+        "match": true,
+        "sha256": "b2e52c572d6da76e26b9e55c0d02f5a509d81a8bfeb7d9edec66ec0f9fe3e740",
+        "bytes": 580880
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/audio_ipi.ko",
+        "match": true,
+        "sha256": "3ad56b1ba6caa24b453004c8ac8f1a377c3d31e8debfe35db8c31310a3d94c35",
+        "bytes": 994096
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/aw32280_charger.ko",
+        "match": true,
+        "sha256": "9892666b5308840ac3c98e9c9542d7bf7a5399ddacdad12d03571875d0454567",
+        "bytes": 607552
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/aw36518.ko",
+        "match": true,
+        "sha256": "3a6ec72532a7b59bd69a82a538af2a9b1fdc5922500f03c0b9438d6c2388ad85",
+        "bytes": 508760
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/aw8692x_haptic.ko",
+        "match": true,
+        "sha256": "c3f93dc6e837027db982b98d149f9af3b2540f7a416a917cca7bd21a19666630",
+        "bytes": 3676536
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/awinic_sar.ko",
+        "match": true,
+        "sha256": "3e85e3d88dbeda8f8bab2633f3fd98cdfb551b2e1eff8645c7b9e5d990c06bd9",
+        "bytes": 1328616
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/backlight_cooling.ko",
+        "match": true,
+        "sha256": "92e35c468e0f2c1a6eca03ba70accf6ac0085e965e14ab7737b5be6765291a6b",
+        "bytes": 284048
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/blocktag.ko",
+        "match": true,
+        "sha256": "ee18d50f623a9942378f79e08358b8202b4250f04c22e29a7e3cc2fe99b51910",
+        "bytes": 1824704
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/board_id.ko",
+        "match": true,
+        "sha256": "3d718eb9d44477578e048f8593799d9556cfd4160e2697c183b036a733af745c",
+        "bytes": 371928
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/board_temp.ko",
+        "match": true,
+        "sha256": "a01f3b54b883e85e3c3ef07e2bd9565403016c86c9206383682daedd5a5221e7",
+        "bytes": 307472
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/bootprof.ko",
+        "match": true,
+        "sha256": "1e0f75a22ca2562e16c3f736b5158f395a475ea733b4af4e9930ed29a96a995a",
+        "bytes": 372680
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/bt_drv_6886.ko",
+        "match": true,
+        "sha256": "d6e4ba838d44c547e278abf32a3675b294e957f09e75d130a8b90fe3f474813a",
+        "bytes": 4895400
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/btif_drv.ko",
+        "match": true,
+        "sha256": "9397ac001f2783ce1c9f2cd53f328cc7a76e32005f9a140aadf34c4a304edbac",
+        "bytes": 1520888
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/bu64253gwz.ko",
+        "match": true,
+        "sha256": "700c434280b1da559bbf87bcabd0002dd8b4718de77fe65532bb28b79fa08213",
+        "bytes": 448768
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/bus_parity.ko",
+        "match": true,
+        "sha256": "be8ec475596dec865525d29a91bc5ccc09e999270c84d2bb436c7f2ff80c03be",
+        "bytes": 339616
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/c2k_usb.ko",
+        "match": true,
+        "sha256": "526c1c72729afab58a042f34f8e9594d446009cf9a3fbbc844b7b3437905f73b",
+        "bytes": 969128
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/c2k_usb_f_via_atc.ko",
+        "match": true,
+        "sha256": "4e629e0c2a07ac02274f1928f15f36b6334ff6331eb79055f5c6435b8c322c3a",
+        "bytes": 300800
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/c2k_usb_f_via_ets.ko",
+        "match": true,
+        "sha256": "6349601a43d77c22b6c61b8e58fb63b30a4397523c0bc8ab55ed4719fff19985",
+        "bytes": 300800
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/c2k_usb_f_via_modem.ko",
+        "match": true,
+        "sha256": "f8ef160f94ffb738a31655f866b2a1f41e78d7fb44c244fdae8377a1310f3292",
+        "bytes": 300832
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cache_parity.ko",
+        "match": true,
+        "sha256": "3c13907ee19fc5230188c4b68ebdeaac5853793f272f9585bc63653b965efee9",
+        "bytes": 361760
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/camera_af_media.ko",
+        "match": true,
+        "sha256": "43312e657b573cf7b88eb5c36e0cb47411c5edc15069c012152da2d82ad8889a",
+        "bytes": 460688
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/camera_dpe_isp70.ko",
+        "match": true,
+        "sha256": "6bdf49df2c18512c7c5f77e179384780a8c8ba753b501996b820d6d6476e2585",
+        "bytes": 1553368
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/camera_eeprom.ko",
+        "match": true,
+        "sha256": "5bfa61bd1f9509ee13a933adfb055ee587246cf702d1a1d93f16122e9a3dda0d",
+        "bytes": 6724280
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ccci_auxadc.ko",
+        "match": true,
+        "sha256": "17b5c112f954d76ddf587792124acde796482d9d01b3db7cfd87b8f5a6ebcece",
+        "bytes": 417032
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ccci_ccif.ko",
+        "match": true,
+        "sha256": "66f481bccea1fafaf34d94b66c37a3b4b5c36b55bcde97dd36a729eab775b1ac",
+        "bytes": 910288
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ccci_dpmaif.ko",
+        "match": true,
+        "sha256": "5a89458499d827fcceaa13b8bf1ad2c780594e13c2bb6db735598e6d202dc9ed",
+        "bytes": 5651552
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ccci_fsm_scp.ko",
+        "match": true,
+        "sha256": "fe9667acf3ba49fbfad55063b005ee7c3d6dd0966856fbc191425f4f6e91ed31",
+        "bytes": 508696
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ccci_md_all.ko",
+        "match": true,
+        "sha256": "b4b7e4febfa3b8460a2689b751096450fdee0edd515ca3e59c52cc406a3abf7e",
+        "bytes": 10999824
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ccci_util_lib.ko",
+        "match": true,
+        "sha256": "409579ef667dfa30c5b36295413f5f280188a8858c11d89c06c24508e40be070",
+        "bytes": 2225832
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ccd_rpmsg.ko",
+        "match": true,
+        "sha256": "8bdf460f019780963fdd31e7df9bd6c6bf4dece5f46d4381ec73ab9bcc8f3961",
+        "bytes": 661528
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ccmni.ko",
+        "match": true,
+        "sha256": "dfb17e26083a96803a42ef1e70dec78268c9afb3e765f299de96331fda19deba",
+        "bytes": 684352
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cfg80211.ko",
+        "match": true,
+        "sha256": "8bb04a662d55bd7fa66743b6f7a4e9922ab871c68cacad28b7c1db938eef60b8",
+        "bytes": 17671688
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/charger_class.ko",
+        "match": true,
+        "sha256": "e03c52110be6f01fbc9e4d7f7b7fe76f68fad0f98da2eea858701d7f0cf6c745",
+        "bytes": 455912
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/charger_cooling.ko",
+        "match": true,
+        "sha256": "71161f6db1b44c453bd1eecc46e9b2894904d092a9c57b295947335f29de92c7",
+        "bytes": 314448
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_bringup.ko",
+        "match": true,
+        "sha256": "9c964dca17272a0a12e525800b81c9c2707aaaa4b7d4f918ff568f91427e3ba5",
+        "bytes": 276880
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_chk_mt6886.ko",
+        "match": true,
+        "sha256": "960a9c8cd47740427a0597d0b7161c4f38df7f32f6196b79cc5a7a60a4427233",
+        "bytes": 365200
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_common.ko",
+        "match": true,
+        "sha256": "2e60b3bbd2d3d594a9abf65125e8d49c9777f051904175f04e0ced53c4e52671",
+        "bytes": 2418152
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_dbg_mt6886.ko",
+        "match": true,
+        "sha256": "33628fc8436e13af207551616bb9833c2cc799a063a2518ff7c2bd9f54d70625",
+        "bytes": 290864
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_disable_unused.ko",
+        "match": true,
+        "sha256": "f6c429aa2827008e80c17939cf931695086dc9912f3b926182ee727420bd2521",
+        "bytes": 277624
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_fmeter_mt6886.ko",
+        "match": true,
+        "sha256": "a7b35f4fa429963db5cb10e37c263d125871d531103a449b05cd6c5669998765",
+        "bytes": 317256
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886.ko",
+        "match": true,
+        "sha256": "4bde527c940d74e25b436ede5974ba6a790227f77a57661db958d185daba1fb7",
+        "bytes": 366320
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_adsp.ko",
+        "match": true,
+        "sha256": "2206876fee8e3c0ec4e29ca778d3cb612bf6ca928fc90410621c278069e170c8",
+        "bytes": 276328
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_bus.ko",
+        "match": true,
+        "sha256": "b5e78e944107acc82c1a441b08681480f28ff2f911838d0deee6b2c70a30d625",
+        "bytes": 274520
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_cam.ko",
+        "match": true,
+        "sha256": "e6b35769a85c7f65f319d13c41e60facc692a4662cb5c821c9c6f4ed35c8a13b",
+        "bytes": 283904
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_ccu.ko",
+        "match": true,
+        "sha256": "4505783e68e7958a4c7541d52fdeb8b37ffd55fb8b42268187fed4b3a6761898",
+        "bytes": 272816
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_img.ko",
+        "match": true,
+        "sha256": "01a97e674f62abc62a160315d5faf30a7c7f12ee974de330e30145d769d94f37",
+        "bytes": 283224
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_mdpsys.ko",
+        "match": true,
+        "sha256": "46c4024c350dd0e068b1da5fd911bb1e285dd5bb0df754f2b774e2698c2e0829",
+        "bytes": 274704
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_mmsys.ko",
+        "match": true,
+        "sha256": "5c2797a0c00b086bc1e674b37b6714278733df7564c37e9a5140771ec923337a",
+        "bytes": 281472
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_peri.ko",
+        "match": true,
+        "sha256": "cf49ae6d16435e7ee297a4fef2ca0ddafe31161c0e24d5409132441176c3424d",
+        "bytes": 285744
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_scp.ko",
+        "match": true,
+        "sha256": "30bb0eae083374979cc31132ba11b5e7e2cf98e79ee242b6be810224088b311c",
+        "bytes": 273472
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clk_mt6886_vcodec.ko",
+        "match": true,
+        "sha256": "ca4085247a26890e3946820ff21a515f7c2c6ded960521cef7d7edb136f697aa",
+        "bytes": 274664
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/clkbuf.ko",
+        "match": true,
+        "sha256": "8c47f265014c0e94040859e8d943cf73884c15b2003614f65c017f434880b3e4",
+        "bytes": 1432384
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cmdq_helper_inf.ko",
+        "match": true,
+        "sha256": "45c7f1b59c6cafcd96179107d94505586138d9cd6c22af7cfebf5dec6656bb59",
+        "bytes": 368840
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cmdq_platform_mt6886.ko",
+        "match": true,
+        "sha256": "8b3743e73bfda03429ff7dfdc9b9f205f7c541f8be6114c17bcf1f711a2af913",
+        "bytes": 162240
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cmdq_sec_drv.ko",
+        "match": true,
+        "sha256": "17abd65901eac2864da6392030745617519d1e81d8885db13fe389f64d6d5be2",
+        "bytes": 995576
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cmdq_test.ko",
+        "match": true,
+        "sha256": "e7a3415af8ff7967be7c108428b964ed92969ebf2d0192b7632f451bc7f773f3",
+        "bytes": 594392
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/connadp.ko",
+        "match": true,
+        "sha256": "ae09ca6f3420198123d8980553732a4db30ebdd22130e59874dfdfcaf3943cc4",
+        "bytes": 980368
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/connfem.ko",
+        "match": true,
+        "sha256": "db8681e271d53cb712b4b2927f8539b7e18903cea0cde9e938d4244d84221992",
+        "bytes": 801624
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/conninfra.ko",
+        "match": true,
+        "sha256": "51678cc5fa919bc9a68535a9ea02b528fcc0b77a20fad6959bfe831c3f946887",
+        "bytes": 10720440
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/connscp.ko",
+        "match": true,
+        "sha256": "30b081d5ea85037d588c239e7162cff54e01cc6245ce893a8d6ef91e6ff6f9af",
+        "bytes": 1305200
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cpudvfs.ko",
+        "match": true,
+        "sha256": "c966e8fc5e3a013b45df9be5a7f82aa55e490a5e77c6c095a3ecd8a9526bb702",
+        "bytes": 305928
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cpufreq_sugov_ext.ko",
+        "match": true,
+        "sha256": "0259a40e4140170817d2f6fb368b1eda5eb3e53b3ac69ff40335e7b2ed7ccb4b",
+        "bytes": 1728688
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cpuqos_v3.ko",
+        "match": true,
+        "sha256": "c199093c1680aaa202d4e9f8fbcb71a85e929c9e5f93936aaface824bdb95f64",
+        "bytes": 1155728
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/cqhci.ko",
+        "match": true,
+        "sha256": "0d3e27182b2ca2422e12c27483b0b4cf7f0d32c51756143806717b50a93c789c",
+        "bytes": 769408
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/dbgtop_drm.ko",
+        "match": true,
+        "sha256": "333ddeac54da12295ed5e8b0313267fa01f723823a43ea8d1b70e1490f0c3548",
+        "bytes": 290240
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/device_apc_common.ko",
+        "match": true,
+        "sha256": "9add3939396dd5f71b493bb854f2edecc078f1d72a77a69520fc02ce4512b94e",
+        "bytes": 518368
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/device_apc_mt6886.ko",
+        "match": true,
+        "sha256": "f0850bb3344b247b1ed63fe320ee547ac0de61107320051dec59bbf8bfc08253",
+        "bytes": 383168
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/dio8018_regulator.ko",
+        "match": true,
+        "sha256": "19946c9aea2b19ac8786547761dca05c12b536c142d363a031110b02ec36b3a3",
+        "bytes": 404104
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/dw9800v.ko",
+        "match": true,
+        "sha256": "cfe20a033965d32f4734d5fcc070b416f84dc2a0f0ba8f1f96c434482554cbde",
+        "bytes": 463648
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/dw9800w.ko",
+        "match": true,
+        "sha256": "bc691e914fb58d1887de7210e8a7721b2a2aadf7736d7dc8c237aebf67c11aeb",
+        "bytes": 445568
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/emi.ko",
+        "match": true,
+        "sha256": "35ccb5a1879e69e89bbc227fb1fd370a7d83a7c4f2d1b8596193d414bf987bb7",
+        "bytes": 660640
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/emi_mpu.ko",
+        "match": true,
+        "sha256": "337300b7ee901aed42f18f195af6e3915c7928374bb268c64b93d94dd7d486da",
+        "bytes": 365168
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/emi_mpu_hook_v1.ko",
+        "match": true,
+        "sha256": "177e3e33615bbd3a3d2b6dd06984e54b821609600cede3c06342735615a71d73",
+        "bytes": 149464
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/emi_mpu_v2.ko",
+        "match": true,
+        "sha256": "cc5f29fdca57b60d403c0ae88eea67a9e8396da4f2e2750f2291428079daf1b6",
+        "bytes": 345992
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/emi_slb.ko",
+        "match": true,
+        "sha256": "af6b59046309970c3031fa7ea935e7f966a6707602e94f8e3ae089bceca17342",
+        "bytes": 309280
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/extcon_mtk_usb.ko",
+        "match": true,
+        "sha256": "f2931218beaa568a972fca2d1ae5e0b58ecbd3dcd25daf204cef9e0b2fa8afa6",
+        "bytes": 451200
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/extdev_io_class.ko",
+        "match": true,
+        "sha256": "f1483c981bdfa317f32c27cb74915b47e604e4735f1ee43465dbdaa1625b2f29",
+        "bytes": 300120
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/fhctl.ko",
+        "match": true,
+        "sha256": "6bf46bf6b9255b860d2fba5a77aae79328fd61cd004c4e8349bbe3b5dda3622d",
+        "bytes": 755152
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/flashlight.ko",
+        "match": true,
+        "sha256": "7d0d430cab0eb1cd5f962f5a04a82db067c79ab17a39a708d12d73c30fba40de",
+        "bytes": 461592
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/fmradio_drv_connac2x.ko",
+        "match": true,
+        "sha256": "11e769890183de4513a20178a4afedecec66d0bc62636519abdcabafbdfd795b",
+        "bytes": 2762008
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/focaltech_touch.ko",
+        "match": true,
+        "sha256": "f64b555c850aaf6680ba37defdf4d339d5e0e6723a3f6032017b63a6dd3916d7",
+        "bytes": 3332232
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/fpsgo.ko",
+        "match": true,
+        "sha256": "74d6e2a7436c88d0d40ba8a5bc810b312b4975ffd20553fad1cc7251b681c115",
+        "bytes": 370112
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/frs.ko",
+        "match": true,
+        "sha256": "470cca45c6b22ec46cd48c517dba5dc57f9d0cdb1d4d852678bb2382ddb04821",
+        "bytes": 346552
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/fsa4480_i2c.ko",
+        "match": true,
+        "sha256": "03f6a5eda4304f9c7d71e01383b99356d1f7d3a59777b4a9f7fd84749237a78e",
+        "bytes": 420720
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/fusb304.ko",
+        "match": true,
+        "sha256": "44be9bd02c9ab2427792b08753b2fc4a25f61a70eb3fce59c1a49d5111074834",
+        "bytes": 289616
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ged.ko",
+        "match": true,
+        "sha256": "7c34442397df08b01ad38ed4b4176c9bb2f3ff87807fdd3254cf82c45712bb93",
+        "bytes": 5004776
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/goodix_fp.ko",
+        "match": true,
+        "sha256": "5cc5496f573f75b2cb1f6d769815b14899c127d752255a446a7fe8ec4cada4a6",
+        "bytes": 684568
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/goodix_gh621x.ko",
+        "match": true,
+        "sha256": "0d77be5f6738961a0ee8281ef1405453bf4a42d258991ab8274783d0aa898aae",
+        "bytes": 1101656
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gps_drv_dl_v051.ko",
+        "match": true,
+        "sha256": "1e8a3f440abde53ea154ac2ded2918b1ec58cc217d063e3e3ee35bd883e9790b",
+        "bytes": 5234992
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gps_pwr.ko",
+        "match": true,
+        "sha256": "4684f5933dbd2f30b843185a12a0bae87df9a7d809b6dc1f6bc341f63a440502",
+        "bytes": 303768
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gps_scp.ko",
+        "match": true,
+        "sha256": "8a02d571a92d03e8cfa3ab486f90115248d271afb25b93a0997da9c0e5cde73c",
+        "bytes": 332144
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gpueb.ko",
+        "match": true,
+        "sha256": "a2599041ee8923694bb447c378e8abaa8d8c590164d60add7c66fa794275f75c",
+        "bytes": 2129408
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gt9764.ko",
+        "match": true,
+        "sha256": "c1c39faf9bfe93436ec458d8a669c9e2c81ae3e92af27ef622aa7d792770d267",
+        "bytes": 443880
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gt9772a.ko",
+        "match": true,
+        "sha256": "ddf2d9db4ef1a6e7bf5e03aae2690ce7eb4095116e69d871173408a6184d9ea1",
+        "bytes": 444032
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gt9772b.ko",
+        "match": true,
+        "sha256": "fe0e2af66017e3164ab1e9e380776fca4d95380457f68ef15507f5db43f5eb35",
+        "bytes": 444032
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gt9896s.ko",
+        "match": true,
+        "sha256": "cf115c291ea9a11453912f80adb9c36d4896cded221e9faee43334366883dd50",
+        "bytes": 1807048
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gz_ipc_mod.ko",
+        "match": true,
+        "sha256": "6fbee1d0c82b15d57c01f3e7013da95eec420642f967f199eba9a0fd635d74aa",
+        "bytes": 668960
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gz_irq_mod.ko",
+        "match": true,
+        "sha256": "73a10309d94a94f831c0986c45c7a7e73931afb5e971d817d1844d4cc2dcfef6",
+        "bytes": 379344
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gz_log_mod.ko",
+        "match": true,
+        "sha256": "1615a47a73bd7e350a6c21ed33f5201828c57c5bbe33ef890e31f0b60f315fe9",
+        "bytes": 364288
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gz_main_mod.ko",
+        "match": true,
+        "sha256": "3233e3d5a55d61dd9a21df674dbf0b3af92bb5f5b977301e296be5eaf53fe270",
+        "bytes": 539288
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gz_trusty_mod.ko",
+        "match": true,
+        "sha256": "61a6b03179486bfa414086950543237cb79ae24d92f15909d4fd52def2926b34",
+        "bytes": 588040
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gz_tz_system.ko",
+        "match": true,
+        "sha256": "48aee77aa7c57f400bbaa7c30e1fea7c311575bc9ca83e690506a2244c456abb",
+        "bytes": 683768
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/gz_virtio_mod.ko",
+        "match": true,
+        "sha256": "04cdadd86944b4c2174f58996d30400f4edb8dc974fa11665b234a90d39b360d",
+        "bytes": 568736
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/hardware_info.ko",
+        "match": true,
+        "sha256": "a96389f8e218d8adb74b7bfad809b9596d2d8eda6f20b9b74e825d8725f9d2a2",
+        "bytes": 401664
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/hbt.ko",
+        "match": true,
+        "sha256": "46fdf93a0d67a2d1a194fd545e50f738c637a3ede11718387f9f7e452341d76f",
+        "bytes": 280144
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/hf_manager.ko",
+        "match": true,
+        "sha256": "0334681f9290d9614d78fcde60cbb7e3c3149b2e53ea3a5aec9172c2e8b52ac2",
+        "bytes": 569368
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/i2c_mt65xx.ko",
+        "match": true,
+        "sha256": "ccea9aebb819174807a3305208f6e7269aa472aa911dd9f03dfabe3ce724d42e",
+        "bytes": 553136
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/imgsensor.ko",
+        "match": true,
+        "sha256": "a05dcc611115930498eb4b299a350447eabaa27c13b2b93d3946ee17f6fdb4c2",
+        "bytes": 8527080
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/imgsensor_glue.ko",
+        "match": true,
+        "sha256": "d2438e7bce67f22e0812d0cc88d0a9df5e918951f5495ff8c92073a87fe38534",
+        "bytes": 435400
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/iommu_debug.ko",
+        "match": true,
+        "sha256": "2b8f7e45c40129c40de3ba295b05d965f52ff62bc6ff4769677f649744edba7e",
+        "bytes": 665376
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/iommu_secure.ko",
+        "match": true,
+        "sha256": "afb394ad63148964d38d70e8c450529e46d1c143b4a193bdf012de2f0d14ecd1",
+        "bytes": 352536
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/iommu_test.ko",
+        "match": true,
+        "sha256": "5808f38bb146f95792b8132d1f0d3a6e249295a4dcaa7d145267495d68f04fc9",
+        "bytes": 140016
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/irq_dbg.ko",
+        "match": true,
+        "sha256": "0cd2fd94b1ce0625ea358e0677177890b187c320e059814718c8100a44fd78b1",
+        "bytes": 282656
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/isee.ko",
+        "match": true,
+        "sha256": "2b61c62e4b9c72ad3fa3d2d245860b3ce8e9aabae3444f2e8c3d919958c1259b",
+        "bytes": 4051600
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/lc898229.ko",
+        "match": true,
+        "sha256": "0cd01ad04e68210351af7b5926ababbe4d6e2f9d4a366882af982a33672d3a07",
+        "bytes": 446752
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/led_aw20036.ko",
+        "match": true,
+        "sha256": "7dda6318f37e9780358da769d6b9efff1b6071eb79c6052a7a115cca14e71a23",
+        "bytes": 640592
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/leds_mtk.ko",
+        "match": true,
+        "sha256": "703a28c54e90d0a9cb1314e0011efa879c79934155f9df61802f9df202ea1056",
+        "bytes": 393072
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/leds_mtk_disp.ko",
+        "match": true,
+        "sha256": "ad9a50b3cf1d1be2dda6897d6d40dfba0602eb894e17b2a50578d70a5d0d8a23",
+        "bytes": 344920
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/leds_mtk_pwm.ko",
+        "match": true,
+        "sha256": "27c2242afc64b84b2bcfdde976f9c820c4fa01049baa291e12b14bc0136130c3",
+        "bytes": 346056
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/lm3643.ko",
+        "match": true,
+        "sha256": "1164d1cdcab6ed96fb8ef5ed255159d03f76b1c9cb940cd49a6af1e2de9c8a09",
+        "bytes": 506248
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/load_track.ko",
+        "match": true,
+        "sha256": "fdde9bb8400dc2fa9028f5da4d9d9fc2bbf6337d61aa29c54d5828f6f6fefb7d",
+        "bytes": 194008
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/log_store.ko",
+        "match": true,
+        "sha256": "311cecc19bd8b103842ed30beb89a62e6c09caf5182a88bcb3110c71916b3182",
+        "bytes": 438560
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mac80211.ko",
+        "match": true,
+        "sha256": "984d2f7b1cda5dcd6e2b902d2ba21f95f452ce69ca3c8ce1c05323b4c6fd4730",
+        "bytes": 31092232
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mali_kbase_mt6886.ko",
+        "match": true,
+        "sha256": "68a4192b95e853b8499e876a0530b99643dec5c617ffad1846d2cd44f3b38e6d",
+        "bytes": 40494016
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mali_mgm_mt6886.ko",
+        "match": true,
+        "sha256": "f57f302cfcd2ba281d645deff8a158bdf72f64b77b7e0b6e682e1db3c04a3f21",
+        "bytes": 336504
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mali_prot_alloc_mt6886.ko",
+        "match": true,
+        "sha256": "06f5dc9f66750700ef2e87042894bd57b2c9ad98dec3b41dec6809712c66895c",
+        "bytes": 316016
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mcDrvModule.ko",
+        "match": true,
+        "sha256": "aad088597c57c5138fbba6eaaba2b2ae6074524edad674e14690accadfaee4f9",
+        "bytes": 4210960
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mcupm.ko",
+        "match": true,
+        "sha256": "bfdf1ac9f3c71a84dd952051b52bbd9bb6847fa781cd1c0708272724df25e496",
+        "bytes": 701952
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/md_cooling_all.ko",
+        "match": true,
+        "sha256": "71723e91366f874c87b5108bec9833290230ba6f3d507585374b6114d3a66a9d",
+        "bytes": 574648
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mddp.ko",
+        "match": true,
+        "sha256": "683ad6ab87c1a74a8c8484bd5a3b79da076737f5f82e77ce47b84a586de7641f",
+        "bytes": 2123400
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mdp_drv_mt6886.ko",
+        "match": true,
+        "sha256": "4c866a7bcfce98747339892b373a0b8cd87cd7f27fd6d2cd859cffb9164c2a17",
+        "bytes": 4778400
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mediatek_cpufreq_hw.ko",
+        "match": true,
+        "sha256": "8b84d44f3eac465e3014cd31c5b16e33dad19cbc3f95878b479a864762312893",
+        "bytes": 331016
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mediatek_drm.ko",
+        "match": true,
+        "sha256": "b82e8232496dd398dfb88959942a9bf8129f64b1368e7923634c982f4bb60e13",
+        "bytes": 38922184
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met.ko",
+        "match": true,
+        "sha256": "b0aa518a73b89e82d1606102a1c819a875e695d0524da3a5a7c28708c5ed3875",
+        "bytes": 10237296
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_backlight_api.ko",
+        "match": true,
+        "sha256": "59c26838aebd0c178d9328f6e50b28bbcf404f03c2e68c7ec6cfa4cb1c3d4303",
+        "bytes": 142832
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_emi_api.ko",
+        "match": true,
+        "sha256": "ff77e321025e871c32fad6a8dae9bb592334f0163f54bc31174fb03de4229053",
+        "bytes": 251480
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_gpu_adv_api.ko",
+        "match": true,
+        "sha256": "6651de5216f61e1d910134198cb2aab59fd19008f961c746a34ee1fadb5961df",
+        "bytes": 143496
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_gpu_api.ko",
+        "match": true,
+        "sha256": "d5c7c8a2afeb0930ac5488601e2792f26ff1868e76afea171b4eaafee3af935a",
+        "bytes": 145376
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_gpueb_api.ko",
+        "match": true,
+        "sha256": "1e0c544532ceb0ef07f2aab73206c265fb57244926210483d937fda9162452e7",
+        "bytes": 145408
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_ipi_api.ko",
+        "match": true,
+        "sha256": "92aa6e05596f7ac95d11943c0dc8af6ef9c49b65861afd0532b7361c40525906",
+        "bytes": 146232
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_mcupm_api.ko",
+        "match": true,
+        "sha256": "4ffef85436638b273708690f5023be05dac78afd440c83917e11bc15c8928ccc",
+        "bytes": 144216
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_scmi_api.ko",
+        "match": true,
+        "sha256": "aef6ba7fdf2493ed97b24b6e056d6eefa4d5de2a39dfe760bd5b855c379c6faa",
+        "bytes": 253672
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_sspm_api.ko",
+        "match": true,
+        "sha256": "dc67486604b688c0bfc36d519d895aa441433d198e300949ee87c229122c812d",
+        "bytes": 252480
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/met_vcore_api.ko",
+        "match": true,
+        "sha256": "bc4f7fe419562f0a2c855829328aa89e32a35cbea299bb292de33b1ceeec2e45",
+        "bytes": 144576
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mkp.ko",
+        "match": true,
+        "sha256": "cec8e6b7e5cc29db86751135afe0a0c040fd313fce5fe3e8b494a43c9c3b5165",
+        "bytes": 1167808
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mmprofile.ko",
+        "match": true,
+        "sha256": "2a511240352b686b7a69c44cd8f76eb981ac3a38d3a4d1dcb5746216eae402b8",
+        "bytes": 810728
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mmqos_common.ko",
+        "match": true,
+        "sha256": "1ecc5c036b64e607791890eea6bf3e1efb66a8abd20c031f4f3438473bdeff87",
+        "bytes": 1075424
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mmqos_mt6886.ko",
+        "match": true,
+        "sha256": "1829351521bfafdafd0c9a1fe203c3071671588ea0f3e014c5ac4450a3a2f728",
+        "bytes": 296064
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/monitor_hang.ko",
+        "match": true,
+        "sha256": "88595d58944203c1bad4608b648cefb90cbf08e7eb4c8065532c59436c275dc0",
+        "bytes": 613392
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mrdump.ko",
+        "match": true,
+        "sha256": "c60c93616d3ed2361ed76b01109cff6fe167061a503e9626d5d6243d5ee62a9e",
+        "bytes": 1640304
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/msync2_frd.ko",
+        "match": true,
+        "sha256": "26f2136455a3239ed8589d05f3889fa5f86604a28bc936e83c24cddc9501f739",
+        "bytes": 154712
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6315_regulator.ko",
+        "match": true,
+        "sha256": "07ecdd36d72263b55f0b18832f8b7b01ae7866aa8ac0d4f7a97d6721486a2ea9",
+        "bytes": 404048
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6338_core.ko",
+        "match": true,
+        "sha256": "604d98c8daea81c855a3249d7f07a005c0ae3df93200f51015323f9e232734f1",
+        "bytes": 386200
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6363_regulator.ko",
+        "match": true,
+        "sha256": "b9034bcddd325396bbdfb2e8964628a0837252f29c031ff164ed78c5e9d236ec",
+        "bytes": 442472
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6368_accdet.ko",
+        "match": true,
+        "sha256": "76f0652dd5cd3d4dbe0855898ddcd222190f721ad98e7c4468a8c730964f51ab",
+        "bytes": 731480
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6368_regulator.ko",
+        "match": true,
+        "sha256": "eb13f0d84e4fb52afa23dccb7a7c990e19c1bd92411d205ac298111b4ba41dcb",
+        "bytes": 413920
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6375.ko",
+        "match": true,
+        "sha256": "4935b56b83e9d69aface4ff9ec56fcd98e5c6001ba6c75b371d9e389a68f73a6",
+        "bytes": 433984
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6375_adc.ko",
+        "match": true,
+        "sha256": "46ea4e6b6e9c36447da5cce2608ca68e5bafdd35a408cfa2cb6d9b1b7b4c68a4",
+        "bytes": 301400
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6375_auxadc.ko",
+        "match": true,
+        "sha256": "9ea984d10d452fde9510a7a317426a2b46b7549e182703fc9f6094c454e0497b",
+        "bytes": 476528
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6375_battery.ko",
+        "match": true,
+        "sha256": "0c59b1315c82b865dd2770ec936631837490e05f35f3f5130e063b8ec71d4cf8",
+        "bytes": 3795448
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6375_charger.ko",
+        "match": true,
+        "sha256": "427ce56ffcacfa33728bf2f3c3a9e8caf0f93c533c7c0a80a2c17b3c8159cdee",
+        "bytes": 920624
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6685_audclk.ko",
+        "match": true,
+        "sha256": "e72c4286e43934a6052ab7c9afd633696626e4f33a4144f6d71e4fed5243d774",
+        "bytes": 275136
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6685_clkbuf.ko",
+        "match": true,
+        "sha256": "1e4ae90e06a9dc4de1e62266ee8d1ae20dd1e5cf3277e2dae1e3b887eab99b60",
+        "bytes": 303712
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6685_core.ko",
+        "match": true,
+        "sha256": "8d3d3f3d643f903c8e002d02c023272db2036d16a43cd3b9ea319fafa198f119",
+        "bytes": 277024
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6886_dcm.ko",
+        "match": true,
+        "sha256": "d2a5cbd7d2e251b9dbe33ad5c74cd1fa2ac9b19cc4151bd1e59f39ab6c541407",
+        "bytes": 387048
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mt6886_mt6368.ko",
+        "match": true,
+        "sha256": "65b170608803c6e616088d5c8ae220a3d7453022b3399cce579cca6a67ed6780",
+        "bytes": 519304
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_afe_external.ko",
+        "match": true,
+        "sha256": "85d222e2182066da66193a49f8578f3a4c781b98b8120c9ccf0f06bc5e0329e7",
+        "bytes": 156640
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_aie.ko",
+        "match": true,
+        "sha256": "97d0d81ced28c1a9600daf1523f37472fc59b74cdb815c7cd844ca71b8a39521",
+        "bytes": 14108016
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_aov.ko",
+        "match": true,
+        "sha256": "e2f888cc012df32632d7ff501f268a10483f852be223aaade9cc19ea3ae2adc6",
+        "bytes": 1942232
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_battery_oc_throttling.ko",
+        "match": true,
+        "sha256": "d31cd8f2249134dac4d770ec8e88029e8c9834de6f7a17675a771ee58610b165",
+        "bytes": 345656
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_bp_thl.ko",
+        "match": true,
+        "sha256": "ece613b735ccbe7216551ab8ff781f0551570ebf75982a6e5c3feaa1b0f93a8a",
+        "bytes": 324088
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_btcvsd.ko",
+        "match": true,
+        "sha256": "df85939d012806eac84941f9ea07bbee2799e78ca3b3c8461cd9e082b567e7b5",
+        "bytes": 510392
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_cam_isp7s.ko",
+        "match": true,
+        "sha256": "cd3f5dab042ed7d890656cbb4fc28bfffa3529cd7731cae2065211398acf2d92",
+        "bytes": 12478552
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_ccd_remoteproc.ko",
+        "match": true,
+        "sha256": "d91e65d3ab0d31e7eba0f590b1a73c3374a2c151400e00f76cde0bd64d575841",
+        "bytes": 563248
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_ccu.ko",
+        "match": true,
+        "sha256": "f5f07f9bc36aa0062faa5d17e4383b74d0cb905b07dddc45eecb87355b3be8e8",
+        "bytes": 825608
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_charger_algorithm_class.ko",
+        "match": true,
+        "sha256": "88298e73f0b9851f9fcc208c4e9bc99f69972d28a62a33bc22a2734b410e1646",
+        "bytes": 309392
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_charger_framework.ko",
+        "match": true,
+        "sha256": "5fff47d8960cca2ad78c7f33c60269ef92a4224cd3e8ec41e39e4df75831316c",
+        "bytes": 2674672
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_chg_type_det.ko",
+        "match": true,
+        "sha256": "5b61ee1e84d2ce9c1b511259e77bb3a9f53f6b397c3a95175dd340822653b7cc",
+        "bytes": 410856
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_cm_ipi.ko",
+        "match": true,
+        "sha256": "beca633ad24c0bff9e15c9e378a72070806496106ef9d896b90598a03b0bf28c",
+        "bytes": 284632
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_cm_mgr.ko",
+        "match": true,
+        "sha256": "2c4c75e2d17748bf258dc898afc2dd816ea99fde6e6309d1b3f72db135db862e",
+        "bytes": 512104
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_cm_mgr_mt6886.ko",
+        "match": true,
+        "sha256": "fd6a6a5055e0a6165630e0dc5af54831a15bef931baa73da855d222039acdeb8",
+        "bytes": 460752
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_cmdq_drv_ext.ko",
+        "match": true,
+        "sha256": "54fad3def5c500c5724ce4ef122b63177a1f1d077783ae47d67140c921a75cc4",
+        "bytes": 2149064
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_composite.ko",
+        "match": true,
+        "sha256": "4b8beecb92b3193d315e9c79ee6e84df2cef8ce8c57cacfb9fbcda795bf81b6c",
+        "bytes": 462272
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_core_ctl.ko",
+        "match": true,
+        "sha256": "835f558a7cf09d2fca4eeec9dd3d0067f12f33af0aec1a04201bb192f11ef0ef",
+        "bytes": 1359088
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_cpu_power_throttling.ko",
+        "match": true,
+        "sha256": "e48d4c52976861fad42d1f38634172a57e59462b49229d26fa0f29c7328bf9cc",
+        "bytes": 296256
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_dcm.ko",
+        "match": true,
+        "sha256": "39bcf7d09590fcb25c5562721fe13aa9d1631e2bf4dd0f67c710adbdfcae6b7d",
+        "bytes": 285064
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_disp_notify.ko",
+        "match": true,
+        "sha256": "a313391e7dc8826255527c598ed1cc93ccfd07bb50cfc9756cbb8426283daaa3",
+        "bytes": 152960
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_disp_sec.ko",
+        "match": true,
+        "sha256": "9ed61a57df9db2f2531d0b22bb5c870b88c020f03177745cecefe5138a6be026",
+        "bytes": 424064
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_dramc.ko",
+        "match": true,
+        "sha256": "18205eb0042e492bb06a5416b5b7d714184f84807757356144cdc7f3c40c130e",
+        "bytes": 362160
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_dvfsrc.ko",
+        "match": true,
+        "sha256": "12e040f569cb5599e2a51970a0f2a9a443feae276ac1a5430f3d6449b36378cd",
+        "bytes": 457944
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_dvfsrc_devfreq.ko",
+        "match": true,
+        "sha256": "e6323cbabac0c43d514fde7b4cea1856fdd9106e4bbc430271d994f17c53f3ab",
+        "bytes": 288952
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_dvfsrc_helper.ko",
+        "match": true,
+        "sha256": "686b1eb088b8e005906d3224c5d3c092ac8e2de46777d11882230f683b8e60b7",
+        "bytes": 1760984
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_dvfsrc_regulator.ko",
+        "match": true,
+        "sha256": "0aade64de1bc9f97f5dd67f2c1368c7ac507c006faaea2ab3554940e1c3316e6",
+        "bytes": 446336
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_dvfsrc_start.ko",
+        "match": true,
+        "sha256": "690a006f5e1aac469ed4bba3e1d7db5aa905ef7de207b06f356b04ec93d29815",
+        "bytes": 266920
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_dynamic_loading_throttling.ko",
+        "match": true,
+        "sha256": "a6d2ec9a2cbb642bec2168b6fec9d3911c9dccf90b1f78ef5f6c3c6cc5b072c1",
+        "bytes": 419792
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_emi.ko",
+        "match": true,
+        "sha256": "482ec63186e4ce5b8d9618cdd51abfc938111c2dbaf57d632247ecd39d40065c",
+        "bytes": 422168
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_et.ko",
+        "match": true,
+        "sha256": "7a4d490e5b1d4bb8de63b5c48f06728141b13d421e881efca1c0958a3330a52e",
+        "bytes": 326784
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_fpsgo.ko",
+        "match": true,
+        "sha256": "61a57ef6b5444ebdda6a6bcf1e46fe2b22a048e30bae6e5692e59f57a43a1b7d",
+        "bytes": 7367136
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_gpu_hal.ko",
+        "match": true,
+        "sha256": "bc6d7002e41d174083573ce6b862b3fec5f38302c47d1ab022435e557e419a24",
+        "bytes": 256888
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_gpu_qos.ko",
+        "match": true,
+        "sha256": "af8b0137c9dfe1bd2bf7e0366017b32589fbcf00cd4a78d05c2ec41fec20ba18",
+        "bytes": 312672
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_gpufreq_mt6886.ko",
+        "match": true,
+        "sha256": "0cca9455ae9ec9536199d2489729457636c4cbc5e6680c127e4e77ae0c2ebac7",
+        "bytes": 731576
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_gpufreq_wrapper.ko",
+        "match": true,
+        "sha256": "6a9aeb5ea8e79e4d3be62c7b7c4250f0dba2a7b0f07f0486664d6fa954d92471",
+        "bytes": 1042744
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_hcp.ko",
+        "match": true,
+        "sha256": "de86c834f5f07510f6b344f269415919cb3417e8bf7014563c875b1baf161f94",
+        "bytes": 1325080
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_heap_debug.ko",
+        "match": true,
+        "sha256": "4574ebb13daec5fabdaeb2529762cd5f1f876feb2b157ccc151c8c938afacbb3",
+        "bytes": 578904
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_icc_core.ko",
+        "match": true,
+        "sha256": "25ed0f627d461d7c55dc5ab9e086354dd325654399f61a9211a40ea7d72b906e",
+        "bytes": 475944
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_imgsys_cmdq.ko",
+        "match": true,
+        "sha256": "9e843d3d2499f802ff26b551cfc04936a74649f2f444d39db52a429806cbb8a9",
+        "bytes": 2121952
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_imgsys_isp7s.ko",
+        "match": true,
+        "sha256": "69a24ba5bf46ae6426ba287815c3658e18b461d8223fcda43f59d3612903f001",
+        "bytes": 3646208
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_imgsys_v4l2.ko",
+        "match": true,
+        "sha256": "72bf1a354ba10607bd6362a6c5123cca34dd23a9ccecf8a522ab9b325c123dd5",
+        "bytes": 5433344
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_iommu.ko",
+        "match": true,
+        "sha256": "e3817fd085f2db6bbf0b77e6c5cf5cf67ffd950251a28e49152ade417f0ebd0f",
+        "bytes": 619592
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_ipesys_me.ko",
+        "match": true,
+        "sha256": "3cdf0ad3b6bb60011797310162e04e0f9666621eb10830521a16fc218c3f6981",
+        "bytes": 484016
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_irtx_pwm.ko",
+        "match": true,
+        "sha256": "94f34f692a3d405361288712ebc78c58844765155ceb7187fd4e472224e93dab",
+        "bytes": 384176
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_jpeg.ko",
+        "match": true,
+        "sha256": "2b83ba24ac3634c603d860495e3c2040a6c4bda01868d990cfa6b0b404f3969e",
+        "bytes": 1045312
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_kpd.ko",
+        "match": true,
+        "sha256": "7c21d356e206c8a942298adac47bbac4ebdf738371bdb5865e21ca48c92d4d43",
+        "bytes": 338008
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_low_battery_throttling.ko",
+        "match": true,
+        "sha256": "0872886bc9f3188432dfa92276132320527c445a74cc66b6c9555d4e560dc5ca",
+        "bytes": 325816
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_lpm.ko",
+        "match": true,
+        "sha256": "687924a0afb2c4f66ea43e6e9f79f603a9b98fb124f34b70f4380c7d484daec8",
+        "bytes": 1374960
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_lpm_dbg_common_v1.ko",
+        "match": true,
+        "sha256": "9da9f34f14e1b95135d6d837193494c6d3e7f06a2e7b3229d409453a3803e520",
+        "bytes": 2334472
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_lpm_dbg_mt6886.ko",
+        "match": true,
+        "sha256": "ecbe5f77dc3943b52482c9aa000d1f12c559ce30546297e37d9653702af9fff3",
+        "bytes": 482016
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_lpm_plat_v1.ko",
+        "match": true,
+        "sha256": "fe9d305d4a834232ea1e768e0c0b0356b438c0f3e728ac16503079f2a5b607a4",
+        "bytes": 565360
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mbox.ko",
+        "match": true,
+        "sha256": "29a0ed03c3d67f720317d4f330fda2c7427756f102bc8dd5400b3c36afe8c095",
+        "bytes": 367216
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mbox_mailbox.ko",
+        "match": true,
+        "sha256": "5e8845cd95b86b5f5ea32e959f512c34d637447bc02e0d9bb195929b3fa1f3d1",
+        "bytes": 304048
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_md_power_throttling.ko",
+        "match": true,
+        "sha256": "fdfe748c1092fc316f102972165294950ecf8127a00acddfd10cdc67247591ec",
+        "bytes": 294952
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mdpm.ko",
+        "match": true,
+        "sha256": "807a056314fdbe63ff75bf6162cb33c1d68d8f6fc12650a2f351cc4233524224",
+        "bytes": 452720
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mmc.ko",
+        "match": true,
+        "sha256": "7678e4b13fa6604246cbbb07ea75ea009c1b2750a589f50bfd9e37280ea820b1",
+        "bytes": 747000
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mmc_dbg.ko",
+        "match": true,
+        "sha256": "8938669f9422dc81f6701f0413ba961811943639321917b98c03b6e382ae1c09",
+        "bytes": 525552
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mmdvfs.ko",
+        "match": true,
+        "sha256": "8c2e7cbbfbb57449cc4d13599a10e1fd4e011d8ae98c2f4d22a67834cbcc207d",
+        "bytes": 440008
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mmdvfs_ccu.ko",
+        "match": true,
+        "sha256": "5238bd408aa3e3d714b683a88179a2120ca62bef16bd705e0e8ac93518c66570",
+        "bytes": 276928
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mmdvfs_debug.ko",
+        "match": true,
+        "sha256": "a91e1228cb0ad33afe68111e511ae4e56aac96b1f142267f83a49162eae2c76e",
+        "bytes": 428512
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mmdvfs_ftrace.ko",
+        "match": true,
+        "sha256": "e160b2ae380fbb41e419016f5e0a1e429c86af103895349813a6721b95b69005",
+        "bytes": 425792
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mmdvfs_v3.ko",
+        "match": true,
+        "sha256": "f4920b3b5e96a6a81e44025e6b53801ba8d54178f39f94511e9ba778def7b80d",
+        "bytes": 550960
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mmdvfs_v3_start.ko",
+        "match": true,
+        "sha256": "771bf95a3ba3f4b308e23d151c0c5b49b9bcd62850b04ce1a3438e686aa6ee58",
+        "bytes": 278600
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mminfra_debug.ko",
+        "match": true,
+        "sha256": "09f1f0b614e51206057cc0797852c9c646a7697091de6f199db6390c75d7336c",
+        "bytes": 408232
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mminfra_imax.ko",
+        "match": true,
+        "sha256": "ddac22b0fb4823913ffbca61756509f7c4ef2daf7c0e4f63bc5ed4c3bf678339",
+        "bytes": 332152
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mml.ko",
+        "match": true,
+        "sha256": "d094975c69a0c97f80b2588b0e436a0159b3fe8eb7665cef4c09cd886ed5736e",
+        "bytes": 10536888
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_mml_mt6886.ko",
+        "match": true,
+        "sha256": "1d1ecfcc44287b8e83acdae873df71ff709eedacdcefb034f36fd917d47edc86",
+        "bytes": 384968
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_panel_ext.ko",
+        "match": true,
+        "sha256": "72709e7415f371ef8aef8fd19183488cec614bb04326fd2114326440f8c82945",
+        "bytes": 507000
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pbm.ko",
+        "match": true,
+        "sha256": "661cd033fc58cbdeecbcb9d17fdb50ac340dc76dd6cab01a1d2aa2fffdaf932f",
+        "bytes": 526592
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pd_adapter.ko",
+        "match": true,
+        "sha256": "d35c6265ce6b567f55c31412ba1421bff35fd2e9961972601d5b8953b61ace77",
+        "bytes": 460552
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pd_charging.ko",
+        "match": true,
+        "sha256": "38634f72e229362f9e4db433c32d29bb6ec30b15ca108fdf1099155af2aea249",
+        "bytes": 1108160
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pep.ko",
+        "match": true,
+        "sha256": "d23009a79e8a5242296c8fd099388e0b8bc87429defb18bbb488b41f34afc6fd",
+        "bytes": 1000848
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pep20.ko",
+        "match": true,
+        "sha256": "f7ce745a194e8ce557e1604470f1f189f6ba34a17eb3aae0e64516a36c063866",
+        "bytes": 1113696
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pep40.ko",
+        "match": true,
+        "sha256": "0ca281bc7dc8baa63a43e307f80724f1b7b236a78bca5647f4fe0856c85958f8",
+        "bytes": 1228360
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pep45.ko",
+        "match": true,
+        "sha256": "8a8d21f93ecd87448f22cd69b430c0eb7064b6dca86258f488b5479e3fe85c60",
+        "bytes": 1255744
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pep50.ko",
+        "match": true,
+        "sha256": "33f3d24e608b6d17434c65c548a0361244c643df2ce19b8eb552bcbfd48e433f",
+        "bytes": 1492720
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_perf_common.ko",
+        "match": true,
+        "sha256": "5a83cc7f4cd3da7246c77fc6780b386f461a9ee71c7d5c2f81ab8ae494bfdd74",
+        "bytes": 1556752
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_perf_ioctl.ko",
+        "match": true,
+        "sha256": "3a4bb9445a6b792750218d27c40b0a4822443ba279f048e9459c2834b02d6627",
+        "bytes": 424128
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pm_domain_disable_unused.ko",
+        "match": true,
+        "sha256": "a3985c6805991f0097aa5e28ba09d6d4a0b0cd958140846ab0dfa9db298e61dc",
+        "bytes": 267152
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pmic_keys.ko",
+        "match": true,
+        "sha256": "9c9c5527c2c11950d070141bc0bee4d3a401553df92bb2b2f9e676d95bef4d3b",
+        "bytes": 320760
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pmic_oc_debug.ko",
+        "match": true,
+        "sha256": "367c2e95efef8d2d87c3365beb32b347687a9c5c9bcbe1f86fbfb4ea28814a1a",
+        "bytes": 380104
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pmic_wrap.ko",
+        "match": true,
+        "sha256": "4d7e8843b7ca46afba7145e2308db0f99775520ef87979a67c73888bb11dac4b",
+        "bytes": 450992
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pps_charging.ko",
+        "match": true,
+        "sha256": "f29d7fee7f45b221d9f569884c6a9bb686bf0ccfa826bc5034cf3d0ebfdda6fc",
+        "bytes": 1491128
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_printk_ctrl.ko",
+        "match": true,
+        "sha256": "57c5bc849986abf57d9abf862a755fb983574e217f5088082bad2ec5f905c43f",
+        "bytes": 297032
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_pwm.ko",
+        "match": true,
+        "sha256": "2342aca4102398a76d379a0ddb86dfe078154218d11b406987e15682f0009b19",
+        "bytes": 743016
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_qos.ko",
+        "match": true,
+        "sha256": "d6373f8cc2d1cb30f0130617206c578d71278c9a674ef2dd19a13c1c261d6ec1",
+        "bytes": 769664
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_rpmsg_mbox.ko",
+        "match": true,
+        "sha256": "1950859500207047d7ccab7c85f869915e04e541d68474c6d6dbc02c338437dd",
+        "bytes": 313344
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_scp_ultra.ko",
+        "match": true,
+        "sha256": "da6eeb925a74a895e2994d15c1976025df90fdf974c8edba87f9c234b9abf3ce",
+        "bytes": 354096
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_scp_vow.ko",
+        "match": true,
+        "sha256": "09f424f64714a06fe70383dfa815175c54e8b70f9bc0b8e75253b921f20b6a03",
+        "bytes": 300584
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_scpsys.ko",
+        "match": true,
+        "sha256": "5c3fdfea39654ec4e1f697e5cbe546128851b49845abbe58ea3f2274c3cab3f2",
+        "bytes": 639576
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_scpsys_bringup.ko",
+        "match": true,
+        "sha256": "78b3b491c6d8486d90ae35e184e1ef5792ced896a8c08b634497f6de26f1b4a9",
+        "bytes": 274368
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_scpsys_mt6886.ko",
+        "match": true,
+        "sha256": "a48e5a72174579280259c417e11c54c93daeb625450601987b2856d1a75c21c8",
+        "bytes": 376216
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_sec_heap.ko",
+        "match": true,
+        "sha256": "98fd7926223bec05f9e1caf1ada7a6b7814cf7bf2aa2e1222cca4590fb877ae3",
+        "bytes": 459432
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_slbc.ko",
+        "match": true,
+        "sha256": "dc4b64b165c332b66699edd9824699e585615794120d564b18e3c061b4bf6547",
+        "bytes": 171976
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_smi.ko",
+        "match": true,
+        "sha256": "fa17edf4322ee374e79242b736834a878888bf7b9dac90772670e6bde72c7a07",
+        "bytes": 661528
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_smi_dbg.ko",
+        "match": true,
+        "sha256": "a92c652083496ecc0f65825b4eedceac972e52d7e0b69fbd69b642da47f3805d",
+        "bytes": 425648
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_soc_offload_common.ko",
+        "match": true,
+        "sha256": "a2ee5585648930585d5ec579502768df2642d9a54ebfe691f05859cc0efa55a9",
+        "bytes": 449088
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_socinfo.ko",
+        "match": true,
+        "sha256": "296209ea378de1ec37ba938d688c3dbf3bd9d8c6c4625cfb29306edc1afaeda2",
+        "bytes": 267376
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_sp_spk_amp.ko",
+        "match": true,
+        "sha256": "038536f63f7e4d371ff67c8f53cfc76fe55e875941c1b566794e1cbfbe68b6ef",
+        "bytes": 462528
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_spmi_pmic.ko",
+        "match": true,
+        "sha256": "7c615afbdbf761fa57174b30fb992260c864c74d3be16d5f429e4dd48b43c0e0",
+        "bytes": 361880
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_spmi_pmic_adc.ko",
+        "match": true,
+        "sha256": "32e2475d4aefb6a23a3c06384e8741b06bcf46e1d5530a9f5dbee64c3d6e94f4",
+        "bytes": 422720
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_ssc.ko",
+        "match": true,
+        "sha256": "ef6adbee8b64d84ae8ac72aad20d460f8b2b556e6eb2c9078bfca3f5c55b9a75",
+        "bytes": 393800
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_ssc_dbg_v2.ko",
+        "match": true,
+        "sha256": "233e475767427af0ee9f8f7479f43533af8da89e100cbbb4f9c5258df433fda9",
+        "bytes": 264080
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_swpm.ko",
+        "match": true,
+        "sha256": "336cbf3da1873bad0f33f4ca1281c55f414bd166f98522ba22cd9bed59564500",
+        "bytes": 425520
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_swpm_core_dbg_v6886.ko",
+        "match": true,
+        "sha256": "7ed1b3180ba1b0a2803f7d83ab8fdfcdd4de5a8aee346e615d72a4fd79deee55",
+        "bytes": 161584
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_swpm_cpu_dbg_v6886.ko",
+        "match": true,
+        "sha256": "0949df05bcdd8c4034ae2917d44456afe392830bb74eb3059f8ccfee97923797",
+        "bytes": 159600
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_swpm_dbg_common_v1.ko",
+        "match": true,
+        "sha256": "45a368b8b5c7ffaeda4f6419a1ab89a6b7011de5d0736dd74d9945e92f3e156a",
+        "bytes": 168680
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_swpm_dbg_v6886.ko",
+        "match": true,
+        "sha256": "5a61f6c23d969d3083a5432e1286ccf57350b5a780fdd1da27d11bff4a2e35f0",
+        "bytes": 462416
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_swpm_mem_dbg_v6886.ko",
+        "match": true,
+        "sha256": "3047168b1ef8c3f2a1d1d19d3d124769c5111c27eb7106c397d4f0fb7be0c9e0",
+        "bytes": 158704
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_swpm_perf_arm_pmu.ko",
+        "match": true,
+        "sha256": "82b1b8a7840b6944352f4b8d40c10876a84b09551c81f879eb74d0dc2608070e",
+        "bytes": 341224
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_sync.ko",
+        "match": true,
+        "sha256": "57da0f72d5645e98e66f6e188ceadc28b225a56bfcda44d9b1276dee013eea2d",
+        "bytes": 329008
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_tinysys_ipi.ko",
+        "match": true,
+        "sha256": "3f4cac555ea3e2df9607347c86c15a7029835bd4602655a52a7809f10a836ff3",
+        "bytes": 356136
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_u_ether.ko",
+        "match": true,
+        "sha256": "5d9e5cbb49a1e00c4e00134d2e9e5fc4941b8458a8412d84ddc961669bd0f5aa",
+        "bytes": 675256
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_uart_apdma.ko",
+        "match": true,
+        "sha256": "78aa8a56fb013d440dcbef7ff3c65a9d6a65be613a541b9a4b84b8e20d4d4dc6",
+        "bytes": 582280
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_usb_f_rndis.ko",
+        "match": true,
+        "sha256": "7ab08edf1dc3f4920491e13c65a5f4b70463bac55ee4577b68a29db9abd01b93",
+        "bytes": 935256
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_vcodec_common.ko",
+        "match": true,
+        "sha256": "b64ea9158150e0262832d3ddfe6b16e2a3ce0bd29db6d0433fb89a72c505814b",
+        "bytes": 1290112
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_vcodec_dec_v1.ko",
+        "match": true,
+        "sha256": "2b89c8c78f584d4a5a492aee273feb2afd3f4fc0757a3222e9f22473e5262990",
+        "bytes": 4979112
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_vcodec_enc_v1.ko",
+        "match": true,
+        "sha256": "95e7ba4bc132e6f6bd6e552a51a77a99b2a2ddd870859be6fa480924f4703021",
+        "bytes": 4780872
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_vmm_isp71_regulator.ko",
+        "match": true,
+        "sha256": "de8db7804b3bb5558a3ec0727b722ded394afa632eb22879ec8f5259ad9c35ca",
+        "bytes": 530968
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_vmm_notifier.ko",
+        "match": true,
+        "sha256": "cb7f03976ae3f6e315106ac7a83998ee796a12f9d478e85875534e3b133f6345",
+        "bytes": 291512
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_vmm_spm.ko",
+        "match": true,
+        "sha256": "e1aa03a3d6ac296b51c5fb3d4d99c63150ce7c77bb5b16af607bb1ff8ecfea94",
+        "bytes": 381288
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_vow.ko",
+        "match": true,
+        "sha256": "cec5ef837d809293d1317679312d9c5d2be2b3c410a7aa94a1a36f6105d73164",
+        "bytes": 648088
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtk_wdt.ko",
+        "match": true,
+        "sha256": "cfdff205fb6a54589bef588fb19e21589285bbdb1ca21dbb36bcbf8d1b26de20",
+        "bytes": 334376
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mtu3.ko",
+        "match": true,
+        "sha256": "ba6815f7490ed98468a28d9a171d65dc80085c982eca500fd33bb0d11363f8e2",
+        "bytes": 3575976
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/mux_switch.ko",
+        "match": true,
+        "sha256": "8c4c37a15aa48333a911803e57f725468fa16493c239d065d8a6a1efce38fe07",
+        "bytes": 336744
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nothing_disk_usage.ko",
+        "match": true,
+        "sha256": "e17fdcb3638baa1da44632a4b292f1d73ddaac877ccf7b840159e2aa2f771f5e",
+        "bytes": 341152
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nothing_performance.ko",
+        "match": true,
+        "sha256": "f35a04e073bbfacb9b503264d51560eaaffb798a4c617f881890edebb83cab95",
+        "bytes": 792608
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nothing_readahead_trace.ko",
+        "match": true,
+        "sha256": "995969c1f3729eec287a97716c163dca775c6a7a953ae70c88103a82945a324a",
+        "bytes": 455784
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nothing_task_info.ko",
+        "match": true,
+        "sha256": "d04f890abfb126159b7dcee75bb151b069df59accaef64729e8a31011fe6e825",
+        "bytes": 254280
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nothing_task_meminfo.ko",
+        "match": true,
+        "sha256": "520907d1b5f2656ce71e9ed95abed17d249e312064f2fbe5fa9c67a81a01477d",
+        "bytes": 377408
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nothing_value_check.ko",
+        "match": true,
+        "sha256": "39d84710e275f4e27db30008ecac216182bb844d3db09e530674beb13db4a3dc",
+        "bytes": 270752
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nothing_writeback_kmsg.ko",
+        "match": true,
+        "sha256": "ff12e9fe2ee5a00d48cf0e24eb0b791fbfc46cd5c72919a2164224d3f2370545",
+        "bytes": 351632
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nt_chg.ko",
+        "match": true,
+        "sha256": "a5c5edc507dffe5667c468f48a10ff7628ec8a3cee95a25075a5d072f0256136",
+        "bytes": 930432
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nt_usb_ts.ko",
+        "match": true,
+        "sha256": "287858bf109b925e3a98855745c583cc2c60e2563cc5029c666d26a8af826520",
+        "bytes": 671488
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ntfs3.ko",
+        "match": true,
+        "sha256": "a52b1c684cffc554d5eb71b45df01057f21b69790a9bf8847bf08304c97a5ec8",
+        "bytes": 6189112
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nvmem_mt635x_efuse.ko",
+        "match": true,
+        "sha256": "4847eb5b18f9273179a5db91f2a7e3b74c0a2dbcb811c87c9f9a2b192e44374b",
+        "bytes": 288680
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/nvmem_mtk_devinfo.ko",
+        "match": true,
+        "sha256": "f52f992ab36b082815039e6c0996620125e1af24f90069c2f0639310ee4da50f",
+        "bytes": 278912
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/panel_boe_raydium_rm692h5_cmd.ko",
+        "match": true,
+        "sha256": "c836635bb09b7cdb3a4fc15dfb2540f9651998e5a0e612ed7929bf0f665dddc3",
+        "bytes": 1010320
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/panel_boe_rm692h5_cmd.ko",
+        "match": true,
+        "sha256": "38719543f2ecfb41434c091227069b09737f76d7b8876c6b56001be608c5e926",
+        "bytes": 1293392
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/panel_vnx_rm692h5_cmd.ko",
+        "match": true,
+        "sha256": "8f0cbadbc35f8dc6b781f053e138d6acd7b2dd64cad4da4b227cbf0b13d43557",
+        "bytes": 934896
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pd_chk_mt6886.ko",
+        "match": true,
+        "sha256": "bd813c17975503523a61dcb110aeb999b31b777e93f5ceea00a6fa71c73a7c1e",
+        "bytes": 314040
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pd_dbg_info.ko",
+        "match": true,
+        "sha256": "78e060b12a0ff9b41f35b254e01c6c4cf69fab437cdf18d75b18a792f4ec81bc",
+        "bytes": 274656
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pda_drv_mt6886.ko",
+        "match": true,
+        "sha256": "7327aba39a4ead166334094dd21466cc742186321efcd622947654b8a60e54b7",
+        "bytes": 743280
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/phy_mtk_ufs.ko",
+        "match": true,
+        "sha256": "b57fe9d75270980c9fc5c3e5a3851caf3a6cd8de0ceb0dde76a38e193c3e158a",
+        "bytes": 406080
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/phy_mtk_xsphy.ko",
+        "match": true,
+        "sha256": "51f5f0fc71369c9a4d66c4ba2072ffa86409286e229b7779e452ad9a61872669",
+        "bytes": 573904
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pidmap.ko",
+        "match": true,
+        "sha256": "8f75f2f8c92a093be26f1ffa752cccb8a4911681bd82738c0895e7b268e5e26a",
+        "bytes": 291296
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pinctrl_mt6886.ko",
+        "match": true,
+        "sha256": "f3cb6fe0565431ceadc32fe809381c281cbfc78574dadc62412be6e01fd84af4",
+        "bytes": 451696
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pinctrl_mtk_common_v2_debug.ko",
+        "match": true,
+        "sha256": "5be609e74f8b6df9402b31df43494f51e11deccccc4ddfb47515de55a4678a0e",
+        "bytes": 368880
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pinctrl_mtk_v2.ko",
+        "match": true,
+        "sha256": "067f333b57b389f4663cd7cd5a6717de1724531bd3beed91cd77a30f5111fdbc",
+        "bytes": 1174328
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pmic_lbat_service.ko",
+        "match": true,
+        "sha256": "9c5f854b82988e61fbfe4f5e58c1fdf8881c560ac839c99379b2cdebeba918f0",
+        "bytes": 375856
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pmic_lvsys_notify.ko",
+        "match": true,
+        "sha256": "8b59a03d939e95ebe42e91676065558c9f6ce1eb54ab30369fceb6e3a63ef473",
+        "bytes": 310144
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pmic_temp.ko",
+        "match": true,
+        "sha256": "78afdb4e4ddf552a7f4287d8c340632f190613eab62cb6994b0c5a122c053caa",
+        "bytes": 331200
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pmsr.ko",
+        "match": true,
+        "sha256": "f90008b60eaaec106e0fa2c0230c148073cd96106d0eac77e02335412ec3a111",
+        "bytes": 313424
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/powerhal_cpu_ctrl.ko",
+        "match": true,
+        "sha256": "2bb6831adf22f8f61a2f29eec24aa4679d1d9c34710a37158c3139f1bf97af73",
+        "bytes": 423720
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ps5169.ko",
+        "match": true,
+        "sha256": "d891de342cd2bf064bf75d622c778cf86bfcadc245fd8c40678ed0fd5fedb655",
+        "bytes": 373072
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/pwm_mtk_disp.ko",
+        "match": true,
+        "sha256": "9a8c495bc6fc521ac318459a7a2e0624166bba90736ee0e3a70a8ceef224bf0d",
+        "bytes": 304256
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/reboot_mode.ko",
+        "match": true,
+        "sha256": "9b1f13eb815eaff336f4ba4917d62baa6281810e7210b7632eb2e09ef0e31cb8",
+        "bytes": 283512
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/regmap_spmi.ko",
+        "match": true,
+        "sha256": "2fb5a649075bd91abc0002d48ad712364a1f0cba80e67e55cc9fa5507a20ce0d",
+        "bytes": 293760
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/regulator_vibrator.ko",
+        "match": true,
+        "sha256": "1c94ecf7005d46d789da3fbe2b63a74f14f7331bb0859358b353679c9f715554",
+        "bytes": 380160
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/reset_ti_syscon.ko",
+        "match": true,
+        "sha256": "3228e7a13a62859b5ac4b43ca559c6c5f73607a01e07e9b007e866dd63953b84",
+        "bytes": 292912
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/richtek_spm_cls.ko",
+        "match": true,
+        "sha256": "eb59f65d37b8da07c42bd1724e0549424f4a82377184a551aa94bec0d4861056",
+        "bytes": 414248
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/rpmb.ko",
+        "match": true,
+        "sha256": "c5d3de507226b60eb81c724f01183b9d3209c07ea50e4ec636c1c100ff69e855",
+        "bytes": 309408
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/rpmb_mtk.ko",
+        "match": true,
+        "sha256": "dd4ccb7b84d55cbb695d3e3c6837059e4a25d27225533a1629c2cfe3cbee6449",
+        "bytes": 818520
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/rps_perf.ko",
+        "match": true,
+        "sha256": "524698d1d08d5e8dc40eaf2bef82099e207082380c4e9e09e98b33b07485e3da",
+        "bytes": 500888
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/rt4831a_drv.ko",
+        "match": true,
+        "sha256": "ac4e1a98502a860800977eb70bd3118645a8ba19adbf8550e9e6538b46f094f3",
+        "bytes": 427608
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/rt5133_regulator.ko",
+        "match": true,
+        "sha256": "c1f44f233413f9af82bcd85d2e8c9e29d6c38c4aaef2e4da872099904c3ea6cf",
+        "bytes": 444416
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/rt6160_regulator.ko",
+        "match": true,
+        "sha256": "de23f41ebd9ba553f8087d9010deba6f23f7992729d438ee4ba1bd985b415d28",
+        "bytes": 401064
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/rt_pd_manager.ko",
+        "match": true,
+        "sha256": "8d9a48612192d23f96efc0f571061711d7a06b9e61996defe0cc3b13e0c2c80f",
+        "bytes": 388280
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/rtc_mt6685.ko",
+        "match": true,
+        "sha256": "b1400720eeea4ff007a37d257cc34afc9050ef4ab4d9bb74a3c8735e7e17ea7a",
+        "bytes": 629808
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/sapu.ko",
+        "match": true,
+        "sha256": "9f3477d101ef27d07eb7c06c8534886ee6f6e1d5b944ef98b208df78013f51fa",
+        "bytes": 562720
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/sc8562_charger.ko",
+        "match": true,
+        "sha256": "40f295df70bd29e33dfc25a99d6ae2f1b9dc3b772af6688277fcf8e19fa116c2",
+        "bytes": 609144
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/scheduler.ko",
+        "match": true,
+        "sha256": "de0e272c9ce363c9bbcfaa19eae41174ae6a6e8b5269c78a284c02f3f624a83e",
+        "bytes": 4350368
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/scp.ko",
+        "match": true,
+        "sha256": "8b55f99111f5f6bbd123c5013b057cc0cbf8b905ea11fcae682aba1ac1f07fe7",
+        "bytes": 2357112
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/sec.ko",
+        "match": true,
+        "sha256": "7905c96fa0f1a4f0b304348a483b8bed723c5c52dc0d19b6dde6fb7b98007fd0",
+        "bytes": 825984
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/sec_rng.ko",
+        "match": true,
+        "sha256": "0c1db17a03d0267228ffe1abdce551a4ef3bfb4f489c80bd5655ad719a5d3d38",
+        "bytes": 284304
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/sensorhub.ko",
+        "match": true,
+        "sha256": "5142ed82ff889d0fc5fd981dbb99edf2141a3cd268b490e9398b9f340c1e807e",
+        "bytes": 1114192
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/simulated_ntc.ko",
+        "match": true,
+        "sha256": "0a9824c9c105b16c98ed8b1929783f0cde15fa70a5d3e21927c5df941ec690db",
+        "bytes": 329992
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/slbc_ipi.ko",
+        "match": true,
+        "sha256": "caa428a3d3dffef060c10a24ea9014e034d3f5fc73ed902b4d52981b9b84abbc",
+        "bytes": 315896
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/slbc_mt6886.ko",
+        "match": true,
+        "sha256": "614e2a83426cb3d9e0a9ed625b1aa499475d60886a0d201452d132b494a00185",
+        "bytes": 530560
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/snd_soc_audiodsp_common.ko",
+        "match": true,
+        "sha256": "9519804f6388eb3febf71e087c3c309e44c3c78aadfb9bcc500c06411aa6b811",
+        "bytes": 2219352
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/snd_soc_aw882xx.ko",
+        "match": true,
+        "sha256": "ea0c74a2650c92e0c2b2c599b41b5475d37d05d7867c3f3811bb373b0a8b354c",
+        "bytes": 3677856
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/snd_soc_mt6368.ko",
+        "match": true,
+        "sha256": "5f879cbe8329290a9c6972ba8b0e8e5ef46d8e1b48a6cce0aef36c095d3d5c3a",
+        "bytes": 1042960
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/snd_soc_mt6886_afe.ko",
+        "match": true,
+        "sha256": "fe43a15abab8753232c22d1ba6f0c50b9c1618a1e049f039d5e513cde5613e46",
+        "bytes": 4017960
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/snd_soc_mtk_common.ko",
+        "match": true,
+        "sha256": "906ec02cdda0f4c1a0bba7463687a2e4399e7a347c1861a52f214f6970f46b1a",
+        "bytes": 1856360
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/snd_soc_mtk_scp_ultra.ko",
+        "match": true,
+        "sha256": "71eff2316acdeca02c9bdf319fdf4285af0ef95fc85ea5cc649ec5713b1eb295",
+        "bytes": 1248008
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/snd_soc_rt5512.ko",
+        "match": true,
+        "sha256": "8afda7b52ec5f001093e8b77acf6e964e3fa4e8347b8123b597bfcf4fabf1da4",
+        "bytes": 577304
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/snd_soc_tfa98xx.ko",
+        "match": true,
+        "sha256": "c86387c4e9d26885bcba85a851a17fa39f595b28689e2c5937c05cc0301caf2f",
+        "bytes": 2494288
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/soc_temp_lvts.ko",
+        "match": true,
+        "sha256": "dbc8af72d9e71532f124f1fc6dfd6f307abc77449f7a91ffef781b76fb2bdbcd",
+        "bytes": 626840
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/spi_mt65xx.ko",
+        "match": true,
+        "sha256": "425fefe1d63fdc83e393b0daea68f9d2002d25e6847a630de36be71171192ca6",
+        "bytes": 434800
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/spmi_mtk_mpu.ko",
+        "match": true,
+        "sha256": "089376ecf2fab6321ca14d372ed3a0f876251d4e643696e4dc6347efbe112588",
+        "bytes": 293120
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/spmi_mtk_pmif.ko",
+        "match": true,
+        "sha256": "b619cc4d16f19ad0713d580f8e0ade9ba9b17ccdd446b758933b57dfd95865cd",
+        "bytes": 696504
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/spmtwam.ko",
+        "match": true,
+        "sha256": "9acf818446a9c3c7ae98d3ca855ebf8b4c0c814e8b8d2e6808f9fb3e08a2aa00",
+        "bytes": 418808
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/sspm_v3.ko",
+        "match": true,
+        "sha256": "0afefc54e384e45a6fd1ce5cd970567a0e167217f708bb3685f5b1f99aefbcff",
+        "bytes": 1364392
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/st21nfc.ko",
+        "match": true,
+        "sha256": "a778997e75da0aa05e1a9f1fdf33a43480e4859645acbd67c082db349234f77f",
+        "bytes": 513440
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/st54spi.ko",
+        "match": true,
+        "sha256": "3bb7c7f93ae59d57d4cbcc8c8aaa04d8589974469a0f18a3ed2fbb72f6186c56",
+        "bytes": 492656
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/syscon_reboot_mode.ko",
+        "match": true,
+        "sha256": "12bed6abfcaa1597be2649122e5b04c97754fdb5e5d9bec9e96fbbac1797a0e3",
+        "bytes": 277064
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/system_heap.ko",
+        "match": true,
+        "sha256": "6d92a62505553ce299d5c70228b02b48a779239bfd230e4be22fa3e909a1c497",
+        "bytes": 453072
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/t_base_tui.ko",
+        "match": true,
+        "sha256": "ede14a45941493b0aa42c7279cb2c643a19e2e5ff43820af7702d391c8fcbb60",
+        "bytes": 727552
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/task_turbo.ko",
+        "match": true,
+        "sha256": "5dc99e803f71935a95a329f0eb04502ddfa73cdf4ecd8226c6e39f8ad27c03b0",
+        "bytes": 951640
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/tcpc_class.ko",
+        "match": true,
+        "sha256": "75bb2b0433a41549d08e0ce6068d04a9398ab3b2b2dce2ae6a249887f57aeaf6",
+        "bytes": 7563248
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/tcpc_mt6375.ko",
+        "match": true,
+        "sha256": "21646631d66868bc87e5787138de880317709a00293b0d9aa97b0787a94c7524",
+        "bytes": 591288
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/tcpci_late_sync.ko",
+        "match": true,
+        "sha256": "cc00c578059cccdcf150fd8f897f0e28b990887560ba126aa1855659d591d0b2",
+        "bytes": 316312
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/teeperf.ko",
+        "match": true,
+        "sha256": "16df1c8c6476455a0381b7bf87c23b5cdb7a9f7d42b6847f63aaea6f216c2ae4",
+        "bytes": 445096
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/thermal_generic_adc.ko",
+        "match": true,
+        "sha256": "dcd52037492c9ce3767b876d1f473fdc2470addf6ea8fde88b8b76dcb294dfef",
+        "bytes": 289224
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/thermal_interface.ko",
+        "match": true,
+        "sha256": "32298f9da69bdcc15f2897cf5420255ac9d122e2249c8ecd6195aad355276d2c",
+        "bytes": 540312
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/thermal_jatm.ko",
+        "match": true,
+        "sha256": "63a37d82039cf90132ace30f8dc57a5fb7935d8f3a955eec6aecb7343e9922a5",
+        "bytes": 359424
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/thermal_trace.ko",
+        "match": true,
+        "sha256": "2629ea84f82f373070d315d161915fa009e51d2ee29789e25cd9b29e85669755",
+        "bytes": 818008
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/timer_mediatek.ko",
+        "match": true,
+        "sha256": "68e1dff91ef577f201b1be1d4d77f35d82caaaa41588c3b5ca627588b45ec6bc",
+        "bytes": 307496
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/tinysys_scmi.ko",
+        "match": true,
+        "sha256": "e6544a416e8e4a0a42d163487c4a4552788ac32d050b6c0421f643fc77e0ec35",
+        "bytes": 469888
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/trace_mmstat.ko",
+        "match": true,
+        "sha256": "3bd9bc87fa6bd9ed4001a28dc55a95eee28392d4a85b2ab5476fe42d1ff19d6b",
+        "bytes": 539232
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/trusted_mem.ko",
+        "match": true,
+        "sha256": "60323fc6a8535cb4a0b9dd44b4e95f53a186785bc5c7c6f3577eb86762cb009f",
+        "bytes": 1705368
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/uarthub_drv.ko",
+        "match": true,
+        "sha256": "2ee3f92bef3a627da5415470d2769d25ccf1a5d535fe29a0f24791b5fca53d25",
+        "bytes": 753984
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ufs_mediatek_dbg.ko",
+        "match": true,
+        "sha256": "2dab4ef0d1c9166d9d701146ab2cb50587f92d8a773555b50ce7f93975bd0aa1",
+        "bytes": 599488
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/ufs_mediatek_mod.ko",
+        "match": true,
+        "sha256": "bed14fd8d428bacbe6ce3d8143864e26c2f3a6b692e64a40cf5bf890bdc5f400",
+        "bytes": 1348192
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/uload_ind.ko",
+        "match": true,
+        "sha256": "fc9ea43ce1da07219148158a3b5392d2508b3e486393ef3e1ec763535e7e75fa",
+        "bytes": 424872
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/usb_boost.ko",
+        "match": true,
+        "sha256": "99567bd6b4beb5330c0299490250396d34a0cac4beef5bd3a2625c139ee9b319",
+        "bytes": 687728
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/usb_meta.ko",
+        "match": true,
+        "sha256": "8f18d5c0570f991e3bee2451d9f9964979b80caea8cdd2cf7d762ccb0a1adeb8",
+        "bytes": 454616
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/v4l2_async.ko",
+        "match": true,
+        "sha256": "92217f6ae2f4b5a34f32430371903eba0ff928485e581351b19b8b4e91460a41",
+        "bytes": 480976
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/v4l2_fwnode.ko",
+        "match": true,
+        "sha256": "44a7fe0c902f5e75b7cdb7bc951d02068fd52e337ba987cbd22f7fb9addfe037",
+        "bytes": 466272
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/vcp.ko",
+        "match": true,
+        "sha256": "ebab39709b90e1165708d09f71981a522eea83c6ecf7915dcbf71a8834a06b6b",
+        "bytes": 1210504
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/vcp_status.ko",
+        "match": true,
+        "sha256": "c2e0c4d59338c3b3102f7e59e824ea5c480e6e1fee4efba616c4c566651c6c60",
+        "bytes": 181968
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/vdec_fmt.ko",
+        "match": true,
+        "sha256": "1698453e615cb6f2cfbfb47a59d012a053b3c952e1fcb49351e0959948b62143",
+        "bytes": 1344712
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/widevine_driver.ko",
+        "match": true,
+        "sha256": "dcf7508cd177356f26d7dc874521c9dfef45ce91a267c259e44750c199bc97d4",
+        "bytes": 326472
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/wifi_cooling.ko",
+        "match": true,
+        "sha256": "1af006d97358838e8eb2d0478786d68662a97e9c7e68b11eb77b3e292c35165d",
+        "bytes": 282696
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/wl2868c_regulator.ko",
+        "match": true,
+        "sha256": "4d68dd37d597fa69bcba96e9ea7c864904a4a7f16f00ebdfcbbd05bde7624ed7",
+        "bytes": 409216
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/wlan_drv_gen4m_6886.ko",
+        "match": true,
+        "sha256": "2e1aa3cfbbc7ef79e25448a6ed2b4184b383735e059b021e926a7adf4b2a4455",
+        "bytes": 129153304
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/wmt_chrdev_wifi_connac2.ko",
+        "match": true,
+        "sha256": "e8e9b9538c2885ca00bebf811dab662c19ddb8c90a41ddacf177a7c65c9d723c",
+        "bytes": 702424
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/xhci_mtk_hcd_v2.ko",
+        "match": true,
+        "sha256": "4ed191f6b3c9051fb0811ce2015e4318422837e2eba07e4327fefdb1e697d201",
+        "bytes": 5124456
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/zram.ko",
+        "match": true,
+        "sha256": "c3ae1b7a7a1a26f6889198f778fbf7cb2f36d891f6038eb06cbf7e261230c6f6",
+        "bytes": 857600
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/modules/zsmalloc.ko",
+        "match": true,
+        "sha256": "91ae9bed53624803f02d9c37dcaba84e64897d63bcd8956a12f04bea6de3452e",
+        "bytes": 746168
+      },
+      {
+        "path": "artifacts/vendor-droidspaces/userns-fpsgo06-01-modules/vendor.config",
+        "match": true,
+        "sha256": "09235f5f8786756cbaf1b32f7d1077aa506a3e764959f1cf712bf73dc96ec5b8",
+        "bytes": 222103
+      }
+    ]
+  },
+  {
+    "kind": "artifacts/vendor-performance/fpsgo-userns06-01",
+    "files": [
+      {
+        "path": "artifacts/vendor-performance/fpsgo-userns06-01/BUILD-INFO.json",
+        "match": true,
+        "sha256": "c34431a0d7dd256034853d543555e6ef2b06eac97f636367d9ff57285007a42c",
+        "bytes": 13860
+      },
+      {
+        "path": "artifacts/vendor-performance/fpsgo-userns06-01/CHECKS.json",
+        "match": true,
+        "sha256": "899e40646d5bc4af5543701d9cc3e92a910bd9b39dd83bbbe108a88a66582f0e",
+        "bytes": 34866
+      },
+      {
+        "path": "artifacts/vendor-performance/fpsgo-userns06-01/NOT-FLASHABLE.txt",
+        "match": true,
+        "sha256": "172f54127f16f0f8671e8e90a7efafe66b8cbabfe32f50bbe2ab426198f5a62e",
+        "bytes": 132
+      },
+      {
+        "path": "artifacts/vendor-performance/fpsgo-userns06-01/baseline-Module.symvers",
+        "match": true,
+        "sha256": "40743727c0843c904332a406b3bd14634e80bfcbafd6bad2325ac02425fc18d7",
+        "bytes": 6861
+      },
+      {
+        "path": "artifacts/vendor-performance/fpsgo-userns06-01/baseline-mtk_fpsgo.ko",
+        "match": true,
+        "sha256": "d82dd20791195263a8309dec58403e1fa07a7c612fc0f89e0b4c5d2130bed3e1",
+        "bytes": 7369104
+      },
+      {
+        "path": "artifacts/vendor-performance/fpsgo-userns06-01/candidate-Module.symvers",
+        "match": true,
+        "sha256": "d5844a0560ebd5c4e0aa054d3bf0d71a3d4f3a94a2a4d40e08d25c91c202dd0f",
+        "bytes": 6902
+      },
+      {
+        "path": "artifacts/vendor-performance/fpsgo-userns06-01/candidate-mtk_fpsgo.ko",
+        "match": true,
+        "sha256": "61a57ef6b5444ebdda6a6bcf1e46fe2b22a048e30bae6e5692e59f57a43a1b7d",
+        "bytes": 7367136
+      }
+    ]
+  },
+  {
+    "kind": "artifacts/performance-before-20261005",
+    "files": [
+      {
+        "path": "artifacts/performance-before-20261005/REPORT.md",
+        "match": true,
+        "sha256": "ad121c7a2a16c26aedc97c0699a2c052ec5c08666ea353968eac4da36f5fd2b9",
+        "bytes": 2085
+      },
+      {
+        "path": "artifacts/performance-before-20261005/results.json",
+        "match": true,
+        "sha256": "a052832c807afb0b6858febb9cfb84ec46d1e9e26b599dae26156ef8c2b621f7",
+        "bytes": 2006
+      }
+    ]
+  },
+  {
+    "kind": "artifacts/performance-after-20261005",
+    "files": [
+      {
+        "path": "artifacts/performance-after-20261005/REPORT.md",
+        "match": true,
+        "sha256": "a9d7db61dc68439e0951da2987b85b3427242c0d21b43300738a49441ed6cb27",
+        "bytes": 2082
+      },
+      {
+        "path": "artifacts/performance-after-20261005/results.json",
+        "match": true,
+        "sha256": "4eb554afd1843d3f78cfd61238fc583116da5a3a99c22e9249959b24da6a1c7c",
+        "bytes": 2003
+      },
+      {
+        "path": "artifacts/performance-after-20261005/COMPARISON.md",
+        "match": true,
+        "sha256": "068a7a44d0eea12ec599a93ef6350f3ce40e3f567732a62b0624124b0cc445ad",
+        "bytes": 4589
+      },
+      {
+        "path": "artifacts/performance-after-20261005/COMPARISON.json",
+        "match": true,
+        "sha256": "1360239f779cb650b3e5f2d18cfdac09e384700dae72ec4171969ea7e8233796",
+        "bytes": 1163
+      },
+      {
+        "path": "artifacts/performance-after-20261005/APPS-REPEAT.json",
+        "match": true,
+        "sha256": "8c54c40a352c63f17b62d65be4b11284eda59781dcfd0acfd64d8c0f0bfeb0af",
+        "bytes": 746
+      }
+    ]
+  },
+  {
+    "kind": "toolchain-archive",
+    "name": "clang-r450784e.tar.gz",
+    "sha256": "af92cdc5f84defd0a754b1d3b3ded9f0da29a737efba5a796c4ebff5a71baa3d",
+    "match": true
+  },
+  {
+    "kind": "toolchain-archive",
+    "name": "ndk-r23-sysroot.tar.gz",
+    "sha256": "705ddc9f201a9436c2edf0952f65697d45c9bd788e1375f51b69d004450b777a",
+    "match": true
+  }
+]

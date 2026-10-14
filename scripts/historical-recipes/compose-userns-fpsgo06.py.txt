@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""Compose immutable USER_NS module set with checked FPSGO06; no phone access."""
+from pathlib import Path
+import json,hashlib,shutil
+P=Path('${PROJECT_ROOT}');B=P/'artifacts/vendor-droidspaces/userns-perf-02-modules';C=P/'artifacts/vendor-performance/fpsgo-userns06-01';O=P/'artifacts/vendor-droidspaces/userns-fpsgo06-01-modules'
+assert not O.exists();check=json.loads((C/'CHECKS.json').read_text());assert check['pass'];info=json.loads((C/'BUILD-INFO.json').read_text());assert info['source_candidate']=='313c21a9dc2358667e9640e35738d2e9cab49a5e' and info['prepared_inputs_unchanged']
+def sha(f):return hashlib.sha256(f.read_bytes()).hexdigest()
+base=json.loads((B/'BUILD-INFO.json').read_text());assert base['kernel_commit']=='90700ba133db2fb1d2b05519d45de38ad3d148e1'
+assert sha(B/'modules/mtk_fpsgo.ko')==check['modules']['userns_reference']['sha256']
+assert sha(C/'candidate-mtk_fpsgo.ko')==check['modules']['candidate']['sha256']
+O.mkdir();(O/'modules').mkdir();hashes={}
+for name,h in base['artifact_sha256'].items():
+ source=B/name;assert sha(source)==h
+ if name=='modules/mtk_fpsgo.ko':source=C/'candidate-mtk_fpsgo.ko'
+ target=O/name;shutil.copyfile(source,target);assert sha(target)==sha(source);hashes[name]=sha(target)
+assert len(hashes)==410
+rows=json.loads((B/'module-map.json').read_text())
+for r in rows:r['candidate']=str((O/'modules'/(r['module_name']+'.ko')).relative_to(P));r['sha256']=hashes['modules/'+r['module_name']+'.ko']
+(O/'module-map.json').write_text(json.dumps(rows,indent=2));shutil.copyfile(B/'vendor.config',O/'vendor.config')
+base.update(stage='USER_NS + FPSGO06 composed module set, NOT FLASHABLE standalone',fpsgo_source_commit=info['source_candidate'],fpsgo_build=str(C.relative_to(P)),artifact_sha256=hashes,composition_base=str(B.relative_to(P)),device_validated=False)
+(O/'BUILD-INFO.json').write_text(json.dumps(base,indent=2))
+CK=P/'artifacts/vendor-droidspaces/userns-perf-02-supplement';m=json.loads((CK/'module-checks.json').read_text())
+for row in m['modules']:
+ if row['name']=='mtk_fpsgo':row.update(check['modules']['candidate'])
+ row['path']=str(O/'modules'/(row['name']+'.ko'));row['sha256']=sha(Path(row['path']))
+m['composition_proof']='Other 409 modules byte-identical to checked USER_NS set; FPSGO06 imports/exports/CRC/vermagic/CFI/dependencies identical and abidiff=0.'
+(O/'module-checks.json').write_text(json.dumps(m,indent=2));l=json.loads((CK/'layout-checks.json').read_text());l['composition_proof']=m['composition_proof'];l['fpsgo_all_types_abi_proof']=str(C/'CHECKS.json');(O/'layout-checks.json').write_text(json.dumps(l,indent=2))
+(O/'DO-NOT-FLASH.txt').write_text('Modules only. Packaging and physical validation required. No automatic flash.\n')
+for a in [O,C]:
+ (a/'SHA256SUMS').write_text(''.join(sha(f)+'  '+str(f.relative_to(a))+'\n' for f in sorted(a.rglob('*')) if f.is_file() and f.name!='SHA256SUMS'))
+print(O)

@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+"""Compare sensitive layouts in representative rebuilt modules against combined GKI."""
+from pathlib import Path
+import json,sys,subprocess,hashlib,xml.etree.ElementTree as ET,re
+p=Path('${PROJECT_ROOT}');run=sys.argv[1];assert re.fullmatch('[a-z0-9-]+',run)
+a=p/'artifacts/vendor-droidspaces'/run;i=json.loads((a/'BUILD-INFO.json').read_text());assert i['exit_code']==0
+checks=json.loads((a/'module-checks.json').read_text());out=Path(i['out_dir']);dest=a/'layouts';dest.mkdir(exist_ok=False)
+baseline=p/'artifacts/ksu-next-susfs-droidspaces/combined-01-checks/abi.xml'
+names=['task_struct','net','skb_ext','cgroup','css_set','cgroup_root']
+def layouts(path):
+ root=ET.parse(path).getroot();res={n:set() for n in names}
+ for e in root.iter('class-decl'):
+  n=e.get('name')
+  if n not in res or 'size-in-bits' not in e.attrib:continue
+  members=[]
+  for m in e.findall('data-member'):
+   v=m.find('var-decl')
+   if v is not None:members.append((v.get('name'),m.get('layout-offset-in-bits')))
+  if members:res[n].add(json.dumps({'size_bits':int(e.get('size-in-bits')),'members':members},sort_keys=True))
+ return res
+b=layouts(baseline);report={'scope':'Representative modules: sensitive structure sizes and direct member offsets; not recursive whole-vendor ABI proof or runtime validation','baseline':str(baseline),'modules':{},'baseline_sha256':hashlib.sha256(baseline.read_bytes()).hexdigest(),'all_observed_layouts_match':True}
+for name in ['mtk_fpsgo','mediatek_drm','mali_kbase_mt6886','bt_drv_6886','wlan_drv_gen4m_6886','msync2_frd']:
+ m=next(m for m in checks['modules'] if m['name']==name);f=Path(m['path']);xml=dest/(name+'.xml')
+ # Use final compilation objects for modules without usable exported-type DWARF.
+ if name in ['wlan_drv_gen4m_6886','msync2_frd']:f=f.with_suffix('.lto.o')
+ cmd=[str(p/'sources/gki/prebuilts/kernel-build-tools/linux-x86/bin/abidw'),'--load-all-types','--no-show-locs','--out-file',str(xml)]
+ if name in ['wlan_drv_gen4m_6886','msync2_frd']:cmd+=['--no-linux-kernel-mode']
+ cmd.append(str(f))
+ with (dest/(name+'.log')).open('w') as fd:r=subprocess.run(cmd,stdout=fd,stderr=subprocess.STDOUT)
+ result={'input':str(f),'input_sha256':hashlib.sha256(f.read_bytes()).hexdigest(),'command':cmd,'abidw_exit':r.returncode,'types':{}}
+ if r.returncode==0:
+  c=layouts(xml)
+  for n in names:
+   state='not_present' if not c[n] else 'match' if c[n]==b[n] else 'mismatch'
+   result['types'][n]={'status':state,'baseline':[json.loads(x) for x in sorted(b[n])],'module':[json.loads(x) for x in sorted(c[n])]}
+   if state=='mismatch':report['all_observed_layouts_match']=False
+ else:report['all_observed_layouts_match']=False
+ report['modules'][name]=result
+ (a/'layout-checks.json').write_text(json.dumps(report,indent=2)+'\n')
+ print(name,r.returncode,{k:v['status'] for k,v in result['types'].items()},flush=True)
+report['coverage']={n:sum(r['types'].get(n,{}).get('status')=='match' for r in report['modules'].values()) for n in names}
+report['all_six_types_covered']=all(report['coverage'].values())
+(a/'layout-checks.json').write_text(json.dumps(report,indent=2)+'\n')
+sys.exit(0 if report['all_observed_layouts_match'] and report['all_six_types_covered'] else 1)

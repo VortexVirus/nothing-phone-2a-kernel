@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+"""Build only the pinned SUSFS arm64 helper. Does not install a module or touch a phone."""
+from pathlib import Path
+import json,subprocess,hashlib,datetime,sys,re
+p=Path('${PROJECT_ROOT}');src=p/'sources/susfs4ksu';commit='687d2d18d94cb2e3e72d1074778d58384d58e379'
+assert subprocess.check_output(['git','-C',str(src),'rev-parse','HEAD'],text=True).strip()==commit
+assert not subprocess.check_output(['git','-C',str(src),'status','--porcelain','--untracked-files=no'],text=True).strip()
+run=sys.argv[1];assert re.fullmatch(r'[a-z0-9.-]+',run)
+a=p/'artifacts/susfs-tools'/run;a.mkdir(parents=True,exist_ok=False)
+jni=src/'ksu_susfs/jni';clang=p/'toolchains/clang-r450784e/bin/clang'
+cmd=[str(clang),'--target=aarch64-linux-android31','--sysroot='+str(p/'sources/gki/prebuilts/ndk-r23/toolchains/llvm/prebuilt/linux-x86_64/sysroot'),'-fuse-ld=lld','-O3','-fstack-protector-strong','-D_FORTIFY_SOURCE=2','-fPIC','-fPIE','-pie','-flto=thin','-ffunction-sections','-fdata-sections','-fvisibility=hidden','-Wl,--gc-sections','-I'+str(jni/'includes'),*map(str,sorted(jni.glob('*.c'))+sorted((jni/'features').glob('*.c'))),'-o',str(a/'ksu_susfs')]
+with (a/'build.log').open('w') as fd:r=subprocess.run(cmd,stdout=fd,stderr=subprocess.STDOUT)
+info={'date_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'commit':commit,'version':'2.3.0','target':'arm64 Android API31 (NDK r23 sysroot, Clang r450784e)','command':cmd,'exit_code':r.returncode,'device_validated':False,'installed_on_device':False,'module_packaged':False}
+if r.returncode==0:
+ with (a/'elf.txt').open('w') as fd:subprocess.run([str(clang.parent/'llvm-readelf'),'-h','-l','-d',str(a/'ksu_susfs')],stdout=fd,check=True)
+ info['sha256']=hashlib.sha256((a/'ksu_susfs').read_bytes()).hexdigest()
+(a/'BUILD-INFO.json').write_text(json.dumps(info,indent=2)+'\n')
+print(json.dumps(info,indent=2));raise SystemExit(r.returncode)

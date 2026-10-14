@@ -1,0 +1,154 @@
+[
+  {
+    "path": ".",
+    "head": "d49401c44bbf559fa73395837fd82fe795daa52b",
+    "branch": "stock",
+    "status": "",
+    "branches": "ksu-next da41fe618f8d0b91634ea8b4cbd86004ba1ce813\nksu-next-droidspaces da41fe618f8d0b91634ea8b4cbd86004ba1ce813\nksu-next-susfs da41fe618f8d0b91634ea8b4cbd86004ba1ce813\nksu-next-susfs-droidspaces da41fe618f8d0b91634ea8b4cbd86004ba1ce813\nstock d49401c44bbf559fa73395837fd82fe795daa52b",
+    "submodules": ""
+  },
+  {
+    "path": "sources/Droidspaces",
+    "head": "14a8dba3bedfd42cfc9b6f10ce06b72e688c7523",
+    "branch": "main",
+    "status": "",
+    "branches": "main 14a8dba3bedfd42cfc9b6f10ce06b72e688c7523",
+    "submodules": ""
+  },
+  {
+    "path": "sources/KernelSU-Next",
+    "head": "1a879d6a866f80b1fa1c1009a2ffa747873cbb5e",
+    "branch": "",
+    "status": "",
+    "branches": "dev 2b31f7185460e99bc3896a639e9073b1c354ee0d\npacman-susfs e7f85f7c439f157ec25a3c682e92886bb5f1546a",
+    "submodules": ""
+  },
+  {
+    "path": "sources/KernelSU-Next-susfs",
+    "head": "e7f85f7c439f157ec25a3c682e92886bb5f1546a",
+    "branch": "pacman-susfs",
+    "status": "",
+    "branches": "dev 2b31f7185460e99bc3896a639e9073b1c354ee0d\npacman-susfs e7f85f7c439f157ec25a3c682e92886bb5f1546a",
+    "submodules": ""
+  },
+  {
+    "path": "sources/common",
+    "head": "18a89f1307e251f1533266476c36a9bae2a0c033",
+    "branch": "stock",
+    "status": "",
+    "branches": "ksu-next e9af941faf2cb76f1a96a4bb0ea69e7ae3959976\nksu-next-droidspaces 0f0a9cc657b9d439d94d29dbf987d8bc1dcc0e58\nksu-next-susfs 8639d0d67195a4761b5ebcf7436ccc53d0664980\nksu-next-susfs-droidspaces 9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd\nksu-next-susfs-droidspaces-nomount 515e10a550524692829dfad3ee2c7691ff74b468\nksu-next-susfs-droidspaces-nomount-userns 90700ba133db2fb1d2b05519d45de38ad3d148e1\nstock 18a89f1307e251f1533266476c36a9bae2a0c033",
+    "submodules": ""
+  },
+  {
+    "path": "sources/common-droidspaces",
+    "head": "0f0a9cc657b9d439d94d29dbf987d8bc1dcc0e58",
+    "branch": "ksu-next-droidspaces",
+    "status": "",
+    "branches": "ksu-next e9af941faf2cb76f1a96a4bb0ea69e7ae3959976\nksu-next-droidspaces 0f0a9cc657b9d439d94d29dbf987d8bc1dcc0e58\nksu-next-susfs 8639d0d67195a4761b5ebcf7436ccc53d0664980\nksu-next-susfs-droidspaces 9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd\nksu-next-susfs-droidspaces-nomount 515e10a550524692829dfad3ee2c7691ff74b468\nksu-next-susfs-droidspaces-nomount-userns 90700ba133db2fb1d2b05519d45de38ad3d148e1\nstock 18a89f1307e251f1533266476c36a9bae2a0c033",
+    "submodules": ""
+  },
+  {
+    "path": "sources/common-next",
+    "head": "e9af941faf2cb76f1a96a4bb0ea69e7ae3959976",
+    "branch": "ksu-next",
+    "status": "",
+    "branches": "ksu-next e9af941faf2cb76f1a96a4bb0ea69e7ae3959976\nksu-next-droidspaces 0f0a9cc657b9d439d94d29dbf987d8bc1dcc0e58\nksu-next-susfs 8639d0d67195a4761b5ebcf7436ccc53d0664980\nksu-next-susfs-droidspaces 9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd\nksu-next-susfs-droidspaces-nomount 515e10a550524692829dfad3ee2c7691ff74b468\nksu-next-susfs-droidspaces-nomount-userns 90700ba133db2fb1d2b05519d45de38ad3d148e1\nstock 18a89f1307e251f1533266476c36a9bae2a0c033",
+    "submodules": ""
+  },
+  {
+    "path": "sources/common-nomount",
+    "head": "515e10a550524692829dfad3ee2c7691ff74b468",
+    "branch": "ksu-next-susfs-droidspaces-nomount",
+    "status": "",
+    "branches": "ksu-next e9af941faf2cb76f1a96a4bb0ea69e7ae3959976\nksu-next-droidspaces 0f0a9cc657b9d439d94d29dbf987d8bc1dcc0e58\nksu-next-susfs 8639d0d67195a4761b5ebcf7436ccc53d0664980\nksu-next-susfs-droidspaces 9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd\nksu-next-susfs-droidspaces-nomount 515e10a550524692829dfad3ee2c7691ff74b468\nksu-next-susfs-droidspaces-nomount-userns 90700ba133db2fb1d2b05519d45de38ad3d148e1\nstock 18a89f1307e251f1533266476c36a9bae2a0c033",
+    "submodules": ""
+  },
+  {
+    "path": "sources/common-nomount-userns",
+    "head": "90700ba133db2fb1d2b05519d45de38ad3d148e1",
+    "branch": "ksu-next-susfs-droidspaces-nomount-userns",
+    "status": "",
+    "branches": "ksu-next e9af941faf2cb76f1a96a4bb0ea69e7ae3959976\nksu-next-droidspaces 0f0a9cc657b9d439d94d29dbf987d8bc1dcc0e58\nksu-next-susfs 8639d0d67195a4761b5ebcf7436ccc53d0664980\nksu-next-susfs-droidspaces 9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd\nksu-next-susfs-droidspaces-nomount 515e10a550524692829dfad3ee2c7691ff74b468\nksu-next-susfs-droidspaces-nomount-userns 90700ba133db2fb1d2b05519d45de38ad3d148e1\nstock 18a89f1307e251f1533266476c36a9bae2a0c033",
+    "submodules": ""
+  },
+  {
+    "path": "sources/common-susfs",
+    "head": "8639d0d67195a4761b5ebcf7436ccc53d0664980",
+    "branch": "ksu-next-susfs",
+    "status": "",
+    "branches": "ksu-next e9af941faf2cb76f1a96a4bb0ea69e7ae3959976\nksu-next-droidspaces 0f0a9cc657b9d439d94d29dbf987d8bc1dcc0e58\nksu-next-susfs 8639d0d67195a4761b5ebcf7436ccc53d0664980\nksu-next-susfs-droidspaces 9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd\nksu-next-susfs-droidspaces-nomount 515e10a550524692829dfad3ee2c7691ff74b468\nksu-next-susfs-droidspaces-nomount-userns 90700ba133db2fb1d2b05519d45de38ad3d148e1\nstock 18a89f1307e251f1533266476c36a9bae2a0c033",
+    "submodules": ""
+  },
+  {
+    "path": "sources/common-susfs-droidspaces",
+    "head": "9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd",
+    "branch": "ksu-next-susfs-droidspaces",
+    "status": "",
+    "branches": "ksu-next e9af941faf2cb76f1a96a4bb0ea69e7ae3959976\nksu-next-droidspaces 0f0a9cc657b9d439d94d29dbf987d8bc1dcc0e58\nksu-next-susfs 8639d0d67195a4761b5ebcf7436ccc53d0664980\nksu-next-susfs-droidspaces 9439133e7f0343e5dd6f52bd6d4e03c418d9b7fd\nksu-next-susfs-droidspaces-nomount 515e10a550524692829dfad3ee2c7691ff74b468\nksu-next-susfs-droidspaces-nomount-userns 90700ba133db2fb1d2b05519d45de38ad3d148e1\nstock 18a89f1307e251f1533266476c36a9bae2a0c033",
+    "submodules": ""
+  },
+  {
+    "path": "sources/nomount",
+    "head": "b8d268353b4e7ecc53c67d1816a626b7d6579201",
+    "branch": "",
+    "status": "",
+    "branches": "master c5fad9d8f97c5a207f7342fd91789449915ea047",
+    "submodules": ""
+  },
+  {
+    "path": "sources/nothing-kernel",
+    "head": "02f45fecd3aa6780740aca0a79a120b810f7c744",
+    "branch": "stock",
+    "status": "",
+    "branches": "ksu-next 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-droidspaces 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-susfs 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-susfs-droidspaces 02f45fecd3aa6780740aca0a79a120b810f7c744\nstock 02f45fecd3aa6780740aca0a79a120b810f7c744\nvendor-perf-fpsgo 800e6f1cf0c85c41bb60baa56a3cb17d4898214d\nvendor-stock-rebuild 02f45fecd3aa6780740aca0a79a120b810f7c744",
+    "submodules": ""
+  },
+  {
+    "path": "sources/nothing-modules",
+    "head": "733567edc7c458342db0ad12593821add4a0c7f0",
+    "branch": "stock",
+    "status": "",
+    "branches": "ksu-next 733567edc7c458342db0ad12593821add4a0c7f0\nksu-next-droidspaces 733567edc7c458342db0ad12593821add4a0c7f0\nksu-next-susfs 733567edc7c458342db0ad12593821add4a0c7f0\nksu-next-susfs-droidspaces 733567edc7c458342db0ad12593821add4a0c7f0\nstock 733567edc7c458342db0ad12593821add4a0c7f0\nvendor-stock-rebuild 733567edc7c458342db0ad12593821add4a0c7f0",
+    "submodules": ""
+  },
+  {
+    "path": "sources/nothing-modules-stock",
+    "head": "733567edc7c458342db0ad12593821add4a0c7f0",
+    "branch": "vendor-stock-rebuild",
+    "status": "",
+    "branches": "ksu-next 733567edc7c458342db0ad12593821add4a0c7f0\nksu-next-droidspaces 733567edc7c458342db0ad12593821add4a0c7f0\nksu-next-susfs 733567edc7c458342db0ad12593821add4a0c7f0\nksu-next-susfs-droidspaces 733567edc7c458342db0ad12593821add4a0c7f0\nstock 733567edc7c458342db0ad12593821add4a0c7f0\nvendor-stock-rebuild 733567edc7c458342db0ad12593821add4a0c7f0",
+    "submodules": ""
+  },
+  {
+    "path": "sources/nothing-vendor-perf",
+    "head": "800e6f1cf0c85c41bb60baa56a3cb17d4898214d",
+    "branch": "vendor-perf-fpsgo",
+    "status": "",
+    "branches": "ksu-next 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-droidspaces 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-susfs 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-susfs-droidspaces 02f45fecd3aa6780740aca0a79a120b810f7c744\nstock 02f45fecd3aa6780740aca0a79a120b810f7c744\nvendor-perf-fpsgo 800e6f1cf0c85c41bb60baa56a3cb17d4898214d\nvendor-stock-rebuild 02f45fecd3aa6780740aca0a79a120b810f7c744",
+    "submodules": ""
+  },
+  {
+    "path": "sources/nothing-vendor-stock",
+    "head": "02f45fecd3aa6780740aca0a79a120b810f7c744",
+    "branch": "vendor-stock-rebuild",
+    "status": "",
+    "branches": "ksu-next 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-droidspaces 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-susfs 02f45fecd3aa6780740aca0a79a120b810f7c744\nksu-next-susfs-droidspaces 02f45fecd3aa6780740aca0a79a120b810f7c744\nstock 02f45fecd3aa6780740aca0a79a120b810f7c744\nvendor-perf-fpsgo 800e6f1cf0c85c41bb60baa56a3cb17d4898214d\nvendor-stock-rebuild 02f45fecd3aa6780740aca0a79a120b810f7c744",
+    "submodules": ""
+  },
+  {
+    "path": "sources/superproject",
+    "head": "57eedad334d8a14a1afd47e88aeac9a5f49ab5ad",
+    "branch": "common-android13-5.15-2025-03",
+    "status": "",
+    "branches": "common-android13-5.15-2025-03 57eedad334d8a14a1afd47e88aeac9a5f49ab5ad",
+    "submodules": "100644 b8815cf267d27b57c2fe25bf2a563d369992c37e 0\t.gitattributes\n100644 18e73db514d4e2e88cd31853ed591647a5d5c439 0\t.gitmodules\n120000 c2ff9e8095a85789d63daa205156c440e5b8449c 0\t.source_date_epoch_dir\n100644 9c70b713cc5a5f005244c582a6230326a6ad100c 0\t.supermanifest\n120000 ec1140491a681f2c4d75c68aefdf8758cf6e3a61 0\tWORKSPACE\n120000 2f19e2ffe6a64f8c882a54baf5a07b56f425dc55 0\tbuild/_setup_env.sh\n120000 c5881b69d9d88f903f09b3534efc604738643791 0\tbuild/abi\n160000 7a007ed2ff0d97eebf77977420f185c66698f7a3 0\tbuild/bazel_common_rules\n120000 afaeb2990006d01c24931118ff5be4cf75c8d094 0\tbuild/build.sh\n120000 bca62d7a26c6cc83bd32fdead43bdccc7c7feb23 0\tbuild/build_abi.sh\n120000 9f79cd6270172bec734b779ff8f8ab532a61c37b 0\tbuild/build_test.sh\n120000 6c4803ef79f7463c621e8a3280a9e7de86a04dc5 0\tbuild/build_utils.sh\n120000 1c55513aeeb2878c136be0d6f99e019535887a18 0\tbuild/config.sh\n120000 2179b858d152ce9a37523d3fb49ff4ac56592421 0\tbuild/envsetup.sh\n160000 4f6ed7381c1553cca7c178a304be23eb284963c2 0\tbuild/kernel\n120000 3bd585080c55d80a9b986d872191fae973fceea1 0\tbuild/multi-switcher.sh\n120000 de66c570ac068e65b51cdbe91940ee2391c6713b 0\tbuild/static_analysis\n160000 362d545d31a5659546d5546c7ae206f745e98c3e 0\tcommon\n160000 cb03117b76f832cf7aef613ee38b6b945456b641 0\tcommon-modules/virtual-device\n160000 f1fb8167b4ed64feb494fd1ea6a8a619bbb549de 0\texternal/bazel-skylib\n160000 63f98de5b158481877489ca39158ed691f7551e1 0\texternal/python/absl-py\n160000 b6ef2c6b6e39087f7396aaeb13c83464dfce4a19 0\texternal/stardoc\n160000 b3cc2bc03dab303c54a9ce1f709f8ee315eb311d 0\tkernel/configs\n160000 6162318e6458db65f94eed6671e302c3e894b1ac 0\tprebuilts/bazel/linux-x86_64\n160000 f6813860e16b2fa1461a15e7b8a3127dfdee021a 0\tprebuilts/build-tools\n160000 9f759dee5cdc5f85d076c642a192f6a9232f7058 0\tprebuilts/clang/host/linux-x86\n160000 007101a451907c5369db5002ddf7b14dcefb7864 0\tprebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8\n160000 2a2fb389233fcc4027625f7642087a09d6014fdf 0\tprebuilts/jdk/jdk11\n160000 083e34d8c2c4239be4967172427268c267585951 0\tprebuilts/kernel-build-tools\n160000 93532f3052c14fbb337ff57d5732128dc7481ee6 0\tprebuilts/ndk-r23\n120000 0867f91a359d97517b540c175a549ab32e2eaed7 0\ttools/bazel\n160000 2208a03d874255af1e4eaf6cf7c156fe1dc98943 0\ttools/mkbootimg"
+  },
+  {
+    "path": "sources/susfs4ksu",
+    "head": "687d2d18d94cb2e3e72d1074778d58384d58e379",
+    "branch": "gki-android13-5.15",
+    "status": "",
+    "branches": "gki-android13-5.15 687d2d18d94cb2e3e72d1074778d58384d58e379",
+    "submodules": ""
+  }
+]

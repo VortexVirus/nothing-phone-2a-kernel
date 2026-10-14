@@ -1,0 +1,11 @@
+. ${ROOT_DIR}/${KERNEL_DIR}/build.config.gki.aarch64
+append_cmd POST_DEFCONFIG_CMDS archive_features
+archive_features() {
+ ${ROOT_DIR}/${KERNEL_DIR}/scripts/config --file "${OUT_DIR}/.config" -e KSU
+ ${ROOT_DIR}/${KERNEL_DIR}/scripts/kconfig/merge_config.sh -m -O "${OUT_DIR}" "${OUT_DIR}/.config" "${ROOT_DIR}/${KERNEL_DIR}/arch/arm64/configs/pacman_droidspaces.fragment"
+ (cd "${OUT_DIR}" && make O="${OUT_DIR}" ${TOOL_ARGS} "${MAKE_ARGS[@]}" olddefconfig)
+}
+# Produce kernel and modules; device packaging requires separately licensed OEM inputs.
+BUILD_GKI_ARTIFACTS=
+BUILD_SYSTEM_DLKM=
+BUILD_GKI_CERTIFICATION_TOOLS=

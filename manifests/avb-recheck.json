@@ -1,0 +1,17 @@
+[
+  {
+    "image": "boot.img",
+    "verify_image_exit": 0,
+    "scope": "embedded signature and available descriptor payload; no OEM trust certification or device test"
+  },
+  {
+    "image": "vendor_boot.img",
+    "verify_image_exit": 0,
+    "scope": "embedded signature and available descriptor payload; no OEM trust certification or device test"
+  },
+  {
+    "image": "vendor_dlkm.img",
+    "verify_image_exit": 0,
+    "scope": "embedded signature and available descriptor payload; no OEM trust certification or device test"
+  }
+]

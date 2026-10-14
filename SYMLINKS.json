@@ -1,0 +1,170 @@
+[
+  {
+    "path": "components/KernelSU-Next/kernel/include/uapi",
+    "target": "../../uapi"
+  },
+  {
+    "path": "components/KernelSU-Next/manager/app/src/main/cpp/uapi",
+    "target": "../../../../../uapi"
+  },
+  {
+    "path": "kernel/Documentation/Changes",
+    "target": "process/changes.rst"
+  },
+  {
+    "path": "kernel/arch/arm/boot/dts/sun8i-a23-ippo-q8h-v1.2.dts",
+    "target": "sun8i-a23-q8-tablet.dts"
+  },
+  {
+    "path": "kernel/arch/arm/boot/dts/sun8i-a23-ippo-q8h-v5.dts",
+    "target": "sun8i-a23-q8-tablet.dts"
+  },
+  {
+    "path": "kernel/arch/arm/boot/dts/sun8i-a33-et-q8-v1.6.dts",
+    "target": "sun8i-a33-q8-tablet.dts"
+  },
+  {
+    "path": "kernel/arch/arm/boot/dts/sun8i-a33-ippo-q8h-v1.2.dts",
+    "target": "sun8i-a33-q8-tablet.dts"
+  },
+  {
+    "path": "kernel/arch/arm64/boot/dts/arm/vexpress-v2m-rs1.dtsi",
+    "target": "../../../../arm/boot/dts/vexpress-v2m-rs1.dtsi"
+  },
+  {
+    "path": "kernel/drivers/kernelsu",
+    "target": "../../components/KernelSU-Next/kernel"
+  },
+  {
+    "path": "kernel/include/dt-bindings/clock/qcom,dispcc-sm8150.h",
+    "target": "qcom,dispcc-sm8250.h"
+  },
+  {
+    "path": "kernel/include/dt-bindings/input/linux-event-codes.h",
+    "target": "../../uapi/linux/input-event-codes.h"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/arc",
+    "target": "../../../arch/arc/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/arm",
+    "target": "../../../arch/arm/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/arm64",
+    "target": "../../../arch/arm64/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/dt-bindings",
+    "target": "../../../include/dt-bindings"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/h8300",
+    "target": "../../../arch/h8300/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/microblaze",
+    "target": "../../../arch/microblaze/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/mips",
+    "target": "../../../arch/mips/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/nios2",
+    "target": "../../../arch/nios2/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/openrisc",
+    "target": "../../../arch/openrisc/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/powerpc",
+    "target": "../../../arch/powerpc/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/sh",
+    "target": "../../../arch/sh/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dtc/include-prefixes/xtensa",
+    "target": "../../../arch/xtensa/boot/dts"
+  },
+  {
+    "path": "kernel/scripts/dummy-tools/nm",
+    "target": "ld"
+  },
+  {
+    "path": "kernel/scripts/dummy-tools/objcopy",
+    "target": "ld"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/copyloops/copy_mc_64.S",
+    "target": "../../../../../arch/powerpc/lib/copy_mc_64.S"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/copyloops/copyuser_64.S",
+    "target": "../../../../../arch/powerpc/lib/copyuser_64.S"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/copyloops/copyuser_power7.S",
+    "target": "../../../../../arch/powerpc/lib/copyuser_power7.S"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/copyloops/memcpy_64.S",
+    "target": "../../../../../arch/powerpc/lib/memcpy_64.S"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/copyloops/memcpy_power7.S",
+    "target": "../../../../../arch/powerpc/lib/memcpy_power7.S"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/nx-gzip/include/vas-api.h",
+    "target": "../../../../../../arch/powerpc/include/uapi/asm/vas-api.h"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/primitives/asm/asm-compat.h",
+    "target": "../../../../../../arch/powerpc/include/asm/asm-compat.h"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/primitives/asm/asm-const.h",
+    "target": "../../../../../../arch/powerpc/include/asm/asm-const.h"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/primitives/asm/extable.h",
+    "target": "../../../../../../arch/powerpc/include/asm/extable.h"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/primitives/asm/feature-fixups.h",
+    "target": "../../../../../../arch/powerpc/include/asm/feature-fixups.h"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/primitives/asm/ppc_asm.h",
+    "target": "../../../../../../arch/powerpc/include/asm/ppc_asm.h"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/primitives/word-at-a-time.h",
+    "target": "../../../../../arch/powerpc/include/asm/word-at-a-time.h"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/stringloops/memcmp_32.S",
+    "target": "../../../../../arch/powerpc/lib/memcmp_32.S"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/stringloops/memcmp_64.S",
+    "target": "../../../../../arch/powerpc/lib/memcmp_64.S"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/stringloops/strlen_32.S",
+    "target": "../../../../../arch/powerpc/lib/strlen_32.S"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/vphn/asm/lppaca.h",
+    "target": "../../../../../../arch/powerpc/include/asm/lppaca.h"
+  },
+  {
+    "path": "kernel/tools/testing/selftests/powerpc/vphn/vphn.c",
+    "target": "../../../../../arch/powerpc/platforms/pseries/vphn.c"
+  }
+]
