@@ -11,9 +11,9 @@ this kernel can totaly be taken to make other things to nothing phone 2a i reall
 (the boot.img in this repo is my current version which is : Pacman-B4.0-251230-2052)
 
 
-Recovered development snapshot for **Nothing Phone (2a), Pacman, MT6886**, targeting Nothing OS **B4.0-251230-2052**. This is not a Phone (3) project. Linux **5.15.178**, based on the exact Google GKI shipped in the target firmware, with separate Nothing vendor sources.
+Recovered development snapshot for **Nothing Phone (2a), Pacman, MT6886**, targeting Nothing OS **B4.0-251230-2052**. Linux **5.15.178**, based on the exact Google GKI shipped in the target firmware, with separate Nothing vendor sources.
 
-The snapshot integrates KernelSU Next v3.4.0 with a local SUSFS 2.3.0 port, DroidSpaces prerequisite configuration including USER_NS, and NoMount 2.0.0. Vendor FPSGO06 optimizations are supplied as patches. The later FPSGO07 experiment is separate and was not the installed build.
+The snapshot integrates KernelSU Next v3.4.2 with a local SUSFS 2.3.0 port, DroidSpaces prerequisite configuration including USER_NS, and NoMount 2.0.0. Vendor FPSGO06 optimizations are supplied as patches. The later FPSGO07 experiment is separate and was not the installed build.
 
 Historical builds and a physical boot are documented. Creating a user namespace was observed; UID/GID root mapping and the latest DroidSpaces sandbox are **not validated**. A previous DroidSpaces container configuration was reported functional by the user. No overall performance gain was established. This archive is prepared for technical and licensing review, not a certified flashable release.
 
