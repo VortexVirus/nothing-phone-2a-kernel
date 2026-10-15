@@ -3,7 +3,15 @@
 from pathlib import Path
 import argparse,os,subprocess,json,datetime,hashlib
 root=Path(__file__).resolve().parents[1]
-p=argparse.ArgumentParser();p.add_argument('--pipeline',type=Path,default=root/'.deps/gki');p.add_argument('--out',type=Path,required=True);p.add_argument('--dist',type=Path,required=True);p.add_argument('--jobs',type=int,default=6);args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--pipeline',type=Path,default=root/'.deps/gki');p.add_argument('--out',type=Path);p.add_argument('--dist',type=Path);p.add_argument('--jobs',type=int,default=6);args=p.parse_args()
+if (args.out is None) != (args.dist is None):
+ raise SystemExit('Précise --out et --dist ensemble, ou aucun des deux')
+if args.out is None:
+ number=2
+ while (root/'.work'/f'kernel-{number:02d}').exists() or (root/'.work'/f'dist-{number:02d}').exists():
+  number+=1
+ args.out=root/'.work'/f'kernel-{number:02d}'
+ args.dist=root/'.work'/f'dist-{number:02d}'
 pipeline=args.pipeline.resolve();out=args.out.resolve();dist=args.dist.resolve()
 if out.exists() or dist.exists():raise SystemExit('Refusing to overwrite any existing output directory')
 if ' ' in str(root)+str(out)+str(dist)+str(pipeline):raise SystemExit('Android build scripts require paths without spaces')
@@ -22,6 +30,20 @@ metadata={'source_commit':'90700ba133db2fb1d2b05519d45de38ad3d148e1','compiler':
 log=dist/'build.log'
 with log.open('w') as f:result=subprocess.run(['bash','build/build.sh',f'-j{args.jobs}'],cwd=pipeline,env=env,stdout=f,stderr=subprocess.STDOUT)
 metadata['exit_code']=result.returncode
+metadata['source_commit_note']='source_commit désigne la base archivée, pas le port KernelSU/SUSFS actuel'
+metadata['kernelsu_susfs_commit']=subprocess.check_output(['git','-C',str(root/'components/KernelSU-Next-SUSFS'),'rev-parse','HEAD'],text=True).strip()
+if result.returncode == 0:
+ config=out/'common-nomount-userns/.config'
+ text_config=config.read_text() if config.is_file() else ''
+ required=('CONFIG_KSU=y','CONFIG_KSU_SUSFS=y','CONFIG_NOMOUNT=y','CONFIG_USER_NS=y')
+ missing=[setting for setting in required if setting not in text_config.splitlines()]
+ if not (out/'common-nomount-userns/fs/susfs.o').is_file():
+  missing.append('fs/susfs.o introuvable')
+ if missing:
+  metadata['exit_code']=3
+  metadata['feature_validation']='FAIL : '+', '.join(missing)
+ else:
+  metadata['feature_validation']='PASS (compilation uniquement, pas de validation device/KMI)'
 # Logs and debug files may contain the caller's paths; this directory is local-only.
 metadata['artifacts']={}
 for f in sorted(dist.iterdir()):
@@ -30,4 +52,4 @@ for f in sorted(dist.iterdir()):
 (dist/'BUILD-INFO.json').write_text(json.dumps(metadata,indent=2)+'\n')
 (dist/'DO-NOT-FLASH.txt').write_text('Raw GKI outputs. Matching vendor modules and OEM-specific verified packaging required. No device validation.\n')
 print('Build exit:',result.returncode,'; outputs remain local and require a privacy review before distribution.')
-raise SystemExit(result.returncode)
+raise SystemExit(metadata['exit_code'])
