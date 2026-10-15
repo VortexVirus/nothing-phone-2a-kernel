@@ -7,6 +7,9 @@ this kernel can totaly be taken to make other things to nothing phone 2a i reall
 
 **THIS IS VIDE CODED ON SOMETHING I DO NOT KNOW AND UNDERSTAND USE AT YOUR OWN RISK AND DO CHECK BEFORE BLINDLY TRUSTING THIS IS GOOD AND FUNCTIONING**
 
+**you need to use magiskboot to unpack and repack the boot.img for YOUR PACMAN VERSION please check it is the right version get the correct boot.img from https://nothingarchive.tech/**
+(the boot.img in this repo is my current version which is : Pacman-B4.0-251230-2052)
+
 
 Recovered development snapshot for **Nothing Phone (2a), Pacman, MT6886**, targeting Nothing OS **B4.0-251230-2052**. This is not a Phone (3) project. Linux **5.15.178**, based on the exact Google GKI shipped in the target firmware, with separate Nothing vendor sources.
 
