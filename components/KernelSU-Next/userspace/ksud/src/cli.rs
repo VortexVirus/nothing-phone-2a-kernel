@@ -10,7 +10,7 @@ use crate::lkm_image::BootPatchV2Args;
 use crate::module::regenerate_preinit_rc;
 use crate::{
     apk_sign, assets, debug, defs, init_event, ksu_uapi, ksucalls, module, module_config, sulog,
-    susfsd, utils,
+    susfsd, utils, risk,
 };
 
 /// KernelSU Next userspace cli
@@ -325,6 +325,24 @@ enum Module {
         #[command(subcommand)]
         command: ModuleConfigCmd,
     },
+
+    /// manage module install-time risk detection
+    Risk {
+        #[command(subcommand)]
+        command: RiskCmd,
+    },
+}
+
+#[derive(clap::Subcommand, Debug)]
+enum RiskCmd {
+    /// enable risk detection
+    Enable,
+
+    /// disable risk detection
+    Disable,
+
+    /// show risk detection status
+    Status,
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -428,7 +446,7 @@ enum Profile {
 enum Feature {
     /// Get feature value and support status
     Get {
-        /// Feature ID or name (su_compat, kernel_umount, sulog, adb_root, selinux_hide)
+        /// Feature ID or name (su_compat, kernel_umount, sulog, adb_root, selinux_hide, shell_su_adb_only)
         id: String,
         /// Read from config file
         #[arg(long, default_value_t = false)]
@@ -446,9 +464,9 @@ enum Feature {
     /// List all available features
     List,
 
-    /// Check feature status (supported/unsupported/managed)
+    /// Check feature status (supported/unsupported/managed/forced)
     Check {
-        /// Feature ID or name (su_compat, kernel_umount, sulog, adb_root, selinux_hide)
+        /// Feature ID or name (su_compat, kernel_umount, sulog, adb_root, selinux_hide, shell_su_adb_only)
         id: String,
     },
 
@@ -496,6 +514,19 @@ enum UmountOp {
 
 #[derive(clap::Subcommand, Debug)]
 enum SusfsAction {
+    /// Load the embedded SUSFS guard LKM for the detected or specified KMI
+    Load {
+        /// Specify kernel KMI version instead of auto-detection
+        #[arg(long)]
+        kmi: Option<String>,
+    },
+    /// Unload the SUSFS guard LKM
+    Unload,
+    /// Configure automatic SUSFS LKM loading during post-fs-data
+    Autoload {
+        #[command(subcommand)]
+        command: SusfsAutoloadAction,
+    },
     /// Show if susfs is supported
     Support,
     /// Show susfs version
@@ -504,6 +535,20 @@ enum SusfsAction {
     Variant,
     /// Show enabled features
     Features,
+}
+
+#[derive(clap::Subcommand, Debug)]
+enum SusfsAutoloadAction {
+    /// Enable auto-load and save a KMI fallback
+    Enable {
+        /// KMI to use if boot-time KMI detection fails
+        #[arg(long)]
+        kmi: Option<String>,
+    },
+    /// Disable automatic SUSFS LKM loading
+    Disable,
+    /// Show whether automatic loading is enabled
+    Status,
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -537,7 +582,7 @@ pub fn run() -> Result<()> {
     log::info!("command: {:?}", cli.command);
 
     let result = match cli.command {
-        Commands::PostFsData => init_event::on_post_data_fs(),
+        Commands::PostFsData => init_event::on_post_fs_data(),
         Commands::BootCompleted => {
             init_event::on_boot_completed();
             Ok(())
@@ -554,6 +599,11 @@ pub fn run() -> Result<()> {
                 Module::Action { id } => module::run_action(&id),
                 Module::Metamodule => module::is_metamodule_installed(),
                 Module::List => module::list_modules(),
+                Module::Risk { command } => match command {
+                    RiskCmd::Enable => risk::set_risk_detection_enabled(true),
+                    RiskCmd::Disable => risk::set_risk_detection_enabled(false),
+                    RiskCmd::Status => risk::risk_detection_status(),
+                },
                 Module::Config { internal, command } => {
                     let module_id = match internal {
                         Some(internal_name) => format!("internal.{internal_name}"),
@@ -793,11 +843,23 @@ pub fn run() -> Result<()> {
             full_args.extend(args);
             crate::resetprop::resetprop_main(&full_args)
         }
-        Commands::SoftReboot => init_event::soft_reboot(),
+        Commands::SoftReboot => crate::soft_reboot::soft_reboot(),
 
         Commands::Insmod { module, params } => debug::insmod(&module, &params),
 
         Commands::Susfs { command } => match command {
+            SusfsAction::Load { kmi } => crate::susfsd::load(kmi.as_deref()),
+            SusfsAction::Unload => crate::susfsd::unload(),
+            SusfsAction::Autoload { command } => match command {
+                SusfsAutoloadAction::Enable { kmi } => {
+                    susfsd::set_autoload(true, kmi.as_deref())
+                }
+                SusfsAutoloadAction::Disable => susfsd::set_autoload(false, None),
+                SusfsAutoloadAction::Status => {
+                    println!("{}", if susfsd::autoload_enabled()? { "enabled" } else { "disabled" });
+                    Ok(())
+                }
+            },
             SusfsAction::Support => susfsd::show_features(true),
             SusfsAction::Version => susfsd::show_version(),
             SusfsAction::Variant => susfsd::show_variant(),

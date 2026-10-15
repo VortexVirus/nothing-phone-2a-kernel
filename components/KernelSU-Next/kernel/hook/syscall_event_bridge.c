@@ -45,36 +45,36 @@ static int ksu_handle_init_mark_tracker(const char __user **filename_user)
         ksu_clear_task_tracepoint_flag_if_needed(current);
     }
 
-	return 0;
+    return 0;
 }
 
 long __nocfi ksu_hook_newfstatat(int orig_nr, const struct pt_regs *regs)
 {
-	if (!static_branch_likely(&ksu_su_compat_enabled))
-		return ksu_syscall_table[orig_nr](regs);
+    if (!ksu_su_compat_enabled)
+        return ksu_syscall_table[orig_nr](regs);
 
-	return ksu_handle_stat_sucompat(orig_nr, (struct pt_regs *)regs);
+    return ksu_handle_stat_sucompat(orig_nr, (struct pt_regs *)regs);
 }
 
 long __nocfi ksu_hook_faccessat(int orig_nr, const struct pt_regs *regs)
 {
-	if (!static_branch_likely(&ksu_su_compat_enabled))
-		return ksu_syscall_table[orig_nr](regs);
+    if (!ksu_su_compat_enabled)
+        return ksu_syscall_table[orig_nr](regs);
 
-	return ksu_handle_faccessat_sucompat(orig_nr, (struct pt_regs *)regs);
+    return ksu_handle_faccessat_sucompat(orig_nr, (struct pt_regs *)regs);
 }
 
 DEFINE_STATIC_KEY_TRUE(ksud_execve_key);
 
 void ksu_stop_ksud_execve_hook()
 {
-	static_branch_disable(&ksud_execve_key);
+    static_branch_disable(&ksud_execve_key);
 }
 
 static long __nocfi ksu_hook_execve_common(int orig_nr, const struct pt_regs *regs, bool execveat)
 {
     const char __user **filename_user =
-        execveat ? (const char __user **)&PT_REGS_PARM2(regs) : (const char __user **)&PT_REGS_PARM1(regs);
+        execveat ? (const char __user **)&PT_REGS_PARM2(regs) : (const char __user **)&PT_REGS_SYSCALL_PARM1(regs);
     const char __user *const __user *argv_user = execveat ? (const char __user *const __user *)PT_REGS_PARM3(regs) :
                                                             (const char __user *const __user *)PT_REGS_PARM2(regs);
     bool current_is_init = is_init(current_cred());
@@ -129,10 +129,6 @@ long __nocfi ksu_hook_setresuid(int orig_nr, const struct pt_regs *regs)
     if (ret < 0)
         return ret;
 
-#ifdef CONFIG_KSU_SUSFS
-    ksu_handle_setresuid(current_uid().val, current_uid().val, current_uid().val);
-#else
     ksu_handle_setresuid(old_uid, current_uid().val);
-#endif
     return ret;
 }

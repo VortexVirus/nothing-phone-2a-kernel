@@ -22,3 +22,4 @@ private/
 *.tar
 *.tar.gz
 *.tar.zst
+references/

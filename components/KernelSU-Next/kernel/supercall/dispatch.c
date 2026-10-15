@@ -5,12 +5,6 @@
 #include <linux/uaccess.h>
 #include <linux/version.h>
 #include <linux/thread_info.h>
-#include <linux/utsname.h>
-
-#ifdef CONFIG_KSU_SUSFS
-#include <linux/namei.h>
-#include <linux/susfs.h>
-#endif
 #include "uapi/supercall.h"
 #include "supercall/internal.h"
 #include "arch.h" // IWYU pragma: keep
@@ -65,9 +59,6 @@ static int do_get_info(void __user *arg)
     if (ksu_late_loaded) {
         cmd.flags |= KSU_GET_INFO_FLAG_LATE_LOAD;
     }
-#ifdef EXPECTED_SIZE2
-    cmd.flags |= KSU_GET_INFO_FLAG_PR_BUILD;
-#endif
     cmd.features = KSU_FEATURE_MAX;
     cmd.uapi_version = KERNEL_SU_UAPI_VERSION;
 
@@ -96,9 +87,6 @@ static int do_get_info_legacy(void __user *arg)
     if (ksu_late_loaded) {
         cmd.flags |= KSU_GET_INFO_FLAG_LATE_LOAD;
     }
-#ifdef EXPECTED_SIZE2
-    cmd.flags |= KSU_GET_INFO_FLAG_PR_BUILD;
-#endif
     cmd.features = KSU_FEATURE_MAX;
 
     if (copy_to_user(arg, &cmd, sizeof(cmd))) {
@@ -111,6 +99,7 @@ static int do_get_info_legacy(void __user *arg)
 
 static int do_report_event(void __user *arg)
 {
+    static bool services_started = false;
     struct ksu_report_event_cmd cmd;
 
     if (copy_from_user(&cmd, arg, sizeof(cmd))) {
@@ -120,6 +109,9 @@ static int do_report_event(void __user *arg)
     switch (cmd.event) {
     case EVENT_POST_FS_DATA: {
         static bool post_fs_data_lock = false;
+
+        // Reset for emulated soft reboot
+        services_started = false;
         if (!post_fs_data_lock) {
             post_fs_data_lock = true;
             if (ksu_late_loaded) {
@@ -141,9 +133,6 @@ static int do_report_event(void __user *arg)
                 pr_info("boot_complete triggered\n");
                 on_boot_completed();
             }
-#ifdef CONFIG_KSU_SUSFS
-            susfs_start_sdcard_monitor_fn();
-#endif
         }
         break;
     }
@@ -151,6 +140,15 @@ static int do_report_event(void __user *arg)
         pr_info("module mounted!\n");
         on_module_mounted();
         break;
+    }
+    case EVENT_SERVICES: {
+        if (services_started) {
+            pr_info("services already started, skipping\n");
+            return 0;
+        }
+        services_started = true;
+        pr_info("services triggered\n");
+        return 1;
     }
     default:
         break;
@@ -298,7 +296,7 @@ static int do_uid_granted_root(void __user *arg)
         return -EFAULT;
     }
 
-    cmd.granted = ksu_is_allow_uid_for_current(cmd.uid);
+    cmd.granted = ksu_is_uid_granted_root(cmd.uid);
 
     if (copy_to_user(arg, &cmd, sizeof(cmd))) {
         pr_err("uid_granted_root: copy_to_user failed\n");
@@ -388,9 +386,7 @@ static int do_set_app_profile(void __user *arg)
     ret = ksu_set_app_profile(&cmd.profile);
     if (!ret) {
         ksu_persistent_allow_list();
-#if !defined(CONFIG_KSU_SUSFS) && defined(CONFIG_KPROBES)
         ksu_mark_running_process();
-#endif
     }
     return ret;
 }
@@ -398,7 +394,7 @@ static int do_set_app_profile(void __user *arg)
 static int do_get_feature(void __user *arg)
 {
     struct ksu_get_feature_cmd cmd;
-    bool supported;
+    bool supported = false;
     int ret;
 
     if (copy_from_user(&cmd, arg, sizeof(cmd))) {
@@ -407,7 +403,13 @@ static int do_get_feature(void __user *arg)
     }
 
     ret = ksu_get_feature(cmd.feature_id, &cmd.value, &supported);
-    cmd.supported = supported ? 1 : 0;
+    cmd.supported = 0;
+    if (supported) {
+        cmd.supported |= KSU_FEATURE_FLAG_SUPPORTED;
+        if (ksu_feature_is_forced(cmd.feature_id)) {
+            cmd.supported |= KSU_FEATURE_FLAG_FORCED;
+        }
+    }
 
     if (ret && supported) {
         pr_err("get_feature: failed for feature %u: %d\n", cmd.feature_id, ret);
@@ -469,27 +471,15 @@ static int do_manage_mark(void __user *arg)
     switch (cmd.operation) {
     case KSU_MARK_GET: {
         // Get task mark status
-#ifdef CONFIG_KSU_SUSFS
-        if (susfs_is_current_proc_no_su()) {
-            ret = 0; // SYSCALL_TRACEPOINT is NOT flagged
-        } else {
-            ret = 1; // SYSCALL_TRACEPOINT is flagged
-        }
-#else
         ret = ksu_get_task_mark(cmd.pid);
         if (ret < 0) {
             pr_err("manage_mark: get failed for pid %d: %d\n", cmd.pid, ret);
             return ret;
         }
-#endif
         cmd.result = (u32)ret;
         break;
     }
     case KSU_MARK_MARK: {
-#ifdef CONFIG_KSU_SUSFS
-        if (cmd.pid != 0)
-            return ret;
-#else
         if (cmd.pid == 0) {
             ksu_mark_all_process();
         } else {
@@ -499,14 +489,9 @@ static int do_manage_mark(void __user *arg)
                 return ret;
             }
         }
-#endif
         break;
     }
     case KSU_MARK_UNMARK: {
-#ifdef CONFIG_KSU_SUSFS
-        if (cmd.pid != 0)
-            return ret;
-#else
         if (cmd.pid == 0) {
             ksu_unmark_all_process();
         } else {
@@ -516,14 +501,11 @@ static int do_manage_mark(void __user *arg)
                 return ret;
             }
         }
-#endif
         break;
     }
     case KSU_MARK_REFRESH: {
-#if !defined(CONFIG_KSU_SUSFS) && defined(CONFIG_KPROBES)
         ksu_mark_running_process();
         pr_info("manage_mark: refreshed running processes\n");
-#endif
         break;
     }
     default: {
@@ -731,16 +713,10 @@ static int do_get_hook_mode(void __user *arg)
 {
     struct ksu_get_hook_mode_cmd cmd = {0};
 
-#ifndef CONFIG_KSU_SUSFS
 #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
     strscpy(cmd.mode, "Tracepoint", sizeof(cmd.mode));
 #else
     strscpy(cmd.mode, "Kprobes", sizeof(cmd.mode));
-#endif
-#elif defined(CONFIG_HAVE_SYSCALL_TRACEPOINTS) || defined(CONFIG_KPROBES)
-    strscpy(cmd.mode, "Hybrid", sizeof(cmd.mode));
-#else
-    strscpy(cmd.mode, "Inline", sizeof(cmd.mode));
 #endif
 
     if (copy_to_user(arg, &cmd, sizeof(cmd))) {
@@ -1038,108 +1014,3 @@ void ksu_supercall_cleanup_state(void)
     }
     up_write(&mount_list_lock);
 }
-
-#ifdef CONFIG_KSU_SUSFS
-/* susfs reboot commands */
-int ksu_handle_sys_reboot(int magic1, int magic2, unsigned int cmd, void __user **arg)
-{
-    if (magic1 != KSU_INSTALL_MAGIC1) {
-        return -EINVAL; 
-    }
-
-    if (magic2 == KSU_INSTALL_MAGIC2) {
-        return ksu_supercall_reboot_handler(arg);
-    }
-
-    // If magic2 is susfs and current process is root
-    if (magic2 == SUSFS_MAGIC && current_uid().val == 0) {
-        switch (cmd) {
-#ifdef CONFIG_KSU_SUSFS_SUS_PATH
-        case CMD_SUSFS_ADD_SUS_PATH:
-            susfs_add_sus_path(arg);
-            return 0;
-        case CMD_SUSFS_ADD_SUS_PATH_LOOP:
-            susfs_add_sus_path_loop(arg);
-            return 0;
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_PATH
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-        case CMD_SUSFS_HIDE_SUS_MNTS_FOR_NON_SU_PROCS:
-            susfs_set_hide_sus_mnts_for_non_su_procs(arg);
-            return 0;
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
-        case CMD_SUSFS_ADD_SUS_KSTAT:
-            susfs_add_sus_kstat(arg);
-            return 0;
-        case CMD_SUSFS_UPDATE_SUS_KSTAT:
-            susfs_update_sus_kstat(arg);
-            return 0;
-        case CMD_SUSFS_ADD_SUS_KSTAT_STATICALLY:
-            susfs_add_sus_kstat(arg);
-            return 0;
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
-#ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
-        case CMD_SUSFS_SET_UNAME: {
-            struct st_susfs_uname info;
-            if (!copy_from_user(&info, (struct st_susfs_uname __user *)*arg, sizeof(info))) {
-                if (strcmp(info.release, "default") || strcmp(info.version, "default")) {
-                    // Dead man's switch: If enabling SuSFS, reset the Toolkit's global memory changes
-                    ksu_toolkit_uname_reset();
-                }
-            }
-            susfs_set_uname(arg);
-            return 0;
-        }
-#endif // #ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
-#ifdef CONFIG_KSU_SUSFS_ENABLE_LOG
-        case CMD_SUSFS_ENABLE_LOG:
-            susfs_enable_log(arg);
-            return 0;
-#endif // #ifdef CONFIG_KSU_SUSFS_ENABLE_LOG
-#ifdef CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
-        case CMD_SUSFS_SET_CMDLINE_OR_BOOTCONFIG:
-            susfs_set_cmdline_or_bootconfig(arg);
-            return 0;
-#endif // #ifdef CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
-#ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
-        case CMD_SUSFS_ADD_OPEN_REDIRECT:
-            susfs_add_open_redirect(arg);
-            return 0;
-#endif // #ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
-#ifdef CONFIG_KSU_SUSFS_SUS_MAP
-        case CMD_SUSFS_ADD_SUS_MAP:
-            susfs_add_sus_map(arg);
-            return 0;
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_MAP
-        case CMD_SUSFS_ENABLE_AVC_LOG_SPOOFING: {
-            struct st_susfs_avc_log_spoofing info;
-            if (!copy_from_user(&info, (struct st_susfs_avc_log_spoofing __user *)*arg, sizeof(info))) {
-                if (info.enabled) {
-                    extern bool ksu_avc_spoof_enabled;
-                    extern void ksu_avc_spoof_disable(void);
-                    if (ksu_avc_spoof_enabled) {
-                        ksu_avc_spoof_disable();
-                    }
-                }
-            }
-            susfs_set_avc_log_spoofing(arg);
-            return 0;
-        }
-        case CMD_SUSFS_SHOW_ENABLED_FEATURES:
-            susfs_get_enabled_features(arg);
-            return 0;
-        case CMD_SUSFS_SHOW_VARIANT:
-            susfs_show_variant(arg);
-            return 0;
-        case CMD_SUSFS_SHOW_VERSION:
-            susfs_show_version(arg);
-            return 0;
-        default:
-            return -EINVAL;
-        }
-    }
-
-    // Handle standard Toolkit MAGICS via unified handler
-    return ksu_handle_toolkit_reboot(magic2, cmd, *arg);
-}
-#endif
